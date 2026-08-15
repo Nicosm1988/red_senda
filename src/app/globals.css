@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #fffdf8;
+  --color-canvas: #f5f1e9;
+  --color-mist: #ebe8df;
+  --color-ink: #1e2926;
+  --color-muted: #5e6965;
+  --color-line: #dfddd4;
+  --color-line-strong: #c8c7bd;
+  --color-senda: #426c5e;
+  --color-senda-dark: #2e5549;
+  --color-senda-soft: #e4eee9;
+  --color-clay: #b45f45;
+  --color-clay-dark: #82432f;
+  --color-clay-soft: #f4e5de;
+  --color-sand: #ead7ad;
+  --color-sky-soft: #e3edf0;
+  --color-sky-dark: #365b64;
+  --shadow-soft: 0 18px 60px rgba(30, 41, 38, 0.09);
+}
+
+@theme inline {
+  --font-sans: var(--font-body);
+  --font-display: var(--font-editorial);
+}
+
+:root {
+  --font-body: "Avenir Next", Avenir, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-editorial: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-paper);
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+a,
+button,
+input,
+select,
+summary,
+textarea {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(66, 108, 94, 0.16);
+}
+
+::selection {
+  background: #c8ded4;
+  color: var(--color-ink);
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  translate: 0 -200%;
+  border-radius: 999px;
+  background: var(--color-ink);
+  color: white;
+  padding: 0.7rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: translate 160ms ease;
+}
+
+.skip-link:focus {
+  translate: 0;
+  outline: 3px solid var(--color-sand);
+  outline-offset: 2px;
+}
+
+.mobile-nav summary::-webkit-details-marker,
+.filter-panel summary::-webkit-details-marker {
+  display: none;
+}
+
+.mobile-nav[open] > summary,
+.filter-panel[open] > summary {
+  border-color: var(--color-senda);
+}
+
+.hero-path {
+  position: relative;
+  min-height: 410px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 2rem;
+  background: #263d36;
+}
+
+.hero-path::before {
+  content: "";
+  position: absolute;
+  inset: -18% -22% 18% 15%;
+  border: 2px solid rgba(234, 215, 173, 0.72);
+  border-radius: 46% 54% 61% 39% / 56% 42% 58% 44%;
+  rotate: -12deg;
+}
+
+.hero-path::after {
+  content: "";
+  position: absolute;
+  width: 11rem;
+  height: 11rem;
+  right: -3rem;
+  bottom: -4rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 42% 58% 49% 51% / 55% 40% 60% 45%;
+}
+
+.path-node {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  max-width: 12rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.path-node::before {
+  content: "";
+  width: 0.75rem;
+  height: 0.75rem;
+  flex: 0 0 auto;
+  border: 2px solid var(--color-sand);
+  border-radius: 999px;
+  background: #263d36;
+  box-shadow: 0 0 0 5px rgba(234, 215, 173, 0.08);
+}
+
+.path-node-active {
+  color: white;
+}
+
+.path-node-active::before {
+  background: var(--color-clay);
+  border-color: white;
+}
+
+.editorial-rule {
+  width: 3.25rem;
+  height: 2px;
+  background: var(--color-clay);
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-mist);
+  animation: skeleton-pulse 1.45s ease-in-out infinite alternate;
+}
+
+@keyframes skeleton-pulse {
+  to {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+}
