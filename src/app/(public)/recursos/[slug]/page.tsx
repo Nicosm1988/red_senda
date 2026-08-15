@@ -62,7 +62,7 @@ export default async function ResourceDetailPage({ params }: ResourcePageProps) 
                 {article.isDemo === false ? null : <Badge tone="clay">Contenido ficticio de demostración</Badge>}
                 <Badge tone="senda">{article.eyebrow}</Badge>
               </div>
-              <h1 className="mt-6 font-display text-[clamp(2.65rem,7vw,5.5rem)] font-semibold leading-[0.96] tracking-[-0.052em] text-ink text-balance">{article.title}</h1>
+              <h1 className="mt-5 max-w-[58rem] font-display text-[clamp(2.1rem,5vw,4rem)] font-semibold leading-[1.02] tracking-[-0.035em] text-ink text-balance">{article.title}</h1>
               <p className="mt-7 max-w-3xl text-lg leading-8 text-muted text-pretty">{article.excerpt}</p>
               <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-line pt-5 text-xs text-muted">
                 <span><strong className="text-ink">{article.author}</strong> · {article.authorRole}</span>

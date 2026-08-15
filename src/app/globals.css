@@ -1,33 +1,78 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #fffdf8;
-  --color-canvas: #f5f1e9;
-  --color-mist: #ebe8df;
-  --color-ink: #1e2926;
-  --color-muted: #5e6965;
-  --color-line: #dfddd4;
-  --color-line-strong: #c8c7bd;
-  --color-senda: #426c5e;
-  --color-senda-dark: #2e5549;
-  --color-senda-soft: #e4eee9;
-  --color-clay: #b45f45;
-  --color-clay-dark: #82432f;
-  --color-clay-soft: #f4e5de;
-  --color-sand: #ead7ad;
-  --color-sky-soft: #e3edf0;
-  --color-sky-dark: #365b64;
-  --shadow-soft: 0 18px 60px rgba(30, 41, 38, 0.09);
+  --color-paper: #fbfaf7;
+  --color-canvas: #f1f2ef;
+  --color-mist: #e7ebe7;
+  --color-ink: #17201d;
+  --color-muted: #56615d;
+  --color-line: #d7ddd8;
+  --color-line-strong: #bac4bd;
+  --color-senda: #37695a;
+  --color-senda-dark: #265346;
+  --color-senda-soft: #dfebe5;
+  --color-clay: #a8513b;
+  --color-clay-dark: #783925;
+  --color-clay-soft: #f2e3dd;
+  --color-sand: #e2c990;
+  --color-sky-soft: #e0ebed;
+  --color-sky-dark: #315961;
+  --shadow-soft: 0 16px 48px rgba(23, 32, 29, 0.09);
+
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.45;
+  --text-sm: 0.8125rem;
+  --text-sm--line-height: 1.55;
+  --text-base: 0.9375rem;
+  --text-base--line-height: 1.55;
+  --text-lg: 1.0625rem;
+  --text-lg--line-height: 1.5;
+  --text-xl: 1.1875rem;
+  --text-xl--line-height: 1.4;
+  --text-2xl: 1.375rem;
+  --text-2xl--line-height: 1.3;
+  --text-3xl: 1.75rem;
+  --text-3xl--line-height: 1.18;
+  --text-4xl: 2.125rem;
+  --text-4xl--line-height: 1.12;
+  --text-5xl: 2.625rem;
+  --text-5xl--line-height: 1.08;
+  --text-6xl: 3.125rem;
+  --text-6xl--line-height: 1.04;
+  --text-7xl: 3.75rem;
+  --text-7xl--line-height: 1;
 }
 
 @theme inline {
   --font-sans: var(--font-body);
-  --font-display: var(--font-editorial);
+  --font-display: var(--font-heading);
 }
 
 :root {
-  --font-body: "Avenir Next", Avenir, "Segoe UI", Helvetica, Arial, sans-serif;
-  --font-editorial: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  color-scheme: light;
+  --font-body: var(--font-ibm-plex-sans), "IBM Plex Sans", Arial, sans-serif;
+  --font-heading: var(--font-ibm-plex-sans), "IBM Plex Sans", Arial, sans-serif;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: #141a18;
+  --color-canvas: #0f1513;
+  --color-mist: #202925;
+  --color-ink: #edf1ee;
+  --color-muted: #aab7b0;
+  --color-line: #303b36;
+  --color-line-strong: #46534d;
+  --color-senda: #8bbda9;
+  --color-senda-dark: #20473c;
+  --color-senda-soft: #203a31;
+  --color-clay: #e0967f;
+  --color-clay-dark: #f1b29e;
+  --color-clay-soft: #3b2620;
+  --color-sand: #e2c990;
+  --color-sky-soft: #1d343b;
+  --color-sky-dark: #acd0d7;
+  --shadow-soft: 0 18px 55px rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -46,7 +91,23 @@ body {
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  letter-spacing: -0.006em;
   -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 button,
@@ -68,7 +129,12 @@ textarea {
 
 ::selection {
   background: #c8ded4;
-  color: var(--color-ink);
+  color: #17201d;
+}
+
+:root[data-theme="dark"] ::selection {
+  background: #4f806f;
+  color: #ffffff;
 }
 
 .skip-link {
@@ -78,7 +144,7 @@ textarea {
   z-index: 100;
   translate: 0 -200%;
   border-radius: 999px;
-  background: var(--color-ink);
+  background: #17201d;
   color: white;
   padding: 0.7rem 1rem;
   font-size: 0.875rem;
@@ -102,67 +168,54 @@ textarea {
   border-color: var(--color-senda);
 }
 
-.hero-path {
-  position: relative;
-  min-height: 410px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 2rem;
-  background: #263d36;
+.theme-icon-moon {
+  display: none;
 }
 
-.hero-path::before {
-  content: "";
-  position: absolute;
-  inset: -18% -22% 18% 15%;
-  border: 2px solid rgba(234, 215, 173, 0.72);
-  border-radius: 46% 54% 61% 39% / 56% 42% 58% 44%;
-  rotate: -12deg;
+:root[data-theme="dark"] .theme-icon-sun {
+  display: none;
 }
 
-.hero-path::after {
-  content: "";
-  position: absolute;
-  width: 11rem;
-  height: 11rem;
-  right: -3rem;
-  bottom: -4rem;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 42% 58% 49% 51% / 55% 40% 60% 45%;
+:root[data-theme="dark"] .theme-icon-moon {
+  display: block;
 }
 
-.path-node {
-  position: absolute;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  max-width: 12rem;
-  color: rgba(255, 255, 255, 0.72);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+/* Accent tokens are brighter in dark mode for readable text and focus rings.
+   Filled controls and dark editorial panels keep deeper, white-safe surfaces. */
+:root[data-theme="dark"] .bg-ink,
+:root[data-theme="dark"] [class~="bg-ink/90"] {
+  background-color: #18231f;
 }
 
-.path-node::before {
-  content: "";
-  width: 0.75rem;
-  height: 0.75rem;
-  flex: 0 0 auto;
-  border: 2px solid var(--color-sand);
-  border-radius: 999px;
-  background: #263d36;
-  box-shadow: 0 0 0 5px rgba(234, 215, 173, 0.08);
+:root[data-theme="dark"] .border-ink {
+  border-color: #18231f;
 }
 
-.path-node-active {
-  color: white;
+:root[data-theme="dark"] .bg-senda,
+:root[data-theme="dark"] .hover\:bg-senda:hover {
+  background-color: #376c5b;
 }
 
-.path-node-active::before {
-  background: var(--color-clay);
-  border-color: white;
+:root[data-theme="dark"] .bg-senda-dark {
+  background-color: #20473c;
+}
+
+:root[data-theme="dark"] .text-senda-dark {
+  color: #a9d0c0;
+}
+
+:root[data-theme="dark"] .bg-clay {
+  background-color: #914b37;
+}
+
+:root[data-theme="dark"] .bg-sand.text-ink,
+:root[data-theme="dark"] .hover\:bg-sand:hover {
+  color: #17201d;
+}
+
+:root[data-theme="dark"] .text-red-700,
+:root[data-theme="dark"] .text-red-800 {
+  color: #fca5a5;
 }
 
 .editorial-rule {
@@ -184,6 +237,14 @@ textarea {
   }
 }
 
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 1rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -197,5 +258,4 @@ textarea {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
-
 }

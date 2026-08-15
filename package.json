@@ -9,6 +9,7 @@
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:db:search": "docker exec -i supabase_db_Red_Senda psql -v ON_ERROR_STOP=1 -U postgres -d postgres < supabase/tests/database/professional_search.sql",
     "test:db:workflow": "docker exec -i supabase_db_Red_Senda psql -v ON_ERROR_STOP=1 -U postgres -d postgres < supabase/tests/database/professional_submission_workflow.sql",
     "test:integration": "vitest run --config vitest.integration.config.mts",
     "test:watch": "vitest",

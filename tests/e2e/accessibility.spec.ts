@@ -5,6 +5,7 @@ const publicPages = [
   "/profesionales",
   "/matching",
   "/profesionales/valentina-acosta",
+  "/terminos",
 ] as const;
 
 async function expectNamedInteractiveElements(page: Page) {

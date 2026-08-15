@@ -38,6 +38,8 @@ Completá `.env.local` con valores del ambiente local. `SUPABASE_SECRET_KEY`, `R
 
 La aplicación queda disponible en [http://localhost:3000](http://localhost:3000).
 
+El archivo `.mcp.json` deja preparados Next DevTools, Playwright en sesión aislada y el MCP del stack Supabase local. Reiniciá el cliente compatible después de clonar o modificar esa configuración. El MCP de Supabase apunta deliberadamente a `127.0.0.1:54321`: no debe cambiarse al proyecto productivo ni recibir secretos en el repositorio.
+
 ## Comandos
 
 ```bash

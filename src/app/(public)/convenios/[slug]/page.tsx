@@ -58,7 +58,7 @@ export default async function AgreementDetailPage({ params }: AgreementPageProps
                 <Badge>{agreement.kind}</Badge>
               </div>
               <p className="mt-5 text-sm font-semibold text-sand">{agreement.institution}</p>
-              <h1 className="mt-3 font-display text-[clamp(2.7rem,7vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.052em] text-balance">{agreement.title}</h1>
+              <h1 className="mt-3 max-w-[58rem] font-display text-[clamp(2.1rem,5vw,4rem)] font-semibold leading-[1.02] tracking-[-0.035em] text-balance">{agreement.title}</h1>
               <p className="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg">{agreement.excerpt}</p>
             </div>
             <div className="rounded-[1.35rem] border border-white/14 p-6">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { Container } from "@/components/ui/container";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { ProfessionalOnboardingForm } from "@/components/onboarding/professional-onboarding-form";
 import { requireCurrentUser } from "@/lib/dal/auth";
 import type { MyProfessionalProfile } from "@/lib/supabase/contracts";
@@ -112,6 +113,9 @@ export default async function ProfessionalOnboardingPage({
   return (
     <main id="contenido" className="bg-paper py-12 sm:py-20">
       <Container className="max-w-4xl">
+        <div className="mb-5 flex justify-end">
+          <ThemeToggle />
+        </div>
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-senda">Perfil profesional</p>
         <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.04em] text-ink sm:text-5xl">
           Tu recorrido merece una presentación a la altura.

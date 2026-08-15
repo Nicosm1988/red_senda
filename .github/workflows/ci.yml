@@ -55,6 +55,7 @@ jobs:
           set -a
           source "${status_env}"
           set +a
+          npm run test:db:search
           npm run test:db:workflow
           SUPABASE_TEST_URL="${API_URL}" \
           SUPABASE_TEST_PUBLISHABLE_KEY="${PUBLISHABLE_KEY}" \

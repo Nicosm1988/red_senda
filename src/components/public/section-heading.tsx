@@ -14,10 +14,10 @@ export function SectionHeading({
   return (
     <div className={align === "center" ? "mx-auto max-w-3xl text-center" : "max-w-3xl"}>
       <Badge tone="senda">{eyebrow}</Badge>
-      <h2 className="mt-5 font-display text-3xl font-semibold leading-[1.08] tracking-[-0.035em] text-ink text-balance sm:text-4xl lg:text-5xl">
+      <h2 className="mt-4 font-display text-2xl font-semibold leading-[1.12] tracking-[-0.025em] text-ink text-balance sm:text-3xl lg:text-4xl">
         {title}
       </h2>
-      {description ? <p className="mt-5 max-w-2xl text-base leading-7 text-muted text-pretty sm:text-lg">{description}</p> : null}
+      {description ? <p className="mt-4 max-w-2xl text-sm leading-6 text-muted text-pretty sm:text-base">{description}</p> : null}
     </div>
   );
 }

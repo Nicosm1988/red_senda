@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { AgreementCard } from "@/components/public/agreement-card";
 import { ProfessionalCard } from "@/components/public/professional-card";
@@ -46,18 +45,18 @@ export default async function HomePage() {
     <>
       <JsonLd data={organizationJsonLd} />
 
-      <section className="overflow-hidden bg-ink py-12 text-white sm:py-16 lg:py-20">
+      <section className="overflow-hidden bg-ink py-10 text-white sm:py-12 lg:py-16">
         <Container>
-          <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_.85fr] lg:gap-16">
+          <div className="grid items-center gap-9 lg:grid-cols-[1.08fr_.92fr] lg:gap-12">
             <div>
               <Badge tone="clay">Personas para momentos profesionales</Badge>
-              <h1 className="mt-6 max-w-4xl font-display text-[clamp(3rem,8vw,6.5rem)] font-semibold leading-[0.9] tracking-[-0.06em] text-balance">
+              <h1 className="mt-5 max-w-3xl font-display text-[clamp(2.35rem,5vw,4.65rem)] font-semibold leading-[0.98] tracking-[-0.045em] text-balance">
                 Tu próximo movimiento no tiene por qué pensarse a solas.
               </h1>
-              <p className="mt-7 max-w-2xl text-base leading-7 text-white/72 text-pretty sm:text-lg">
+              <p className="mt-5 max-w-2xl text-sm leading-6 text-white/72 text-pretty sm:text-base">
                 Red Senda conecta lo que te está pasando con especialistas capaces de acompañarte a explorar, decidir y avanzar con criterio propio.
               </p>
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link href="/profesionales" className={buttonStyles({ variant: "inverse", size: "lg" })}>
                   Encontrar un profesional
                 </Link>
@@ -65,21 +64,27 @@ export default async function HomePage() {
                   No sé qué ayuda necesito
                 </Link>
               </div>
-              <div className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold text-white/55">
+              <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-white/55">
                 <span>Acceso gratuito para personas</span>
                 <span>Perfiles revisados</span>
                 <span>Sin rankings opacos</span>
               </div>
             </div>
 
-            <div className="hero-path" aria-label="Un camino desde la pregunta hacia un próximo paso">
-              <p className="absolute left-7 top-7 z-10 max-w-[15rem] font-display text-2xl font-semibold leading-tight tracking-[-0.025em] text-white">
-                No buscás un título. Buscás a alguien que comprenda tu momento.
-              </p>
-              <span className="path-node path-node-active bottom-[15%] left-[10%]">Estás acá</span>
-              <span className="path-node bottom-[34%] left-[36%]">Nombrar la pregunta</span>
-              <span className="path-node right-[12%] top-[41%]">Explorar opciones</span>
-              <span className="path-node right-[9%] top-[17%]">Elegir un paso</span>
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] border border-white/15 bg-senda-dark shadow-[0_24px_70px_rgba(0,0,0,0.2)]">
+              {/* These pre-optimized local assets use native img elements because
+                  next/image emits inline styles blocked by our style-src-attr CSP. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/red-senda-hero-conversation-v2.webp"
+                alt="Dos personas conversan con atención en un espacio de trabajo sereno."
+                width={1448}
+                height={1086}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
             </div>
           </div>
         </Container>
@@ -113,12 +118,15 @@ export default async function HomePage() {
         <Container>
           <div className="grid items-center gap-12 lg:grid-cols-[.85fr_1.15fr] lg:gap-20">
             <div className="relative min-h-[380px] overflow-hidden rounded-[1.75rem] bg-senda-soft shadow-soft">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="/images/red-senda-conversation.webp"
                 alt="Dos personas conversan con atención frente a un cuaderno en una biblioteca luminosa."
-                fill
-                sizes="(min-width: 1024px) 42vw, 100vw"
-                className="object-cover"
+                width={1599}
+                height={900}
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover"
               />
               <div className="absolute inset-x-5 bottom-5 rounded-[1.15rem] bg-ink/90 p-5 text-white backdrop-blur-sm sm:inset-x-7 sm:bottom-7">
                 <p className="text-xs font-bold uppercase tracking-[0.1em] text-sand">Acompañamiento humano</p>

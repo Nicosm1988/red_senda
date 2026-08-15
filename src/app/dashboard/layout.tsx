@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 
 import { signOutAction } from "@/app/(auth)/actions";
 import { Container } from "@/components/ui/container";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { requireCurrentUser } from "@/lib/dal/auth";
 
 export const metadata: Metadata = {
@@ -29,7 +30,10 @@ export default async function DashboardLayout({ children }: { children: ReactNod
         <div className="grid gap-8 lg:grid-cols-[230px_minmax(0,1fr)]">
           <aside>
             <div className="rounded-3xl border border-line bg-paper p-5 lg:sticky lg:top-24">
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-senda">Tu espacio</p>
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-senda">Tu espacio</p>
+                <ThemeToggle />
+              </div>
               <p className="mt-2 truncate font-semibold text-ink">{user.displayName ?? user.email ?? "Profesional"}</p>
               <nav className="mt-6" aria-label="Dashboard">
                 <ul className="space-y-1">

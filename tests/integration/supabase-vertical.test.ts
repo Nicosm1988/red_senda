@@ -58,6 +58,10 @@ type ProfileRow = IdRow & {
   slug: string;
 };
 
+type RankedProfileRow = {
+  professional_profile_id: string;
+};
+
 type CredentialStatusRow = {
   credential_id: string;
   verification_status: string;
@@ -351,6 +355,20 @@ describeIntegration(
           expect(hiddenDraft.data).toEqual([]);
         }
 
+        const hiddenFromAnonymousSearch = await anonymous.rpc(
+          "rank_professionals",
+          { p_search: "integracion" },
+        );
+        assertNoError(
+          hiddenFromAnonymousSearch,
+          "Buscar un perfil todavía no publicado",
+        );
+        expect(
+          ((hiddenFromAnonymousSearch.data ?? []) as RankedProfileRow[]).some(
+            (row) => row.professional_profile_id === profile.id,
+          ),
+        ).toBe(false);
+
         const forbiddenSubmission = await outsider.rpc(
           "submit_professional_profile",
           { p_profile_id: profile.id },
@@ -561,6 +579,20 @@ describeIntegration(
         expect(directoryRow.service_ids).toContain(serviceId);
         expect(directoryRow.modality_ids).toContain(modalityId);
         expect(directoryRow.language_ids).toContain(languageId);
+
+        const searchResults: string[][] = [];
+        for (const query of ["Integración", "integracion"]) {
+          const search = await anonymous.rpc("rank_professionals", {
+            p_search: query,
+          });
+          assertNoError(search, `Buscar perfil publicado con ${query}`);
+          const resultIds = ((search.data ?? []) as RankedProfileRow[]).map(
+            (row) => row.professional_profile_id,
+          );
+          expect(resultIds).toContain(profile.id);
+          searchResults.push(resultIds.toSorted());
+        }
+        expect(searchResults[1]).toEqual(searchResults[0]);
 
         const idempotencyHash = sha256(
           `${TEST_SUITE}:${profile.id}:lead-idempotency`,

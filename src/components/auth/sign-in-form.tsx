@@ -9,7 +9,7 @@ import { SubmitButton } from "@/components/auth/submit-button";
 import { initialAuthState } from "@/lib/validation/auth";
 
 const inputClass =
-  "mt-2 min-h-12 w-full rounded-2xl border border-line bg-white px-4 text-base text-ink outline-none transition focus-visible:border-senda focus-visible:ring-3 focus-visible:ring-senda/15";
+  "mt-2 min-h-12 w-full rounded-2xl border border-line bg-paper px-4 text-base text-ink outline-none transition focus-visible:border-senda focus-visible:ring-3 focus-visible:ring-senda/15";
 
 export function SignInForm({ next, error }: { next?: string; error?: string }) {
   const [state, formAction] = useActionState(signInAction, initialAuthState);

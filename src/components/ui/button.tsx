@@ -10,13 +10,13 @@ const variants: Record<ButtonVariant, string> = {
   primary: "border-ink bg-ink text-white hover:border-senda hover:bg-senda",
   secondary: "border-line bg-paper text-ink hover:border-ink hover:bg-mist",
   quiet: "border-transparent bg-transparent text-ink hover:bg-mist",
-  inverse: "border-white bg-white text-ink hover:border-sand hover:bg-sand",
+  inverse: "theme-inverse border-white bg-white text-[#17201d] hover:border-sand hover:bg-sand",
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "min-h-9 px-4 text-xs",
+  sm: "min-h-11 px-3.5 text-xs",
   md: "min-h-11 px-5 text-sm",
-  lg: "min-h-12 px-6 text-base",
+  lg: "min-h-12 px-5 text-sm",
 };
 
 export function buttonStyles({

@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { buttonStyles } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { requireCurrentUser } from "@/lib/dal/auth";
 import { createClient } from "@/lib/supabase/server";
 
@@ -112,7 +113,10 @@ export default async function AdminPage({
             <h1 className="mt-3 text-4xl font-semibold tracking-[-0.04em] text-ink sm:text-5xl">Panel de revisión</h1>
             <p className="mt-4 max-w-2xl text-muted">Cada decisión valida permisos en el servidor y deja trazabilidad en la auditoría.</p>
           </div>
-          <Link className={buttonStyles({ variant: "secondary" })} href="/dashboard">Volver al dashboard</Link>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Link className={buttonStyles({ variant: "secondary" })} href="/dashboard">Volver al dashboard</Link>
+          </div>
         </div>
 
         <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -154,15 +158,15 @@ export default async function AdminPage({
                       <input type="hidden" name="credentialId" value={credential.credential_id} />
                       <label className="block text-sm font-semibold text-ink">
                         Notas internas / motivo si se rechaza
-                        <textarea className="mt-2 min-h-20 w-full rounded-xl border border-line bg-white p-3 text-sm" name="notes" maxLength={2000} />
+                        <textarea className="mt-2 min-h-20 w-full rounded-xl border border-line bg-paper p-3 text-sm text-ink" name="notes" maxLength={2000} />
                       </label>
                       <label className="mt-3 block text-sm font-semibold text-ink">
                         Válida hasta (opcional)
-                        <input className="mt-2 min-h-10 w-full rounded-xl border border-line bg-white px-3" type="date" name="validUntil" />
+                        <input className="mt-2 min-h-11 w-full rounded-xl border border-line bg-paper px-3 text-ink" type="date" name="validUntil" />
                       </label>
                       <div className="mt-4 flex flex-wrap gap-2">
-                        <button className="min-h-10 rounded-full bg-senda px-4 text-sm font-semibold text-white" type="submit" name="status" value="APPROVED">Aprobar</button>
-                        <button className="min-h-10 rounded-full border border-red-300 bg-white px-4 text-sm font-semibold text-red-800" type="submit" name="status" value="REJECTED">Rechazar</button>
+                        <button className="min-h-11 rounded-full bg-senda px-4 text-sm font-semibold text-white" type="submit" name="status" value="APPROVED">Aprobar</button>
+                        <button className="min-h-11 rounded-full border border-red-300 bg-paper px-4 text-sm font-semibold text-red-800" type="submit" name="status" value="REJECTED">Rechazar</button>
                       </div>
                     </form>
                   </div>
@@ -193,7 +197,7 @@ export default async function AdminPage({
                         <Badge tone={profile.verification_state === "VERIFIED" ? "senda" : "neutral"}>{profile.verification_state}</Badge>
                       </div>
                       <p className="mt-2 text-sm text-muted">{profile.headline}</p>
-                      <details className="mt-4 rounded-2xl border border-line bg-white p-4">
+                      <details className="mt-4 rounded-2xl border border-line bg-paper p-4">
                         <summary className="min-h-10 cursor-pointer font-semibold text-senda focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/25">
                           Revisar perfil completo
                         </summary>
@@ -210,10 +214,10 @@ export default async function AdminPage({
                     </div>
                     <form action={resolvePublicationAction} className="w-full max-w-md rounded-2xl border border-line bg-mist p-4">
                       <input type="hidden" name="profileId" value={profile.id} />
-                      <label className="block text-sm font-semibold text-ink">Motivo si se rechaza<textarea className="mt-2 min-h-20 w-full rounded-xl border border-line bg-white p-3 text-sm" name="reason" maxLength={1000} /></label>
+                      <label className="block text-sm font-semibold text-ink">Motivo si se rechaza<textarea className="mt-2 min-h-20 w-full rounded-xl border border-line bg-paper p-3 text-sm text-ink" name="reason" maxLength={1000} /></label>
                       <div className="mt-4 flex flex-wrap gap-2">
-                        <button className="min-h-10 rounded-full bg-senda px-4 text-sm font-semibold text-white" type="submit" name="status" value="PUBLISHED">Publicar</button>
-                        <button className="min-h-10 rounded-full border border-red-300 bg-white px-4 text-sm font-semibold text-red-800" type="submit" name="status" value="REJECTED">Rechazar</button>
+                        <button className="min-h-11 rounded-full bg-senda px-4 text-sm font-semibold text-white" type="submit" name="status" value="PUBLISHED">Publicar</button>
+                        <button className="min-h-11 rounded-full border border-red-300 bg-paper px-4 text-sm font-semibold text-red-800" type="submit" name="status" value="REJECTED">Rechazar</button>
                       </div>
                     </form>
                   </div>

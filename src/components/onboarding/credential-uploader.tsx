@@ -127,7 +127,7 @@ export function CredentialUploader({
       {credentials.length ? (
         <ul className="mb-5 space-y-2">
           {credentials.map((credential) => (
-            <li key={credential.credential_id} className="flex items-center justify-between gap-3 rounded-2xl border border-line bg-white px-4 py-3 text-sm">
+            <li key={credential.credential_id} className="flex items-center justify-between gap-3 rounded-2xl border border-line bg-paper px-4 py-3 text-sm">
               <span className="flex min-w-0 items-center gap-3 font-semibold text-ink">
                 <FileCheck2 className="size-4 shrink-0 text-senda" aria-hidden="true" />
                 <span className="truncate">{credential.title}</span>
@@ -140,37 +140,37 @@ export function CredentialUploader({
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm font-semibold text-ink">
           Tipo de documento
-          <select className="mt-2 min-h-11 w-full rounded-xl border border-line bg-white px-3" value={credentialTypeId} onChange={(event) => setCredentialTypeId(event.target.value)}>
+          <select className="mt-2 min-h-11 w-full rounded-xl border border-line bg-paper px-3 text-ink" value={credentialTypeId} onChange={(event) => setCredentialTypeId(event.target.value)}>
             {credentialTypes.map((type) => <option key={type.id} value={type.id}>{type.name}</option>)}
           </select>
         </label>
         <label className="text-sm font-semibold text-ink">
           Título
-          <input className="mt-2 min-h-11 w-full rounded-xl border border-line bg-white px-3" value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Ej.: Licenciatura en Psicología…" />
+          <input className="mt-2 min-h-11 w-full rounded-xl border border-line bg-paper px-3 text-ink" value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Ej.: Licenciatura en Psicología…" />
         </label>
         <label className="text-sm font-semibold text-ink sm:col-span-2">
           Institución emisora (opcional)
-          <input className="mt-2 min-h-11 w-full rounded-xl border border-line bg-white px-3" value={issuingEntity} maxLength={180} onChange={(event) => setIssuingEntity(event.target.value)} />
+          <input className="mt-2 min-h-11 w-full rounded-xl border border-line bg-paper px-3 text-ink" value={issuingEntity} maxLength={180} onChange={(event) => setIssuingEntity(event.target.value)} />
         </label>
         <label className="text-sm font-semibold text-ink">
           Jurisdicción (si corresponde)
-          <input className="mt-2 min-h-11 w-full rounded-xl border border-line bg-white px-3" value={jurisdiction} maxLength={120} onChange={(event) => setJurisdiction(event.target.value)} placeholder="Ej.: CABA…" />
+          <input className="mt-2 min-h-11 w-full rounded-xl border border-line bg-paper px-3 text-ink" value={jurisdiction} maxLength={120} onChange={(event) => setJurisdiction(event.target.value)} placeholder="Ej.: CABA…" />
         </label>
         <label className="text-sm font-semibold text-ink">
           Matrícula o registro (si corresponde)
-          <input className="mt-2 min-h-11 w-full rounded-xl border border-line bg-white px-3" value={registrationNumber} maxLength={120} onChange={(event) => setRegistrationNumber(event.target.value)} placeholder="Ej.: M.P. 12345…" />
+          <input className="mt-2 min-h-11 w-full rounded-xl border border-line bg-paper px-3 text-ink" value={registrationNumber} maxLength={120} onChange={(event) => setRegistrationNumber(event.target.value)} placeholder="Ej.: M.P. 12345…" />
         </label>
         <label className="text-sm font-semibold text-ink">
           Fecha de emisión (opcional)
-          <input className="mt-2 min-h-11 w-full rounded-xl border border-line bg-white px-3" type="date" value={issuedOn} onChange={(event) => setIssuedOn(event.target.value)} />
+          <input className="mt-2 min-h-11 w-full rounded-xl border border-line bg-paper px-3 text-ink" type="date" value={issuedOn} onChange={(event) => setIssuedOn(event.target.value)} />
         </label>
         <label className="text-sm font-semibold text-ink">
           Fecha de vencimiento (opcional)
-          <input className="mt-2 min-h-11 w-full rounded-xl border border-line bg-white px-3" type="date" value={expiresOn} onChange={(event) => setExpiresOn(event.target.value)} />
+          <input className="mt-2 min-h-11 w-full rounded-xl border border-line bg-paper px-3 text-ink" type="date" value={expiresOn} onChange={(event) => setExpiresOn(event.target.value)} />
         </label>
         <label className="text-sm font-semibold text-ink sm:col-span-2">
           Archivo
-          <input ref={fileRef} className="mt-2 block w-full rounded-xl border border-line bg-white p-3 text-sm" type="file" accept="application/pdf,image/jpeg,image/png" />
+          <input ref={fileRef} className="mt-2 block w-full rounded-xl border border-line bg-paper p-3 text-sm text-ink" type="file" accept="application/pdf,image/jpeg,image/png" />
         </label>
       </div>
       <Button className="mt-4" variant="secondary" type="button" onClick={uploadCredential} disabled={pending || !profileId}>

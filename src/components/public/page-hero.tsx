@@ -19,18 +19,18 @@ export function PageHero({
   aside?: ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden border-b border-line bg-canvas py-12 sm:py-16 lg:py-20">
+    <section className="relative overflow-hidden border-b border-line bg-canvas py-10 sm:py-12 lg:py-16">
       <div aria-hidden="true" className="absolute -right-20 -top-28 size-64 rounded-[42%_58%_65%_35%/56%_45%_55%_44%] border border-senda/15" />
       <Container>
         {breadcrumbs ? <Breadcrumbs items={breadcrumbs} /> : null}
-        <div className={`mt-8 grid items-end gap-10 ${aside ? "lg:grid-cols-[1.3fr_.7fr]" : ""}`}>
-          <div className="max-w-4xl">
+        <div className={`mt-6 grid items-end gap-8 ${aside ? "lg:grid-cols-[1.3fr_.7fr]" : ""}`}>
+          <div className="max-w-[56rem]">
             <Badge tone="senda">{eyebrow}</Badge>
-            <h1 className="mt-5 font-display text-[clamp(2.45rem,7vw,5.25rem)] font-semibold leading-[0.98] tracking-[-0.052em] text-ink text-balance">
+            <h1 className="mt-4 font-display text-[clamp(2.1rem,5vw,4rem)] font-semibold leading-[1.02] tracking-[-0.035em] text-ink text-balance">
               {title}
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-7 text-muted text-pretty sm:text-lg">{description}</p>
-            {actions ? <div className="mt-8 flex flex-wrap gap-3">{actions}</div> : null}
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-muted text-pretty sm:text-base">{description}</p>
+            {actions ? <div className="mt-6 flex flex-wrap gap-3">{actions}</div> : null}
           </div>
           {aside ? <div>{aside}</div> : null}
         </div>

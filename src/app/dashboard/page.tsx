@@ -193,7 +193,7 @@ export default async function DashboardPage({
                   {(leadTransitions[lead.status] ?? []).length ? <form action={updateLeadStatusAction} className="flex shrink-0 gap-2">
                     <input type="hidden" name="leadId" value={lead.lead_id} />
                     <label className="sr-only" htmlFor={`lead-status-${lead.lead_id}`}>Estado de la consulta</label>
-                    <select id={`lead-status-${lead.lead_id}`} className="min-h-11 rounded-xl border border-line bg-white px-3 text-sm font-semibold text-ink" name="status">
+                    <select id={`lead-status-${lead.lead_id}`} className="min-h-11 rounded-xl border border-line bg-paper px-3 text-sm font-semibold text-ink" name="status">
                       {(leadTransitions[lead.status] ?? []).map((status) => <option key={status} value={status}>{leadStateCopy[status] ?? status}</option>)}
                     </select>
                     <button className="min-h-11 rounded-xl bg-ink px-4 text-sm font-semibold text-white" type="submit">Guardar</button>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { buttonStyles } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Logo } from "@/components/public/logo";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const navigation = [
   { href: "/profesionales", label: "Profesionales" },
@@ -14,20 +15,21 @@ const navigation = [
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-paper/95 supports-[backdrop-filter]:bg-paper/90 supports-[backdrop-filter]:backdrop-blur-md">
-      <Container className="flex min-h-[72px] items-center justify-between gap-6">
+      <Container className="flex min-h-16 items-center justify-between gap-4">
         <Logo />
-        <nav aria-label="Navegación principal" className="hidden items-center gap-1 lg:flex">
+        <nav aria-label="Navegación principal" className="hidden items-center gap-0.5 xl:flex">
           {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-full px-3.5 py-2 text-sm font-medium text-muted transition-colors hover:bg-mist hover:text-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35 motion-reduce:transition-none"
+              className="rounded-full px-3 py-2 text-[0.8rem] font-medium text-muted transition-colors hover:bg-mist hover:text-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35 motion-reduce:transition-none"
             >
               {item.label}
             </Link>
           ))}
         </nav>
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden items-center gap-1.5 xl:flex">
+          <ThemeToggle />
           <Link href="/ingresar" className={buttonStyles({ variant: "quiet", size: "sm" })}>
             Ingresar
           </Link>
@@ -38,30 +40,33 @@ export function SiteHeader() {
             Encontrar acompañamiento
           </Link>
         </div>
-        <details className="mobile-nav relative lg:hidden">
-          <summary className="flex min-h-11 cursor-pointer list-none items-center rounded-full border border-line px-4 text-sm font-semibold text-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35">
-            Menú
-          </summary>
-          <div className="absolute right-0 top-[calc(100%+12px)] w-[min(82vw,320px)] rounded-[1.25rem] border border-line bg-paper p-3 shadow-[0_18px_50px_rgba(30,39,36,0.12)]">
-            <nav aria-label="Navegación móvil" className="flex flex-col">
-              {navigation.map((item) => (
-                <Link key={item.href} href={item.href} className="rounded-xl px-4 py-3 text-base font-medium text-ink hover:bg-mist">
-                  {item.label}
+        <div className="ml-auto flex items-center gap-2 xl:hidden">
+          <ThemeToggle />
+          <details className="mobile-nav relative">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center rounded-full border border-line px-4 text-sm font-semibold text-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35">
+              Menú
+            </summary>
+            <div className="absolute right-0 top-[calc(100%+10px)] w-[min(86vw,320px)] rounded-[1.1rem] border border-line bg-paper p-3 shadow-soft">
+              <nav aria-label="Navegación móvil" className="flex flex-col">
+                {navigation.map((item) => (
+                  <Link key={item.href} href={item.href} className="rounded-xl px-4 py-3 text-sm font-medium text-ink hover:bg-mist">
+                    {item.label}
+                  </Link>
+                ))}
+                <div className="my-2 border-t border-line" />
+                <Link href="/ingresar" className="rounded-xl px-4 py-3 text-sm font-medium text-ink hover:bg-mist">
+                  Ingresar
                 </Link>
-              ))}
-              <div className="my-2 border-t border-line" />
-              <Link href="/ingresar" className="rounded-xl px-4 py-3 text-base font-medium text-ink hover:bg-mist">
-                Ingresar
-              </Link>
-              <Link href="/registro?next=/profesionales/sumarse" className="rounded-xl px-4 py-3 text-base font-medium text-ink hover:bg-mist">
-                Crear perfil profesional
-              </Link>
-              <Link href="/profesionales" className={`${buttonStyles({ size: "sm" })} mt-2`}>
-                Encontrar acompañamiento
-              </Link>
-            </nav>
-          </div>
-        </details>
+                <Link href="/registro?next=/profesionales/sumarse" className="rounded-xl px-4 py-3 text-sm font-medium text-ink hover:bg-mist">
+                  Crear perfil profesional
+                </Link>
+                <Link href="/profesionales" className={`${buttonStyles({ size: "sm" })} mt-2`}>
+                  Encontrar acompañamiento
+                </Link>
+              </nav>
+            </div>
+          </details>
+        </div>
       </Container>
     </header>
   );

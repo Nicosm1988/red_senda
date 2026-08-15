@@ -8,7 +8,7 @@ import { SubmitButton } from "@/components/auth/submit-button";
 import { initialAuthState } from "@/lib/validation/auth";
 
 const inputClass =
-  "mt-2 min-h-12 w-full rounded-2xl border border-line bg-white px-4 text-base text-ink outline-none transition focus-visible:border-senda focus-visible:ring-3 focus-visible:ring-senda/15";
+  "mt-2 min-h-12 w-full rounded-2xl border border-line bg-paper px-4 text-base text-ink outline-none transition focus-visible:border-senda focus-visible:ring-3 focus-visible:ring-senda/15";
 
 function FieldError({ id, errors }: { id: string; errors?: string[] }) {
   return errors?.[0] ? (
@@ -51,11 +51,11 @@ export function SignUpForm({ next }: { next?: string }) {
       <fieldset>
         <legend className="text-sm font-semibold text-ink">Quiero</legend>
         <div className="mt-2 grid gap-3 sm:grid-cols-2">
-          <label className="flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border border-line bg-white px-4 has-checked:border-senda has-checked:ring-2 has-checked:ring-senda/15">
+          <label className="flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border border-line bg-paper px-4 has-checked:border-senda has-checked:ring-2 has-checked:ring-senda/15">
             <input type="radio" name="accountType" value="PERSON" defaultChecked={!professionalIntent} />
             <span className="text-sm font-medium">Encontrar acompañamiento</span>
           </label>
-          <label className="flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border border-line bg-white px-4 has-checked:border-senda has-checked:ring-2 has-checked:ring-senda/15">
+          <label className="flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border border-line bg-paper px-4 has-checked:border-senda has-checked:ring-2 has-checked:ring-senda/15">
             <input type="radio" name="accountType" value="PROFESSIONAL" defaultChecked={professionalIntent} />
             <span className="text-sm font-medium">Ofrecer mis servicios</span>
           </label>

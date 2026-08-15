@@ -36,7 +36,7 @@ type ExistingProfile = {
 };
 
 const fieldClass =
-  "mt-2 min-h-12 w-full rounded-2xl border border-line bg-white px-4 text-base text-ink outline-none transition focus-visible:border-senda focus-visible:ring-3 focus-visible:ring-senda/15";
+  "mt-2 min-h-12 w-full rounded-2xl border border-line bg-paper px-4 text-base text-ink outline-none transition focus-visible:border-senda focus-visible:ring-3 focus-visible:ring-senda/15";
 const steps = ["Identidad", "Especialidad", "Perfil", "Documentación", "Revisión"];
 
 function restoreFormSnapshot(form: HTMLFormElement, snapshot: FormData) {
@@ -97,7 +97,7 @@ function ChoiceList({
         {options.map((option) => (
           <label
             key={option.id}
-            className="flex min-h-14 cursor-pointer items-start gap-3 rounded-2xl border border-line bg-white p-4 has-checked:border-senda has-checked:bg-senda/5"
+            className="flex min-h-14 cursor-pointer items-start gap-3 rounded-2xl border border-line bg-paper p-4 has-checked:border-senda has-checked:bg-senda/5"
           >
             <input
               className="mt-1"
@@ -339,7 +339,7 @@ export function ProfessionalOnboardingForm({
       <section className="mt-8" hidden={step !== 4}>
         <p className="text-sm font-semibold text-senda">Paso 5 de 5</p>
         <h2 className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-ink">Listo para revisión</h2>
-        <div className="mt-6 rounded-3xl border border-line bg-white p-6">
+        <div className="mt-6 rounded-3xl border border-line bg-paper p-6">
           <Check className="size-7 text-senda" aria-hidden="true" />
           <p className="mt-4 font-semibold text-ink">Al enviar, el perfil todavía no queda público.</p>
           <p className="mt-2 text-sm leading-relaxed text-muted">Revisaremos identidad, formación y consistencia del perfil. Vas a ver el estado desde tu dashboard.</p>
@@ -351,7 +351,7 @@ export function ProfessionalOnboardingForm({
           </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             {plans.map((plan) => (
-              <label key={plan.code} className="cursor-pointer rounded-2xl border border-line bg-white p-4 has-checked:border-senda has-checked:bg-senda/5">
+              <label key={plan.code} className="cursor-pointer rounded-2xl border border-line bg-paper p-4 has-checked:border-senda has-checked:bg-senda/5">
                 <span className="flex items-start gap-3">
                   <input className="mt-1" type="radio" name="planCode" value={plan.code} defaultChecked={plan.code === initialPlan} />
                   <span>

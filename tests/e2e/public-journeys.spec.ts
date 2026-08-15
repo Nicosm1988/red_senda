@@ -70,6 +70,102 @@ test("home → filtered search → profile → contact", async ({ page }) => {
   await expect(page.getByRole("status")).toContainText(professionalName);
 });
 
+test("directory filters stay synchronized with the URL", async ({ page }) => {
+  await page.goto("/profesionales");
+
+  const jobChange = page.getByRole("checkbox", {
+    name: "Cambiar o encontrar trabajo",
+  });
+  const openMobileFilters = async () => {
+    const mobileFilterSummary = page.getByText("Filtros y orden", {
+      exact: true,
+    });
+    if (
+      (await mobileFilterSummary.isVisible()) &&
+      !(await jobChange.isVisible())
+    ) {
+      await mobileFilterSummary.click();
+    }
+  };
+
+  await openMobileFilters();
+  await jobChange.check();
+  await page.getByRole("checkbox", { name: "Online", exact: true }).check();
+  await page.getByRole("button", { name: "Aplicar filtros" }).click();
+
+  await expect(page).toHaveURL(/need=cambio-trabajo/);
+  await expect(page).toHaveURL(/modality=online/);
+  await openMobileFilters();
+  await expect(jobChange).toBeChecked();
+  await expect(
+    page.getByText("3 profesionales coinciden", { exact: true }),
+  ).toBeVisible();
+
+  const resultCards = page.locator("article").filter({
+    has: page.getByRole("link", { name: "Contactar" }),
+  });
+  await expect(resultCards).toHaveCount(3);
+  for (const card of await resultCards.all()) {
+    await expect(card.getByText("Cambiar o encontrar trabajo", { exact: true })).toBeVisible();
+    await expect(card.getByText(/^Online(?: · Presencial)?$/)).toBeVisible();
+  }
+
+  await openMobileFilters();
+  await page.getByRole("link", { name: "Limpiar" }).click();
+  await expect(page).toHaveURL(/\/profesionales$/);
+  await expect(jobChange).not.toBeChecked();
+  await expect(
+    page.getByText("6 profesionales coinciden", { exact: true }),
+  ).toBeVisible();
+
+  await page.goBack();
+  await expect(page).toHaveURL(/need=cambio-trabajo/);
+  await openMobileFilters();
+  await expect(jobChange).toBeChecked();
+  await expect(
+    page.getByText("3 profesionales coinciden", { exact: true }),
+  ).toBeVisible();
+});
+
+test("theme choice persists across public pages", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.goto("/");
+  await page.evaluate(() =>
+    window.localStorage.removeItem("red-senda-theme:v1"),
+  );
+  await page.reload();
+
+  const root = page.locator("html");
+  const activateLight = page.getByRole("button", {
+    name: "Activar modo claro",
+  });
+
+  await expect(root).toHaveAttribute("data-theme", "dark");
+  await expect(activateLight).toHaveAttribute("aria-pressed", "true");
+  await activateLight.click();
+  await expect(root).toHaveAttribute("data-theme", "light");
+
+  expect(
+    await page.evaluate(() =>
+      window.localStorage.getItem("red-senda-theme:v1"),
+    ),
+  ).toBe("light");
+
+  await page.reload();
+  await expect(root).toHaveAttribute("data-theme", "light");
+  await page.getByRole("button", { name: "Activar modo oscuro" }).click();
+  await expect(root).toHaveAttribute("data-theme", "dark");
+
+  await page.goto("/terminos");
+  await expect(root).toHaveAttribute("data-theme", "dark");
+  await expect(
+    page.getByRole("button", { name: "Activar modo claro" }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Términos y condiciones" }),
+  ).toBeVisible();
+});
+
 test("matching explains its recommendation and keeps filters in the URL", async ({
   page,
 }) => {

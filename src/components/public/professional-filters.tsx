@@ -132,7 +132,23 @@ function FilterFields({ selected }: { selected: ProfessionalFilters }) {
   );
 }
 
+function filterStateKey(selected: ProfessionalFilters) {
+  return JSON.stringify({
+    q: selected.q ?? "",
+    need: selected.need ?? [],
+    type: selected.type ?? [],
+    modality: selected.modality ?? [],
+    location: selected.location ?? [],
+    language: selected.language ?? [],
+    verified: selected.verified ?? false,
+    price: selected.price ?? "",
+    sort: selected.sort ?? "relevance",
+  });
+}
+
 export function ProfessionalFiltersForm({ selected, activeCount }: { selected: ProfessionalFilters; activeCount: number }) {
+  const urlStateKey = filterStateKey(selected);
+
   function trackFilterSubmit(event: React.FormEvent<HTMLFormElement>) {
     const formData = new FormData(event.currentTarget);
     trackAnalytics("filter_applied", { properties: { active_count: activeCount } });
@@ -148,7 +164,7 @@ export function ProfessionalFiltersForm({ selected, activeCount }: { selected: P
           <h2 className="font-display text-xl font-semibold tracking-[-0.02em] text-ink">Afinar búsqueda</h2>
           {activeCount > 0 ? <span className="rounded-full bg-senda-soft px-2.5 py-1 text-xs font-bold text-senda-dark">{activeCount} activos</span> : null}
         </div>
-        <FilterFields selected={selected} />
+        <FilterFields key={urlStateKey} selected={selected} />
       </form>
       <details className="filter-panel rounded-[1.25rem] border border-line bg-paper lg:hidden">
         <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between px-5 font-semibold text-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-senda/35">
@@ -156,7 +172,7 @@ export function ProfessionalFiltersForm({ selected, activeCount }: { selected: P
           <span className="text-xs text-senda-dark">{activeCount > 0 ? `${activeCount} activos` : "Abrir"}</span>
         </summary>
         <form action="/profesionales" method="get" onSubmit={trackFilterSubmit} className="border-t border-line p-5">
-          <FilterFields selected={selected} />
+          <FilterFields key={urlStateKey} selected={selected} />
         </form>
       </details>
     </>

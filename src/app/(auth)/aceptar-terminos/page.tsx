@@ -36,7 +36,7 @@ export default async function AcceptTermsPage({
       ) : null}
       <form action={acceptCurrentTermsAction} className="mt-7 space-y-5">
         <input type="hidden" name="next" value={params.next ?? "/dashboard"} />
-        <label className="flex items-start gap-3 rounded-2xl border border-line bg-white p-4 text-sm leading-relaxed text-muted">
+        <label className="flex items-start gap-3 rounded-2xl border border-line bg-paper p-4 text-sm leading-relaxed text-muted">
           <input className="mt-1 size-4" type="checkbox" name="terms" required />
           <span>
             Leí y acepto los <Link className="font-semibold text-ink underline" href="/terminos" target="_blank">términos</Link> y la <Link className="font-semibold text-ink underline" href="/privacidad" target="_blank">política de privacidad</Link> vigentes.

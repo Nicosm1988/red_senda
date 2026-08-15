@@ -117,6 +117,7 @@ Helpers privilegiados viven en `private`; los wrappers de `public` son `security
 
 - `professional_profiles(slug)` unique; la view pública decide elegibilidad.
 - `professional_profiles(publication_status, is_accepting_leads, updated_at desc, id)` para catálogo/moderación, con índice parcial sobre publicados.
+- `professional_profiles(search_vector_unaccented)` GIN para búsqueda pública en español sin distinguir mayúsculas ni tildes; la configuración `private.spanish_unaccent` normaliza antes de aplicar el stemmer.
 - Índice en cada FK de tabla puente y unique compuesto para evitar duplicados.
 - `leads(professional_profile_id, status, created_at desc)` y `leads(consumer_user_id, created_at desc)` cuando hay cuenta consumidora.
 - `reviews(professional_profile_id, created_at desc) where status = 'APPROVED'`.
