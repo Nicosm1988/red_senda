@@ -1,0 +1,64 @@
+# Benchmark funcional: RedPsi
+
+## Estado
+
+- **Implementado:** desarrollo clean-room, copy propio, seed marcado `is_demo` y asset editorial original en `public/images/red-senda-conversation.webp`.
+- **Pendiente recurrente:** revisión de originalidad y licencias en cada release que agregue assets o investigación competitiva.
+
+## Alcance
+
+Este documento registra únicamente aprendizajes funcionales aportados en el brief del proyecto. **Red Senda se diseña e implementa de forma original, clean-room y desde cero.** No se necesita ni se autoriza scraping de RedPsi.
+
+RedPsi se usa como referencia conceptual de un directorio/marketplace que conecta demanda con profesionales y monetiza principalmente visibilidad y generación de leads para la oferta.
+
+## Qué se puede estudiar
+
+- recorrido búsqueda → filtro → perfil → contacto;
+- taxonomías de oferta y demanda;
+- mecanismos generales de confianza, reputación y verificación;
+- adquisición B2C/B2P/B2B;
+- suscripciones, convenios, contenido y SEO como patrones de negocio;
+- métricas genéricas de un marketplace de servicios.
+
+Son patrones comunes del mercado, no especificaciones para replicar una implementación.
+
+## Qué está prohibido
+
+- Copiar código, HTML, CSS, JavaScript, textos, artículos o estructura visual 1:1.
+- Descargar o reutilizar fotos, iconos, logo, identidad, nombres internos o trade dress.
+- Copiar datos, perfiles o información de profesionales reales.
+- Hacer scraping automatizado, evadir restricciones o buscar código no público.
+- Presentar contenido derivado como propio o construir una réplica estética.
+
+## Diferenciación obligatoria
+
+Red Senda se organiza primero por la **situación de la persona**, no sólo por profesión. Agrega:
+
+- matching determinístico y explicable;
+- reglas de verificación diferentes por tipo profesional;
+- ranking transparente con fairness y patrocinio visible;
+- foco específico en trayectorias, empleabilidad y transiciones;
+- arquitectura para convenios y red profesional interna;
+- identidad humana/editorial propia de SENDA, sin clonar un portal clínico.
+
+## Procedimiento clean-room
+
+1. Convertir el brief funcional en capacidades abstractas.
+2. Diseñar taxonomía, copy, flujos, componentes y modelo de datos originales.
+3. Usar únicamente assets propios, licenciados o generados para Red Senda.
+4. Crear seed con personas y datos inequívocamente ficticios; marcar `is_demo` cuando aplique.
+5. Revisar antes de publicar que no exista similitud sustancial en copy, composición, identidad o dataset.
+6. Registrar fuente/licencia de cualquier recurso externo permitido.
+
+El asset editorial actual fue generado para Red Senda con la herramienta de generación de imágenes integrada y luego optimizado a WebP. La consigna visual pidió una conversación profesional humana, sobria y luminosa, sin logos, texto ni semejanza con portales de referencia. No deriva de un asset de RedPsi.
+
+## Checklist de originalidad
+
+| Estado | Control |
+| --- | --- |
+| **Implementado** | No hay scraper/importador de RedPsi en el repositorio; copy, diseño, tokens y componentes fueron creados para Red Senda. |
+| **Implementado** | Los 16 perfiles y demás datos demo se declaran ficticios mediante `is_demo` y rótulos visibles. |
+| **Implementado** | Ranking y patrocinio siguen reglas propias y transparentes. |
+| **Pendiente recurrente** | Revisar que nuevas taxonomías, textos y assets mantengan origen propio/licencia registrada y no introduzcan similitud sustancial. |
+
+Si una investigación competitiva futura requiere material no incluido en el brief, debe limitarse a observación humana legítima de información pública, documentar sólo aprendizajes abstractos y pasar revisión legal cuando exista duda.
