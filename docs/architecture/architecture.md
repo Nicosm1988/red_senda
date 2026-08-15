@@ -4,9 +4,9 @@
 
 | Estado | Alcance |
 | --- | --- |
-| **Implementado** | App Router, SSR Auth, directorio Supabase, APIs, vertical profesional/admin, CSP y outbox. |
+| **Implementado** | App Router, SSR Auth, directorio Supabase, APIs, vertical profesional/admin, CSP, outbox y release Vercel/Supabase verificado. |
 | **Preparado** | Matching administrable, esquemas de contenidos/convenios y adaptadores externos cerrados. |
-| **Pendiente** | Lectura productiva de contenidos/convenios, matching UI dinámico, pagos y entrega real de email verificados, release remoto. |
+| **Pendiente** | Lectura productiva de contenidos/convenios, matching UI dinámico, pagos y entrega real de email verificados. |
 
 ## Topología
 
@@ -14,7 +14,7 @@
 Navegador
    │ HTTPS / cookies
    ▼
-Next.js 16.3 (destino Vercel, Node.js 24)
+Next.js 16.3 (Vercel `gru1`, Node.js 24)
    ├─ Server Components: lectura/render/SEO
    ├─ Server Actions: mutaciones internas
    ├─ Route Handlers: callback, APIs, cron y webhooks

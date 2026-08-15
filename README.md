@@ -8,16 +8,18 @@ El directorio y los perfiles publicados se leen desde Supabase. El seed piloto c
 
 | Estado | Alcance |
 | --- | --- |
-| **Implementado** | Directorio Supabase, filtros y ranking; perfil y lead idempotente; Auth; aceptación legal append-only; onboarding con documento privado; dashboard de leads; revisión admin de credencial y publicación; outbox con lease/token, intento post-response y cron autenticado. |
+| **Implementado** | Directorio Supabase, filtros y ranking; perfil y lead idempotente; Auth; aceptación legal append-only; onboarding con documento privado; dashboard de leads; revisión admin de credencial y publicación; outbox con lease/token; producción Vercel/Supabase y cron autenticado verificados. |
 | **Preparado** | Modelo/RPC de matching administrable; planes en `DRAFT`, selección en `PENDING_PAYMENT`; esquemas de artículos y convenios; adaptadores de Resend y Mercado Pago que permanecen cerrados sin configuración válida. |
-| **Pendiente** | Conectar la UI de matching a `explain_matching`; servir recursos/convenios desde Supabase; precio y checkout aprobados; credenciales y smoke tests de proveedores; primer `SUPERADMIN`; release y smoke remoto. |
+| **Pendiente** | Conectar la UI de matching a `explain_matching`; servir recursos/convenios desde Supabase; precio y checkout aprobados; credenciales y smoke tests de proveedores; primer `SUPERADMIN`. |
+
+Producción: [https://red-senda.vercel.app](https://red-senda.vercel.app), desplegada desde `main` y verificada el 2026-08-15. El alcance del smoke y los límites externos están registrados en [despliegue](docs/deployment/vercel.md).
 
 ## Stack
 
 - Node.js 24, Next.js 16, React 19 y TypeScript estricto.
 - Tailwind CSS 4 y componentes propios accesibles.
 - Supabase Postgres, Auth y Storage con RLS.
-- Configuración de Vercel y componentes de Analytics/Speed Insights; su activación se confirma recién con el deployment.
+- Vercel en región `gru1`, Analytics y Speed Insights activos en el deployment de producción.
 - Zod, Vitest y Playwright.
 
 ## Puesta en marcha
@@ -58,7 +60,7 @@ npm run db:types   # regenera tipos desde Supabase local
 
 La integración destructiva `tests/integration/supabase-vertical.test.ts` y el E2E autenticado sólo aceptan una URL Supabase local por HTTP; fallan o se omiten si faltan `SUPABASE_TEST_URL`, `SUPABASE_TEST_PUBLISHABLE_KEY` o `SUPABASE_TEST_SECRET_KEY`. Ejecutalos después de `npm run db:reset`; crean y limpian usuarios, perfiles y objetos exclusivos de prueba y validan RLS, aceptación legal, onboarding, bootstrap admin, credencial privada, publicación, plan, lead idempotente, analítica y reset de moderación. `test:db:workflow` ejecuta además una fixture SQL dentro de una transacción que siempre termina en rollback.
 
-`npm run db:reset` carga el seed demo local. Para el primer release piloto se decidió aplicar ese seed una sola vez y de forma explícita con `npx supabase@2.114.0 db push --linked --include-seed --yes`; no debe repetirse en releases posteriores sin una nueva decisión documentada.
+`npm run db:reset` carga el seed demo local. El primer release piloto aplicó ese seed una sola vez y de forma explícita el 2026-08-15 con `npx supabase@2.114.0 db push --linked --include-seed --yes`; no debe repetirse en releases posteriores sin una nueva decisión documentada.
 
 ## Límites de confianza
 

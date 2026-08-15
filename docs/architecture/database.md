@@ -4,9 +4,9 @@
 
 | Estado | Alcance |
 | --- | --- |
-| **Implementado** | Migración inicial, grants/RLS, catálogo, directorio, ranking, identidad/legal, vertical profesional/admin, leads, Storage privado, auditoría y outbox. |
+| **Implementado** | Migraciones local/remotas, grants/RLS, catálogo, directorio, ranking, identidad/legal, vertical profesional/admin, leads, Storage privado, auditoría y outbox. |
 | **Preparado** | Matching versionado, artículos, convenios, suscripciones y eventos de proveedor. |
-| **Pendiente** | Conectar matching/contenidos/convenios a sus UIs, ampliar la integración RLS a más políticas y validar la aplicación remota del release. |
+| **Pendiente** | Conectar matching/contenidos/convenios a sus UIs y ampliar la integración RLS a más políticas fuera del vertical crítico. |
 
 ## Contrato
 
@@ -134,6 +134,6 @@ No crear todos los índices posibles: confirmar con consultas y `EXPLAIN (ANALYZ
 4. Ejecutar advisors y revisar el diff antes de push/deploy.
 5. El seed actual contiene 16 perfiles, reseñas, artículos y convenios inequívocamente ficticios con `is_demo = true`, además del catálogo y los UUID de referencia. El primer release piloto lo aplica una sola vez y de forma intencional porque el catálogo inicial depende de esos UUID; luego no se reejecuta sin decisión documentada.
 
-Las migraciones de producción son forward-only y compatibles con la versión anterior de la app cuando el despliegue lo requiera. **Pendiente:** confirmar push/configuración remotos, backups, retención y eliminación de PII antes de tráfico real.
+Las migraciones de producción son forward-only y compatibles con la versión anterior de la app cuando el despliegue lo requiera. Las dos migraciones, el seed piloto y la configuración Auth se aplicaron al proyecto alojado el 2026-08-15; los probes anónimos confirmaron directorio/ranking y denegación de `leads`, `analytics_events` y schema `private`. **Pendiente operativo:** política formal de backups, retención y eliminación de PII.
 
 Referencias vigentes: [seguridad del Data API](https://supabase.com/docs/guides/api/securing-your-api), [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security) y [cambio a grants explícitos](https://supabase.com/changelog/45329-breaking-change-tables-not-exposed-to-data-and-graphql-api-automatically).

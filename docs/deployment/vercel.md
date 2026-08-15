@@ -2,19 +2,18 @@
 
 ## Estado
 
-- **Preparado:** configuración local de Next.js, Node 24, región, cron, variables documentadas y proyecto destino. Las variables Vercel ya están aisladas: Preview usa valores inertes y `CRON_SECRET` queda en Production.
-- **Pendiente:** push/verificación final de Supabase, deployment Production, primer `SUPERADMIN`, invocación real del cron y smoke remoto.
-- Este documento describe el procedimiento objetivo; no demuestra que producción esté activa.
+- **Implementado el 2026-08-15:** dos migraciones, configuración Auth y seed piloto en Supabase; `main` desplegada en Vercel; variables aisladas; CI, rutas públicas, CSP, RLS, lead idempotente y cron autenticado verificados.
+- **Pendiente externo:** primer `SUPERADMIN`, entrega Resend y contrato/sandbox Mercado Pago. El smoke autenticado remoto se completa después de crear la cuenta real autorizada.
 
 ## Destino
 
 - Repositorio: [Nicosm1988/red_senda](https://github.com/Nicosm1988/red_senda).
-- Proyecto destino existente: [red-senda](https://vercel.com/nmarcosan-2648s-projects/red-senda) en el equipo del dueño; debe reutilizarse el vínculo local `.vercel/project.json`.
-- Producción objetivo: branch `main` conectada al proyecto existente. No crear otro proyecto.
-- URL canónica objetivo: `https://red-senda.vercel.app`; `supabase/config.toml` usa esa Site URL y permite exactamente su `/auth/callback`, además de callbacks locales. Los previews no usan Auth productivo: tienen variables Supabase aisladas y no figuran en el allowlist del proyecto productivo.
-- Runtime objetivo: Node.js `24.x`; `package.json` ya lo exige y Project Settings debe confirmarse antes del deployment.
+- Proyecto activo: [red-senda](https://vercel.com/nmarcosan-2648s-projects/red-senda) en el equipo del dueño, ligado por `.vercel/project.json`.
+- Producción: branch `main` conectada al proyecto existente.
+- URL canónica activa: [https://red-senda.vercel.app](https://red-senda.vercel.app); `supabase/config.toml` usa esa Site URL y permite exactamente su `/auth/callback`, además de callbacks locales. Los previews no usan Auth productivo: tienen variables Supabase aisladas y no figuran en el allowlist del proyecto productivo.
+- Runtime confirmado: Node.js `24.x`.
 - Región de Functions: `gru1` (São Paulo), cercana al mercado inicial y coherente con `vercel.json`.
-- Framework/root objetivo: `nextjs`, root del repositorio, install `npm ci`, build `npm run build`; verificar que Project Settings no permanezca como “Other”.
+- Framework/root confirmado: `nextjs`, root del repositorio, install `npm ci`, build `npm run build`.
 
 Un vínculo local no demuestra que Git Integration, dominio, variables o último deployment estén correctos; se validan en Vercel antes de declarar producción.
 
@@ -72,7 +71,7 @@ No inventar credenciales. Si faltan, el resto despliega sin habilitar la funció
 - **Implementado:** `vercel.json` agenda `GET /api/internal/notifications/process` todos los días a las 12:17 UTC; Vercel debe enviar `Authorization: Bearer <CRON_SECRET>`.
 - **Implementado:** el worker reclama con lease/`lock_token`, reintenta leases de más de 15 minutos y sólo completa con el token vigente.
 - **Implementado en configuración:** `CRON_SECRET` está aislado en Production; no se expone su valor ni se replica en Preview.
-- **Pendiente externo:** verificar una invocación real del cron y habilitar Resend. Sin credenciales de email, el cron conserva la entrega como fallida/reintentable.
+- **Verificado en producción:** sin Bearer responde 401 y con el `CRON_SECRET` vigente respondió 200, con lote vacío sano. Sin credenciales de email, cualquier entrega real queda fallida/reintentable hasta habilitar Resend.
 
 ## Flujo de release
 
@@ -80,7 +79,7 @@ No inventar credenciales. Si faltan, el resto despliega sin habilitar la funció
 2. Revisar migraciones, grants/RLS y compatibilidad hacia atrás.
 3. En Preview: `npm ci`, lint, typecheck, unit/integration, build y Playwright crítico.
 4. En el primer release piloto, aplicar migración y seed de forma intencional: `npx supabase@2.114.0 db push --linked --include-seed --yes`. En releases posteriores omitir `--include-seed` salvo decisión documentada.
-5. Aplicar la configuración Auth versionada con `npx supabase@2.114.0 config push --linked --yes` y verificar Site URL, redirect allowlist, confirmación de email, contraseña mínima/requisitos y `secure_password_change = true` en el proyecto alojado.
+5. Aplicar la configuración Auth versionada con `npx supabase@2.114.0 config push --yes` (usa el proyecto enlazado) y verificar Site URL, redirect allowlist, confirmación de email, contraseña mínima/requisitos y `secure_password_change = true` en el proyecto alojado.
 6. Verificar variables, Node 24, URL de Auth, cron y dominio por ambiente. El webhook Mercado Pago debe seguir cerrado mientras no exista sandbox validado.
 7. Merge/push validado a `main`; esperar deployment Production del proyecto existente.
 8. Ejecutar smoke tests y revisar logs/Analytics sin PII.
@@ -118,7 +117,11 @@ npm run test:e2e:auth
 
 ## Smoke tests de producción
 
-Estado: **Pendiente hasta disponer del deployment**. Usar cuentas de prueba autorizadas y no cargar PII ficticia en perfiles o leads reales.
+Estado: **smoke público completado el 2026-08-15**. Se verificaron home, directorio, filtro, perfil, contacto, matching, planes, recursos, convenios, metadata SEO y navegación móvil/escritorio; todas las rutas respondieron correctamente y no hubo errores de runtime. Los 38 scripts del HTML inspeccionado compartieron el nonce CSP y se confirmaron headers de seguridad/no-cache.
+
+También se verificaron el directorio/ranking remoto de Supabase y las denegaciones anónimas de `leads`, `analytics_events` y `private`. Un lead sintético same-origin se creó y reintentó con la misma clave: hubo una sola fila; luego se eliminaron de forma dirigida el lead y sus efectos de prueba. El cron respondió 401 sin secreto y 200 con Bearer válido. El CI de GitHub ejecutó calidad, fixture SQL, integración Supabase y E2E autenticado con resultado verde.
+
+Los siguientes checks requieren insumos externos y permanecen pendientes: sesión real profesional/admin y URL firmada remota; entrega desde un dominio Resend verificado; firma/replay/reconciliación Mercado Pago en sandbox.
 
 - Home → directorio → filtro → perfil → contacto y confirmación.
 - Matching → explicación → perfil sugerido.

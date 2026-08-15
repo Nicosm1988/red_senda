@@ -34,7 +34,7 @@ Es una plataforma B2C/B2P/B2B de SENDA, pero no es el servicio boutique SENDA. L
 | Pagos | Adaptador Mercado Pago preparado para sandbox/producción |
 | Analítica | Vercel Analytics/Speed Insights; eventos de negocio propios |
 | Calidad | ESLint, `tsc`, Vitest y Playwright |
-| Destino de producción | Vercel, runtime Node.js 24, GitHub `main` → Production; release remoto pendiente de validación |
+| Destino de producción | [Vercel](https://red-senda.vercel.app), runtime Node.js 24, GitHub `main` → Production; release remoto verificado el 2026-08-15 |
 
 Versiones exactas y lockfile se controlan en `package.json` y `package-lock.json`.
 
@@ -144,9 +144,9 @@ Para toda tarea futura:
 | Planes/pagos | **Preparado** | Los tres planes están `DRAFT`, sin importes; elegir crea/actualiza `PENDING_PAYMENT`. Checkout, firma y reconciliación Mercado Pago están pendientes. |
 | Matching | **Preparado** | La UI local determinística y explicable está implementada; tablas y `explain_matching` existen. Conectar preguntas/reglas administrables y persistencia está pendiente. |
 | Contenidos y convenios | **Preparado** | Páginas demo rotuladas y esquemas existen; lectura desde tablas y administración completa están pendientes. |
-| Seguridad/QA local | **Preparado** | RLS/grants, Storage privado, CSP nonce, rate limit de leads/analytics, suites públicas y una integración local destructiva del vertical existen. Su ejecución final y un E2E de navegador autenticado se registran por release. |
+| Seguridad/QA | **Implementado** | RLS/grants, Storage privado, CSP nonce, rate limit, suites públicas, fixture SQL, integración RLS y E2E autenticado ejecutados; CI de GitHub quedó verde para el release. |
 | Primer `SUPERADMIN` | **Pendiente** | La RPC service-only está implementada; falta crear/confirmar la cuenta real y ejecutar el bootstrap único. |
-| Producción | **Pendiente** | No se declara activa hasta completar push/configuración, deployment y smoke remoto. |
+| Producción | **Implementado** | Dos migraciones, Auth config y seed piloto aplicados en Supabase; `main` desplegada en Vercel; rutas, CSP, directorio/RLS, lead idempotente y cron autenticado verificados el 2026-08-15. Email, pagos y primer admin conservan sus estados externos propios. |
 
 ## Próxima iteración
 

@@ -4,9 +4,9 @@
 
 | Estado | Alcance |
 | --- | --- |
-| **Implementado** | Grants/RLS, autorización por ownership/rol, CSP con nonce, origen en mutaciones de navegador, Storage privado, evidencia legal append-only, rate limit de leads/analytics y outbox con lease/token. |
+| **Implementado** | Grants/RLS, autorización por ownership/rol, CSP con nonce, origen en mutaciones de navegador, Storage privado, evidencia legal append-only, rate limit de leads/analytics, outbox con lease/token y probes remotos del release. |
 | **Preparado** | Endpoint de pagos cerrado, adaptador Resend, eventos/auditoría y scripts de calidad. |
-| **Pendiente** | MFA admin, eventual BFF para sesión HttpOnly, antimalware de documentos, firma/reconciliación Mercado Pago, proveedor de alertas, revisión legal y validaciones remotas del release. |
+| **Pendiente** | Enforcement MFA admin, eventual BFF para sesión HttpOnly, antimalware de documentos, firma/reconciliación Mercado Pago, proveedor de alertas y revisión legal. |
 
 ## Modelo
 
@@ -31,7 +31,7 @@ No guardar CUIT, documento, domicilio privado u otra PII si el caso no lo exige.
 - Para acciones admin críticas, verificar sesión y rol actual en DAL además del claim.
 - Diferenciar 401 (sin identidad) y 403 (identidad sin permiso) sin filtrar existencia de recursos.
 - Revocar sesiones antes de eliminar/bloquear cuentas sensibles; mantener expiración razonable.
-- `secure_password_change = true` está versionado en `supabase/config.toml`; su aplicación al proyecto alojado se verifica con `config push` y smoke de recuperación/cambio.
+- `secure_password_change = true` está versionado y fue aplicado al proyecto alojado con el resto de la configuración Auth. El smoke real de recuperación/cambio requiere una cuenta autorizada.
 - Las aceptaciones se insertan por documento y versión en `private.legal_acceptances` con timestamp del servidor. El alta usa `accept_terms_from_signup_backend`; una sesión desactualizada debe pasar por `accept_current_terms`. No se sobreescribe evidencia histórica.
 
 Cada Server Action y Route Handler es invocable directamente: valida sesión, rol, ownership y transición de estado dentro del entrypoint/caso de uso.
@@ -106,9 +106,9 @@ No registrar tokens, passwords, API keys, archivos, mensajes completos, emails/t
 
 | Estado | Control |
 | --- | --- |
-| **Implementado** | Secrets server-only, bucket privado de 10 MiB con MIME allowlist, autorización repetida en RPC/actions, CSP/headers, contacto con honeypot, idempotencia y rate limit. |
-| **Preparado** | Lint, typecheck, unitarias, build, Playwright público, fixture SQL transaccional, `test:integration` RLS y E2E autenticado profesional/admin con limpieza; advisors y su ejecución forman parte del release. |
-| **Pendiente** | Ampliar cobertura RLS fuera del vertical, verificación de variables/bundle/logs remotos y smoke de URLs firmadas. |
+| **Implementado** | Secrets aislados por ambiente, bucket privado de 10 MiB con MIME allowlist, autorización repetida, CSP/headers remotos, contacto idempotente/rate-limited y suites local/CI completas del vertical. |
+| **Preparado** | Lint, typecheck, unitarias, build, Playwright público, fixture SQL, integración RLS, E2E autenticado profesional/admin y advisors están automatizados en el release. |
+| **Pendiente** | Ampliar cobertura RLS fuera del vertical, observabilidad central y smoke remoto de URL firmada con una cuenta real autorizada. |
 | **Pendiente externo** | MFA administrativa, escaneo antimalware, sandbox Mercado Pago completo, entrega Resend, retención/eliminación de PII y revisión profesional de privacidad/términos/base legal. |
 
 Referencias: [Data API](https://supabase.com/docs/guides/api/securing-your-api), [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security) y [Storage privado](https://supabase.com/docs/guides/storage/buckets/fundamentals).
