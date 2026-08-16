@@ -11,9 +11,6 @@ export type MyProfessionalProfile = {
   experience_summary: string | null;
   education_summary: string | null;
   years_experience: number;
-  starting_price: number | null;
-  currency: string | null;
-  show_starting_price: boolean;
   availability_status: string;
   next_available_on: string | null;
   availability_note: string | null;

@@ -119,7 +119,7 @@ begin
 end;
 $$;
 
--- Build a complete, non-regulated onboarding fixture for the owner workflow.
+-- Build a complete, supported onboarding fixture for the owner workflow.
 insert into auth.users (
   id,
   aud,
@@ -178,7 +178,7 @@ insert into public.professional_profile_types (
 )
 values (
   'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02',
-  '20000000-0000-4000-8000-000000000003',
+  '20000000-0000-4000-8000-000000000002',
   true
 );
 
@@ -275,6 +275,292 @@ begin
 end;
 $$;
 
+savepoint unsupported_catalog_guardrails;
+
+-- A forged relation to a historical professional type cannot be submitted or
+-- published, even if a privileged actor later forces the profile status.
+delete from public.professional_profile_types
+where professional_profile_id = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02';
+
+insert into public.professional_profile_types (
+  professional_profile_id,
+  professional_type_id,
+  is_primary
+)
+values (
+  'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02',
+  '20000000-0000-4000-8000-000000000003',
+  true
+);
+
+do $$
+declare
+  v_rejected boolean := false;
+begin
+  begin
+    perform public.submit_professional_profile(
+      'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02'
+    );
+  exception
+    when check_violation then
+      v_rejected := true;
+  end;
+
+  if not v_rejected then
+    raise exception 'Unsupported professional type was submitted';
+  end if;
+end;
+$$;
+
+reset role;
+
+insert into public.user_roles (user_id, role_id)
+select 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa02', r.id
+from public.roles r
+where r.code = 'ADMIN'
+on conflict do nothing;
+
+set local role authenticated;
+
+do $$
+declare
+  v_rejected boolean := false;
+begin
+  begin
+    perform public.admin_set_professional_publication(
+      'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02',
+      'PUBLISHED',
+      null
+    );
+  exception
+    when check_violation then
+      v_rejected := true;
+  end;
+
+  if not v_rejected then
+    raise exception 'Admin published an unsupported professional type';
+  end if;
+end;
+$$;
+
+reset role;
+
+-- Simulate legacy/corrupt state to prove every public read and lead boundary
+-- applies the catalogue rule independently of publication_status.
+update public.professional_profiles
+set publication_status = 'PUBLISHED',
+    published_at = statement_timestamp(),
+    is_accepting_leads = true
+where id = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02';
+
+set local role anon;
+
+do $$
+begin
+  if exists (
+    select 1
+    from public.professional_directory d
+    where d.id = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02'
+  ) then
+    raise exception 'Directory exposed an unsupported professional type';
+  end if;
+
+  if exists (
+    select 1
+    from public.rank_professionals() r
+    where r.professional_profile_id = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02'
+  ) then
+    raise exception 'Ranking exposed an unsupported professional type';
+  end if;
+end;
+$$;
+
+reset role;
+
+do $$
+declare
+  v_rejected boolean := false;
+begin
+  begin
+    perform public.create_lead_from_backend(
+      p_professional_profile_id => 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02',
+      p_full_name => 'Persona de prueba',
+      p_email => 'catalog-guardrail@example.invalid',
+      p_message => 'Consulta ficticia para comprobar la barrera de catálogo.',
+      p_contact_preference => 'EMAIL',
+      p_source => 'database_test',
+      p_consent_version => '2026-08',
+      p_consented_at => statement_timestamp(),
+      p_idempotency_key_hash => repeat('a', 64)
+    );
+  exception
+    when invalid_parameter_value then
+      v_rejected := true;
+  end;
+
+  if not v_rejected then
+    raise exception 'Lead was created for an unsupported professional type';
+  end if;
+end;
+$$;
+
+do $$
+declare
+  v_directory_columns text[];
+  v_rank_row jsonb;
+  v_my_profile_fields text[];
+  v_admin_profile_fields text[];
+begin
+  select array_agg(a.attname order by a.attname)
+  into v_directory_columns
+  from pg_attribute a
+  where a.attrelid = 'public.professional_directory'::regclass
+    and a.attnum > 0
+    and not a.attisdropped;
+
+  if v_directory_columns && array[
+    'starting_price', 'currency', 'show_starting_price'
+  ]::text[] then
+    raise exception 'Directory still exposes fee columns: %', v_directory_columns;
+  end if;
+
+  select to_jsonb(r)
+  into v_rank_row
+  from public.rank_professionals() r
+  limit 1;
+
+  if v_rank_row is null then
+    raise exception 'Ranking contract test requires a supported seed profile';
+  end if;
+  if v_rank_row ?| array['starting_price', 'currency', 'show_starting_price'] then
+    raise exception 'Ranking still exposes fee fields: %', v_rank_row;
+  end if;
+
+  if to_regprocedure(
+    'public.rank_professionals(uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],numeric,text,text,integer)'
+  ) is not null then
+    raise exception 'Legacy budget-aware ranking signature still exists';
+  end if;
+  if to_regprocedure(
+    'public.rank_professionals(uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],text,text,integer)'
+  ) is null then
+    raise exception 'Price-free ranking signature is missing';
+  end if;
+
+  select p.proargnames
+  into v_my_profile_fields
+  from pg_proc p
+  where p.oid = 'public.my_professional_profile()'::regprocedure;
+
+  select p.proargnames
+  into v_admin_profile_fields
+  from pg_proc p
+  where p.oid = 'public.admin_pending_professional_profiles(integer)'::regprocedure;
+
+  if v_my_profile_fields && array[
+    'starting_price', 'currency', 'show_starting_price'
+  ]::text[] then
+    raise exception 'Owner profile RPC still exposes fee fields: %',
+      v_my_profile_fields;
+  end if;
+  if v_admin_profile_fields && array[
+    'starting_price', 'currency', 'show_starting_price'
+  ]::text[] then
+    raise exception 'Admin profile RPC still exposes fee fields: %',
+      v_admin_profile_fields;
+  end if;
+
+  if has_column_privilege(
+    'anon', 'public.professional_profiles', 'starting_price', 'SELECT'
+  ) or has_column_privilege(
+    'authenticated', 'public.professional_profiles', 'starting_price', 'SELECT'
+  ) then
+    raise exception 'Client role can still read profile fees';
+  end if;
+
+  if has_column_privilege(
+    'anon', 'public.professional_services', 'price_from', 'SELECT'
+  ) or has_column_privilege(
+    'authenticated', 'public.professional_services', 'price_from', 'SELECT'
+  ) then
+    raise exception 'Client role can still read service fees';
+  end if;
+end;
+$$;
+
+reset role;
+rollback to savepoint unsupported_catalog_guardrails;
+reset role;
+
+savepoint published_type_change_recheck;
+
+-- A published owner changing discipline must immediately leave the public
+-- catalogue and return to human review. The trigger workflow is privileged,
+-- but its marker cannot be forged by the authenticated caller.
+select set_config('request.jwt.claims', '{}', true);
+select set_config('request.jwt.claim.sub', '', true);
+select set_config('request.jwt.claim.role', '', true);
+
+update public.professional_profiles
+set publication_status = 'PUBLISHED',
+    published_at = statement_timestamp()
+where id = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02';
+
+select set_config(
+  'request.jwt.claims',
+  '{"sub": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa02", "role": "authenticated"}',
+  true
+);
+select set_config(
+  'request.jwt.claim.sub',
+  'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa02',
+  true
+);
+select set_config('request.jwt.claim.role', 'authenticated', true);
+
+set local role authenticated;
+
+delete from public.professional_profile_types
+where professional_profile_id = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02';
+
+insert into public.professional_profile_types (
+  professional_profile_id,
+  professional_type_id,
+  is_primary
+)
+values (
+  'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02',
+  '20000000-0000-4000-8000-000000000002',
+  true
+);
+
+do $$
+declare
+  v_status text;
+  v_published_at timestamptz;
+begin
+  select p.publication_status, p.published_at
+  into v_status, v_published_at
+  from public.professional_profiles p
+  where p.id = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbb02';
+
+  if v_status <> 'PENDING_REVIEW' or v_published_at is not null then
+    raise exception
+      'Owner type change did not return published profile to review: %, %',
+      v_status,
+      v_published_at;
+  end if;
+  if coalesce(
+    current_setting('red_senda.professional_profile_workflow', true),
+    ''
+  ) <> '' then
+    raise exception 'Taxonomy workflow marker leaked after relation change';
+  end if;
+end;
+$$;
+
+reset role;
+rollback to savepoint published_type_change_recheck;
 reset role;
 
 -- Defense in depth: even if a future grant accidentally exposes the state

@@ -2,18 +2,19 @@
 
 ## Estado
 
-- **Implementado:** desarrollo clean-room, copy propio, seed marcado `is_demo` y asset editorial original en `public/images/red-senda-conversation.webp`.
-- **Pendiente recurrente:** revisión de originalidad y licencias en cada release que agregue assets o investigación competitiva.
+- **Implementado:** desarrollo clean-room, copy propio y seed marcado `is_demo`.
+- **Decisión vigente:** Red Senda no usa fotografías generadas por IA. La interfaz prioriza tipografía, formas, iconografía y evidencia real.
 
 ## Alcance
 
 Este documento registra únicamente aprendizajes funcionales aportados en el brief del proyecto. **Red Senda se diseña e implementa de forma original, clean-room y desde cero.** No se necesita ni se autoriza scraping de RedPsi.
 
-RedPsi se usa como referencia conceptual de un directorio/marketplace que conecta demanda con profesionales y monetiza principalmente visibilidad y generación de leads para la oferta.
+RedPsi se usa como referencia conceptual de un directorio/marketplace que conecta demanda con profesionales y monetiza principalmente visibilidad y generación de leads para la oferta. La referencia se limita al principio funcional de que la búsqueda debe aparecer rápido; no habilita copiar su interfaz, taxonomía, copy ni datos.
 
 ## Qué se puede estudiar
 
 - recorrido búsqueda → filtro → perfil → contacto;
+- acceso inmediato al buscador y reducción de pasos hasta el primer resultado;
 - taxonomías de oferta y demanda;
 - mecanismos generales de confianza, reputación y verificación;
 - adquisición B2C/B2P/B2B;
@@ -32,9 +33,13 @@ Son patrones comunes del mercado, no especificaciones para replicar una implemen
 
 ## Diferenciación obligatoria
 
-Red Senda se organiza primero por la **situación de la persona**, no sólo por profesión. Agrega:
+Red Senda se organiza como una búsqueda directa de profesionales orientadores. Agrega:
 
-- matching determinístico y explicable;
+- una home deliberadamente corta, sin cuestionario, con búsqueda y CTA de conversión en la primera pantalla;
+- filtros claros y estado compartible en la URL;
+- panel de filtros con scroll propio y cards cuyos bloques comparables se alinean por fila;
+- catálogo público limitado a Psicología/Psicopedagogía bajo la entrada “Profesional orientador”;
+- ratings y opiniones moderadas, sin publicar honorarios profesionales;
 - reglas de verificación diferentes por tipo profesional;
 - ranking transparente con fairness y patrocinio visible;
 - foco específico en trayectorias, empleabilidad y transiciones;
@@ -45,12 +50,10 @@ Red Senda se organiza primero por la **situación de la persona**, no sólo por 
 
 1. Convertir el brief funcional en capacidades abstractas.
 2. Diseñar taxonomía, copy, flujos, componentes y modelo de datos originales.
-3. Usar únicamente assets propios, licenciados o generados para Red Senda.
+3. Usar únicamente recursos gráficos propios o licenciados; excluir fotografías generadas por IA.
 4. Crear seed con personas y datos inequívocamente ficticios; marcar `is_demo` cuando aplique.
 5. Revisar antes de publicar que no exista similitud sustancial en copy, composición, identidad o dataset.
 6. Registrar fuente/licencia de cualquier recurso externo permitido.
-
-El asset editorial actual fue generado para Red Senda con la herramienta de generación de imágenes integrada y luego optimizado a WebP. La consigna visual pidió una conversación profesional humana, sobria y luminosa, sin logos, texto ni semejanza con portales de referencia. No deriva de un asset de RedPsi.
 
 ## Checklist de originalidad
 
@@ -59,6 +62,7 @@ El asset editorial actual fue generado para Red Senda con la herramienta de gene
 | **Implementado** | No hay scraper/importador de RedPsi en el repositorio; copy, diseño, tokens y componentes fueron creados para Red Senda. |
 | **Implementado** | Los 16 perfiles y demás datos demo se declaran ficticios mediante `is_demo` y rótulos visibles. |
 | **Implementado** | Ranking y patrocinio siguen reglas propias y transparentes. |
+| **Implementado en el repositorio** | La experiencia es `search-first`, no presenta test de orientación, no publica honorarios y restringe el catálogo a Psicología/Psicopedagogía. Su release/smoke remoto se registra por separado. |
 | **Pendiente recurrente** | Revisar que nuevas taxonomías, textos y assets mantengan origen propio/licencia registrada y no introduzcan similitud sustancial. |
 
 Si una investigación competitiva futura requiere material no incluido en el brief, debe limitarse a observación humana legítima de información pública, documentar sólo aprendizajes abstractos y pasar revisión legal cuando exista duda.

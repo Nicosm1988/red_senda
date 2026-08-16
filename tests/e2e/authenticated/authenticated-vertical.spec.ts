@@ -63,9 +63,12 @@ test.describe("vertical autenticado profesional y administración", () => {
     await page.getByLabel("Apellido", { exact: true }).fill(
       AUTH_E2E.professionalLastName,
     );
-    await page
-      .getByLabel("Tipo de profesional")
-      .selectOption({ label: "Coaching de carrera" });
+    const professionalType = page.getByLabel("Profesional orientador");
+    await expect(professionalType.locator("option:not([disabled])")).toHaveText([
+      "Psicólogo/a",
+      "Psicopedagogo/a",
+    ]);
+    await professionalType.selectOption({ label: "Psicopedagogo/a" });
     await page.getByLabel("Años de experiencia").fill("7");
     await page
       .getByLabel("Disponibilidad")
@@ -96,7 +99,7 @@ test.describe("vertical autenticado profesional y administración", () => {
 
     await page
       .getByLabel("Titular del perfil")
-      .fill("Coaching de carrera para transiciones con propósito");
+      .fill("Psicopedagogía para decisiones educativas con propósito");
     await page
       .getByLabel("Sobre vos")
       .fill(
@@ -122,7 +125,7 @@ test.describe("vertical autenticado profesional y administración", () => {
 
     await page
       .getByLabel("Tipo de documento")
-      .selectOption({ label: "Certificación de coaching" });
+      .selectOption({ label: "Título universitario" });
     await page.getByLabel("Título", { exact: true }).fill(AUTH_E2E.credentialTitle);
     await page
       .getByLabel("Institución emisora (opcional)")
@@ -253,7 +256,7 @@ test.describe("vertical autenticado profesional y administración", () => {
       .click();
     await page
       .getByLabel("Titular del perfil")
-      .fill("Coaching de carrera — contenido actualizado por E2E");
+      .fill("Psicopedagogía — contenido actualizado por E2E");
     await page.getByRole("button", { name: "Guardar borrador" }).click();
     await expect(page.getByRole("status")).toContainText("Borrador guardado");
     await expect.poll(() => fixture.readProfileSummary()).toMatchObject({

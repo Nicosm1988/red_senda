@@ -6,10 +6,10 @@ Este documento separa la superficie existente del contrato objetivo. `Implementa
 
 | Ruta | Estado | Propósito/indexación actual |
 | --- | --- | --- |
-| `/` | **Implementado** | Propuesta y CTA; index. |
-| `/profesionales` | **Implementado** | Directorio Supabase, filtros URL y orden; index. |
-| `/profesionales/[slug]` | **Implementado** | Perfil `PUBLISHED`/elegible; index y badge sólo cuando el estado calculado es `VERIFIED`. |
-| `/matching` | **Implementado inicial** | Cuestionario client-side con respuestas efímeras; la página genérica es indexable y está en sitemap. |
+| `/` | **Implementado en el repositorio** | Home corta: búsqueda visible en la primera pantalla, accesos a búsquedas frecuentes e ingreso/registro; index. |
+| `/profesionales` | **Implementado** | Directorio Supabase sólo de Psicología/Psicopedagogía, filtros URL con scroll propio y orden; index. |
+| `/profesionales/[slug]` | **Implementado** | Perfil `PUBLISHED`/elegible sin honorarios; rating y opiniones aprobadas; index y badge sólo cuando el estado calculado es `VERIFIED`. |
+| `/matching` | **Legacy** | Redirección permanente a `/profesionales`; sin cuestionario, navegación, canonical propio ni entrada en sitemap. |
 | `/para-profesionales`, `/planes` | **Implementado** | Adquisición y comparación sin precio/cobro activos; index. |
 | `/profesionales/sumarse` | **Implementado** | Onboarding autenticado; noindex. |
 | `/convenios`, `/convenios/[slug]` | **Implementado demo** | Propuesta y convenios ficticios rotulados desde fixtures; index. Acceso institucional real pendiente. |
@@ -18,7 +18,9 @@ Este documento separa la superficie existente del contrato objetivo. `Implementa
 | `/ingresar`, `/registro`, `/recuperar-acceso`, `/actualizar-contrasena`, `/aceptar-terminos`, `/auth/callback` | **Implementado** | Acceso, recuperación y aceptación vigente; pantallas noindex y callback bajo `/auth/` bloqueado en robots. |
 | `/profesionales/{necesidad|tipo|ubicacion}/[slug]` | **Pendiente** | Landings curadas; sólo deben indexarse con oferta y contenido propios. |
 
-Los filtros del directorio viven en query params normalizados para persistir/compartir estado. Los namespaces explícitos evitan colisiones con el slug de perfil. No se generan combinaciones masivas sin contenido y demanda reales.
+Los filtros del directorio viven en query params normalizados para persistir/compartir estado. Selects y checks aplican el refinamiento automáticamente; el texto se confirma con “Buscar”. El panel tiene altura acotada y scroll propio para que refinar no desplace innecesariamente el listado; en móvil se presenta como control accesible. Los namespaces explícitos evitan colisiones con el slug de perfil. No existe filtro de precio y no se generan combinaciones masivas sin contenido y demanda reales.
+
+Dentro de cada fila del grid, las cards comparten niveles visuales: identidad/badges, presentación, necesidades, datos comparables y acciones. Una diferencia de longitud puede ampliar el nivel común, pero no desplazar sólo los CTA o metadatos de una card. En una columna móvil, el orden semántico se conserva sin alturas artificiales innecesarias.
 
 ## Dashboard profesional
 
@@ -56,17 +58,17 @@ Ocultar navegación no es autorización. Cada ruta, consulta y mutación verific
 
 ## Navegación
 
-**Global implementada:** Profesionales, Encontrar acompañamiento, Recursos, Convenios y Para profesionales; incluye Ingresar/Crear perfil. Un menú de cuenta plenamente adaptado a cada rol queda pendiente.
+**Global implementada:** Buscar profesional, Recursos, Convenios y Para profesionales; incluye Ingresar/Crear perfil. No hay enlace a un test u orientador. Un menú de cuenta plenamente adaptado a cada rol queda pendiente.
 
-**Móvil:** búsqueda/matching y contacto permanecen visibles sin duplicar CTA. Filtros se abren como panel accesible, conservan query params y ofrecen resumen de filtros activos.
+**Móvil:** búsqueda y contacto permanecen visibles. Los filtros se abren como panel accesible con scroll propio, conservan query params y ofrecen resumen de filtros activos. Los CTA persistentes no deben tapar contenido ni competir entre sí.
 
 **Breadcrumbs:** obligatorios en perfiles, contenidos, landings de taxonomía y convenios publicables.
 
 ## Taxonomía visible
 
-La entrada primaria es `Need` (situación). Se cruza con `ProfessionalType`, `Service`, `Specialty`, `Audience`, `CareerStage`, `Modality`, `Location`, `Language`, `Industry`, precio, disponibilidad y convenio.
+La entrada primaria es la búsqueda por texto y `Need` (situación). Se cruza con `ProfessionalType`, `Service`, `Specialty`, `Audience`, `CareerStage`, `Modality`, `Location`, `Language`, `Industry`, disponibilidad y convenio. El selector de tipo inicia en “Profesional orientador” y sólo ofrece “Psicólogo/a” y “Psicopedagogo/a”. No hay precio en taxonomía visible, filtros ni orden.
 
-Etiquetas internas y copy público no tienen que coincidir: los IDs son estables y los nombres/slugs son administrables. Mantener redirects al cambiar un slug es un requisito **pendiente**; no modificar slugs publicados hasta implementarlo.
+Etiquetas internas y copy público no tienen que coincidir: los IDs son estables y los nombres/slugs son administrables. Los tipos históricos ajenos a Psicología/Psicopedagogía se conservan inactivos para integridad referencial, pero no pueden seleccionarse, enviarse a revisión ni publicarse. Mantener redirects al cambiar un slug es un requisito **pendiente**; no modificar slugs publicados hasta implementarlo.
 
 ## Estados transversales
 
@@ -84,6 +86,6 @@ Los formularios preservan campos no sensibles ante errores. Nunca se repuebla pa
 
 - Indexar perfiles publicados/elegibles; mostrar badge sólo si están verificados. Recursos y convenios demo se indexan hoy con rótulo explícito; excluirlos o migrarlos a DB antes de contenido real es una decisión pendiente.
 - El directorio canonicaliza variantes hacia `/profesionales`. Marcar combinaciones delgadas como `noindex` queda pendiente si se crean landings filtradas indexables.
-- Sitemap toma perfiles desde `professional_directory`, excluye drafts/suspendidos/privados e incluye la página genérica `/matching`; no genera URLs para respuestas personales.
+- Sitemap toma perfiles desde `professional_directory`, excluye drafts/suspendidos/privados y no incluye `/matching`.
 - `ProfessionalService`, `Article`, `Organization` y breadcrumbs se usan sólo cuando los datos cumplen el vocabulario.
 - Slugs son únicos, legibles y estables; el título profesional no expone matrículas completas.

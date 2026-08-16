@@ -47,7 +47,7 @@ begin
   if (
     select p.prosecdef or p.provolatile <> 's'
     from pg_proc p
-    where p.oid = 'public.rank_professionals(uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],numeric,text,text,integer)'::regprocedure
+    where p.oid = 'public.rank_professionals(uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],uuid[],text,text,integer)'::regprocedure
   ) then
     raise exception 'rank_professionals changed its invoker/stable contract';
   end if;
@@ -108,14 +108,14 @@ declare
 begin
   select array_agg(r.professional_profile_id order by r.professional_profile_id)
   into v_accented
-  from public.rank_professionals(p_search => 'Tomás tecnología') r;
+  from public.rank_professionals(p_search => 'Inés psicopedagogía') r;
 
   select array_agg(r.professional_profile_id order by r.professional_profile_id)
   into v_unaccented
-  from public.rank_professionals(p_search => 'tomas tecnologia') r;
+  from public.rank_professionals(p_search => 'ines psicopedagogia') r;
 
   if v_unaccented is distinct from v_accented or not (
-    '11111111-1111-4111-8111-111111111104'::uuid = any(v_unaccented)
+    '11111111-1111-4111-8111-111111111103'::uuid = any(v_unaccented)
   ) then
     raise exception 'Accented and unaccented RPC searches differ: %, %',
       v_accented, v_unaccented;
@@ -124,11 +124,11 @@ begin
   if not exists (
     select 1
     from public.rank_professionals(
-      p_need_ids => array['22000000-0000-4000-8000-000000000006'::uuid],
+      p_need_ids => array['22000000-0000-4000-8000-000000000001'::uuid],
       p_modality_ids => array['26000000-0000-4000-8000-000000000001'::uuid],
-      p_search => 'tomas tecnologia'
+      p_search => 'ines psicopedagogia'
     ) r
-    where r.professional_profile_id = '11111111-1111-4111-8111-111111111104'
+    where r.professional_profile_id = '11111111-1111-4111-8111-111111111103'
   ) then
     raise exception 'Search no longer composes with categorical filters';
   end if;
@@ -137,19 +137,19 @@ begin
     select 1
     from public.rank_professionals(
       p_need_ids => array['22000000-0000-4000-8000-000000000004'::uuid],
-      p_search => 'tomas tecnologia'
+      p_search => 'ines psicopedagogia'
     ) r
-    where r.professional_profile_id = '11111111-1111-4111-8111-111111111104'
+    where r.professional_profile_id = '11111111-1111-4111-8111-111111111103'
   ) then
     raise exception 'Search bypassed a non-matching categorical filter';
   end if;
 
   if exists (
     select 1
-    from public.rank_professionals(p_search => 'orientacion educativa') r
-    where r.professional_profile_id = '11111111-1111-4111-8111-111111111113'
+    from public.rank_professionals(p_search => 'transicion tecnologia') r
+    where r.professional_profile_id = '11111111-1111-4111-8111-111111111104'
   ) then
-    raise exception 'Search exposed a non-published profile';
+    raise exception 'Search exposed an unsupported professional type';
   end if;
 end;
 $$;

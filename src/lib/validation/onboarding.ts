@@ -17,9 +17,6 @@ export const onboardingSchema = z.object({
   experienceSummary: z.string().trim().max(3000).optional(),
   educationSummary: z.string().trim().max(3000).optional(),
   yearsExperience: z.coerce.number().int().min(0).max(80),
-  startingPrice: z
-    .union([z.literal(""), z.coerce.number().min(0).max(100_000_000)])
-    .transform((value) => (value === "" ? undefined : value)),
   availabilityStatus: z.enum(["AVAILABLE", "LIMITED", "WAITLIST", "ASK"]),
   linkedinUrl: optionalUrl,
   websiteUrl: optionalUrl,

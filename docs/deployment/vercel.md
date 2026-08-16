@@ -2,7 +2,8 @@
 
 ## Estado
 
-- **Implementado el 2026-08-15:** dos migraciones, configuración Auth y seed piloto en Supabase; `main` desplegada en Vercel; variables aisladas; CI, rutas públicas, CSP, RLS, lead idempotente y cron autenticado verificados.
+- **Baseline implementado el 2026-08-15:** dos migraciones, configuración Auth y seed piloto en Supabase; `main` desplegada en Vercel; variables aisladas; CI, rutas públicas, CSP, RLS, lead idempotente y cron autenticado verificados.
+- **Iteración local pendiente de release/smoke:** home `search-first`, retiro del cuestionario, catálogo público limitado a Psicología/Psicopedagogía y eliminación de honorarios de todos los contratos públicos.
 - **Pendiente externo:** primer `SUPERADMIN`, entrega Resend y contrato/sandbox Mercado Pago. El smoke autenticado remoto se completa después de crear la cuenta real autorizada.
 
 ## Destino
@@ -78,11 +79,11 @@ No inventar credenciales. Si faltan, el resto despliega sin habilitar la funció
 1. Confirmar worktree, remote y protección de `main`; no force-push.
 2. Revisar migraciones, grants/RLS y compatibilidad hacia atrás.
 3. En Preview: `npm ci`, lint, typecheck, unit/integration, build y Playwright crítico.
-4. En el primer release piloto, aplicar migración y seed de forma intencional: `npx supabase@2.114.0 db push --linked --include-seed --yes`. En releases posteriores omitir `--include-seed` salvo decisión documentada.
-5. Aplicar la configuración Auth versionada con `npx supabase@2.114.0 config push --yes` (usa el proyecto enlazado) y verificar Site URL, redirect allowlist, confirmación de email, contraseña mínima/requisitos y `secure_password_change = true` en el proyecto alojado.
-6. Verificar variables, Node 24, URL de Auth, cron y dominio por ambiente. El webhook Mercado Pago debe seguir cerrado mientras no exista sandbox validado.
-7. Merge/push validado a `main`; esperar deployment Production del proyecto existente.
-8. Ejecutar smoke tests y revisar logs/Analytics sin PII.
+4. Para la migración contractiva `20260815233718`, desplegar primero la aplicación compatible: ya ignora honorarios y aplica el allowlist Psicología/Psicopedagogía incluso contra el esquema anterior. Esperar `READY` y comprobar el directorio antes de cambiar la base.
+5. Aplicar luego `npx supabase@2.114.0 db push --linked --yes`, **sin seed**, y verificar inmediatamente vista, firma RPC, grants, perfiles permitidos y denegaciones. El `--include-seed` fue exclusivo del primer release piloto y no se repite.
+6. Aplicar la configuración Auth versionada con `npx supabase@2.114.0 config push --yes` sólo cuando ese archivo haya cambiado; verificar Site URL, redirect allowlist, confirmación de email, contraseña mínima/requisitos y `secure_password_change = true` en el proyecto alojado.
+7. Verificar variables, Node 24, URL de Auth, cron y dominio por ambiente. El webhook Mercado Pago debe seguir cerrado mientras no exista sandbox validado.
+8. Ejecutar smoke tests y revisar logs/Analytics sin PII. Si falla la contracción de base, corregir hacia adelante; no promover una versión anterior de la app que dependa del contrato retirado.
 
 ## Primer SUPERADMIN
 
@@ -117,14 +118,24 @@ npm run test:e2e:auth
 
 ## Smoke tests de producción
 
-Estado: **smoke público completado el 2026-08-15**. Se verificaron home, directorio, filtro, perfil, contacto, matching, planes, recursos, convenios, metadata SEO y navegación móvil/escritorio; todas las rutas respondieron correctamente y no hubo errores de runtime. Los 38 scripts del HTML inspeccionado compartieron el nonce CSP y se confirmaron headers de seguridad/no-cache.
+Estado del baseline: **smoke público completado el 2026-08-15**. En ese release se verificaron home, directorio, filtro, perfil, contacto, el matching entonces vigente, planes, recursos, convenios, metadata SEO y navegación móvil/escritorio; todas las rutas respondieron correctamente y no hubo errores de runtime. Ese resultado es histórico y no prueba la iteración actual. Los 38 scripts del HTML inspeccionado compartieron el nonce CSP y se confirmaron headers de seguridad/no-cache.
 
 También se verificaron el directorio/ranking remoto de Supabase y las denegaciones anónimas de `leads`, `analytics_events` y `private`. Un lead sintético same-origin se creó y reintentó con la misma clave: hubo una sola fila; luego se eliminaron de forma dirigida el lead y sus efectos de prueba. El cron respondió 401 sin secreto y 200 con Bearer válido. El CI de GitHub ejecutó calidad, fixture SQL, integración Supabase y E2E autenticado con resultado verde.
 
 Los siguientes checks requieren insumos externos y permanecen pendientes: sesión real profesional/admin y URL firmada remota; entrega desde un dominio Resend verificado; firma/replay/reconciliación Mercado Pago en sandbox.
 
-- Home → directorio → filtro → perfil → contacto y confirmación.
-- Matching → explicación → perfil sugerido.
+Antes de atribuir la nueva experiencia a producción, ejecutar además:
+
+- Home: búsqueda y selector “Profesional orientador” visibles en la primera pantalla; sin cuestionario, CTA “No sé qué ayuda necesito” ni fotografías generadas por IA.
+- Directorio: sólo Psicología/Psicopedagogía, filtros persistidos en URL y panel con scroll propio en desktop/móvil.
+- Cards: bloques comparables alineados; rating/opiniones presentes y ningún honorario.
+- Contrato remoto: `professional_directory`, ranking, perfil propio/admin y grants de servicios no exponen campos de honorarios.
+- Publicación: un perfil con tipo no soportado no puede enviarse a revisión ni publicarse; los tipos históricos permanecen inactivos.
+- `/matching`: redirección permanente a `/profesionales`, ausencia en header y sitemap.
+- Conversión: home → directorio → filtro → perfil → ingreso/registro/contacto y confirmación.
+
+El smoke integral conserva además:
+
 - Login profesional → dashboard; un usuario no puede acceder a otro perfil/lead.
 - Admin autorizado → revisión/aprobación; rol común recibe 403.
 - Credencial privada sólo abre por URL firmada autorizada y breve.

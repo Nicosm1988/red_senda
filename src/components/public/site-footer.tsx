@@ -6,8 +6,7 @@ const footerGroups = [
   {
     title: "Encontrar",
     links: [
-      ["Profesionales", "/profesionales"],
-      ["Orientador de búsqueda", "/matching"],
+      ["Buscar profesionales", "/profesionales"],
       ["Recursos", "/recursos"],
       ["Convenios", "/convenios"],
     ],
@@ -33,7 +32,7 @@ const footerGroups = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-white/10 bg-ink py-14 text-white sm:py-16">
+    <footer className="border-t border-white/10 bg-ink py-10 text-white sm:py-12">
       <Container>
         <div className="grid gap-12 lg:grid-cols-[1.4fr_2fr]">
           <div className="max-w-sm">
@@ -62,7 +61,7 @@ export function SiteFooter() {
             ))}
           </div>
         </div>
-        <div className="mt-14 flex flex-col gap-3 border-t border-white/12 pt-7 text-xs text-white/48 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col gap-3 border-t border-white/12 pt-6 text-xs text-white/48 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Red Senda. Hecho en Argentina.</p>
           <p>Decisiones profesionales, acompañadas por personas.</p>
         </div>

@@ -23,7 +23,6 @@ type ExistingProfile = {
   experienceSummary: string;
   educationSummary: string;
   yearsExperience: number;
-  startingPrice: number | null;
   availabilityStatus: string;
   linkedinUrl: string;
   websiteUrl: string;
@@ -241,9 +240,9 @@ export function ProfessionalOnboardingForm({
             <ErrorText name="lastName" state={state} />
           </label>
           <label className="text-sm font-semibold text-ink sm:col-span-2">
-            Tipo de profesional
+            Profesional orientador
             <select className={fieldClass} name="professionalTypeId" defaultValue={existing?.professionalTypeId ?? ""}>
-              <option value="" disabled>Elegí una opción</option>
+              <option value="" disabled>Elegí Psicología o Psicopedagogía</option>
               {professionalTypes.map((option) => <option key={option.id} value={option.id}>{option.name}</option>)}
             </select>
             <ErrorText name="professionalTypeId" state={state} />
@@ -302,10 +301,6 @@ export function ProfessionalOnboardingForm({
             <label className="block text-sm font-semibold text-ink">
               Formación
               <textarea className={`${fieldClass} min-h-28 py-3`} name="educationSummary" defaultValue={existing?.educationSummary} />
-            </label>
-            <label className="block text-sm font-semibold text-ink">
-              Valor orientativo desde (ARS)
-              <input className={fieldClass} type="number" min="0" name="startingPrice" defaultValue={existing?.startingPrice ?? ""} />
             </label>
             <label className="block text-sm font-semibold text-ink">
               LinkedIn

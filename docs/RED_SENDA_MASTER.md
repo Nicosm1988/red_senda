@@ -4,22 +4,26 @@ Actualizado: 2026-08-15. Este documento registra decisiones y contratos del prod
 
 ## Resumen
 
-Red Senda conecta una situación profesional con un tipo de acompañamiento y, finalmente, con una persona profesional adecuada:
+Red Senda conecta una búsqueda concreta con una persona profesional orientadora y un contacto:
 
-`situación → acompañamiento → profesional → contacto`
+`búsqueda visible → filtros → perfil → ingreso/contacto`
 
 Es una plataforma B2C/B2P/B2B de SENDA, pero no es el servicio boutique SENDA. La relación de marca debe permanecer configurable.
 
 ## Principios no negociables
 
 - Producto original y **clean-room**: RedPsi es sólo un benchmark funcional. No hay scraping, copia de código, textos, datos, assets, identidad ni diseño.
-- La persona no necesita conocer el nombre técnico del servicio que busca.
-- El matching orienta; no diagnostica, prescribe ni suplanta a una persona profesional.
+- La búsqueda aparece en la primera pantalla. La persona no atraviesa un test ni necesita conocer el nombre técnico del servicio que busca.
+- La home es corta, práctica y mantiene visibles las acciones de buscar, abrir un perfil, contactar, ingresar y crear cuenta.
+- El catálogo público admite sólo `psychology_orientation` y `psychopedagogy`, bajo la entrada “Profesional orientador”.
+- Los perfiles, filtros, DTOs y ranking públicos no exponen honorarios. Los planes comerciales B2P son otro dominio.
+- Las valoraciones y opiniones aprobadas sí son señales públicas de confianza; no reemplazan relevancia ni verificación.
+- No se usan fotografías generadas por IA. Los recursos visuales futuros deben ser propios o licenciados y registrar su procedencia.
 - B2C comienza gratuito. La monetización prioriza suscripciones B2P y convenios B2B.
 - Relevancia antes que pago: cualquier resultado patrocinado se identifica y el plan sólo puede aplicar un impulso acotado.
 - Privacidad por diseño: mínimo dato, autorización en servidor, Storage privado y trazabilidad de acciones sensibles.
 - WCAG 2.2 AA, mobile-first, buen rendimiento y estados loading/empty/error/unauthorized/forbidden.
-- Precios, taxonomías, reglas de verificación y planes tienen fuente administrable en base de datos. La UI inicial de matching es la excepción explícita: hoy usa preguntas y pesos locales hasta conectarse al modelo versionado.
+- Taxonomías, reglas de verificación y planes tienen fuente administrable en base de datos. El modelo histórico de matching permanece versionado y dormido: no tiene UI, navegación ni persistencia activa.
 
 ## Stack decidido
 
@@ -47,11 +51,12 @@ Versiones exactas y lockfile se controlan en `package.json` y `package-lock.json
 - Supabase usa cliente SSR ligado a la sesión para operaciones con RLS; la clave secreta queda limitada a tareas privilegiadas y nunca compensa una autorización ausente.
 - Cada objeto expuesto al Data API declara su `GRANT`; toda tabla expuesta tiene RLS. Las views usan `security_invoker = true`.
 - Resend y Mercado Pago implementan puertos/adaptadores para que la falta de credenciales no bloquee el resto del producto.
-- El ranking público usa `rank_professionals` y devuelve versión, componentes y razones. El modelo/RPC de matching está versionado, pero la UI inicial todavía no lo consume.
+- El ranking público usa `rank_professionals`, restringe la elegibilidad a Psicología/Psicopedagogía y devuelve versión, componentes y razones. Su firma ya no acepta presupuesto.
+- El modelo/RPC de matching continúa versionado para preservar historial técnico, pero el cuestionario fue retirado de la experiencia. `/matching` sólo redirige al directorio.
 
 Detalle: [arquitectura](architecture/architecture.md), [base de datos](architecture/database.md) y [seguridad](architecture/security.md).
 
-Dominios estables: shell público; directorio/filtros/cards; perfil/contacto; matching; onboarding y workspace profesional; administración/moderación; planes/pagos; contenidos; convenios. La UI compartida no contiene autorización ni reglas de negocio. Recursos y convenios permanecen como experiencia demo; sus esquemas productivos no son aún la fuente de esas páginas.
+Dominios estables: shell público `search-first`; directorio/filtros/cards; perfil/contacto; onboarding y workspace profesional; administración/moderación; planes/pagos; contenidos; convenios. Matching queda como infraestructura dormida, no como dominio visible. La UI compartida no contiene autorización ni reglas de negocio. Recursos y convenios permanecen como experiencia demo; sus esquemas productivos no son aún la fuente de esas páginas.
 
 ## Roles
 
@@ -67,7 +72,8 @@ La autorización nunca depende de `user_metadata`. La fuente autoritativa es `us
 
 ## Rutas canónicas y estado
 
-- **Implementado — públicas:** `/`, `/profesionales`, `/profesionales/[slug]`, `/matching`, `/para-profesionales`, `/planes`, `/convenios`, `/convenios/[slug]`, `/recursos`, `/recursos/[slug]`, `/terminos` y `/privacidad`.
+- **Implementado — públicas:** `/`, `/profesionales`, `/profesionales/[slug]`, `/para-profesionales`, `/planes`, `/convenios`, `/convenios/[slug]`, `/recursos`, `/recursos/[slug]`, `/terminos` y `/privacidad`.
+- **Compatibilidad:** `/matching` redirige permanentemente a `/profesionales`; no aparece en navegación ni sitemap y no representa una funcionalidad activa.
 - **Implementado — cuenta y alta:** `/ingresar`, `/registro`, `/recuperar-acceso`, `/actualizar-contrasena`, `/aceptar-terminos`, `/profesionales/sumarse` y `/auth/callback`.
 - **Implementado — privado:** `/dashboard` concentra perfil, últimas consultas, métricas y suscripción mediante secciones; `/admin` concentra revisión de credenciales y decisión de publicación.
 - **Implementado — sistema:** `/api/leads`, `/api/analytics`, `/api/subscriptions/select`, `/api/webhooks/mercado-pago`, `/api/internal/notifications/process` y metadata routes para `robots.txt`/`sitemap.xml`. El webhook existe, pero responde cerrado y no procesa pagos.
@@ -108,7 +114,7 @@ Nunca se inventan valores ni se degradan integraciones reales a mocks silencioso
 | D-001 | Supabase como Postgres/Auth/Storage | Menor carga operativa y controles de acceso coherentes. |
 | D-002 | DAL exclusivamente de servidor | Centraliza auth/authz y minimiza datos serializados al cliente. |
 | D-003 | Catálogo normalizado | Taxonomías y reglas cambian sin desplegar UI ni mantener JSON gigantes. |
-| D-004 | Matching determinístico primero | Es explicable, testeable y seguro antes de introducir IA. |
+| D-004 | Matching determinístico preparado, retirado de UX | Se preserva el modelo/RPC versionado, pero el producto no presenta cuestionario ni persiste respuestas. |
 | D-005 | Ranking con impulso comercial acotado | Preserva utilidad, diversidad y confianza. |
 | D-006 | Credenciales en Storage privado | Documentos sólo por acceso autorizado y URL firmada breve. |
 | D-007 | Adaptadores para email/pagos | Aísla proveedores y permite continuar sin credenciales externas. |
@@ -116,6 +122,10 @@ Nunca se inventan valores ni se degradan integraciones reales a mocks silencioso
 | D-009 | Shell operativo en `public`, PII en `private` | Reduce exposición del Data API y limita el impacto de errores. |
 | D-010 | Aceptaciones legales append-only por versión | Conserva evidencia histórica; `user_profiles` mantiene sólo un cache de la versión vigente. |
 | D-011 | Seed demo intencional sólo para el piloto inicial | Permite arrancar el catálogo sin representar personas ni acuerdos reales; toda fila demo se identifica. |
+| D-012 | Experiencia `search-first` y home corta | Minimiza pasos y mantiene siempre accesible la conversión búsqueda → perfil → contacto. |
+| D-013 | Publicación sólo de Psicología/Psicopedagogía | La etiqueta paraguas es “Profesional orientador”; tipos históricos quedan inactivos para preservar integridad referencial. |
+| D-014 | Honorarios fuera de toda superficie pública | Perfil, filtros, directorio y ranking no exponen precios; los planes comerciales B2P continúan separados. |
+| D-015 | Prohibidas las fotografías generadas por IA | La identidad visual usa tipografía, formas, iconografía y recursos propios o licenciados con procedencia verificable. |
 
 Cualquier cambio irreversible, legal o económicamente relevante requiere una ADR breve o actualización de esta tabla.
 
@@ -136,28 +146,29 @@ Para toda tarea futura:
 
 | Área | Estado | Evidencia/límite |
 | --- | --- | --- |
-| Marketplace público y leads | **Implementado** | Directorio Supabase, filtros URL, perfil, API idempotente, PII privada y outbox por cada lead nuevo. El fallback en memoria sólo corre en tests o contra la URL inerte de ejemplo. |
+| Marketplace público y leads | **Implementado en el repositorio** | Home corta con búsqueda inmediata; directorio sólo de Psicología/Psicopedagogía; filtros URL con scroll propio; cards comparables sin honorarios; ratings/opiniones aprobadas; perfil, API idempotente, PII privada y outbox por cada lead nuevo. El fallback en memoria sólo corre en pruebas o contra la URL inerte de ejemplo. |
 | Auth, onboarding y dashboard | **Implementado** | Aceptación legal append-only, perfil, plan, documento privado, últimas 20 consultas, transiciones y métricas agregadas. |
 | Verificación y moderación | **Implementado** | El vertical `/admin` revisa credenciales y decide publicación con RPC auditadas. Las demás consolas están pendientes. |
 | Email — pipeline | **Implementado** | Claim con lease/`lock_token`, lote post-response, cron diario autenticado y reintentos; no guarda el cuerpo sensible en el email. |
 | Email — entrega real | **Pendiente** | Requiere dominio, `RESEND_API_KEY`, `EMAIL_FROM` y smoke test. Sin ellos el outbox queda `FAILED` reintentable, no `SENT`. |
 | Planes/pagos | **Preparado** | Los tres planes están `DRAFT`, sin importes; elegir crea/actualiza `PENDING_PAYMENT`. Checkout, firma y reconciliación Mercado Pago están pendientes. |
-| Matching | **Preparado** | La UI local determinística y explicable está implementada; tablas y `explain_matching` existen. Conectar preguntas/reglas administrables y persistencia está pendiente. |
+| Matching | **Retirado de UX / dormido** | No hay cuestionario, CTA ni navegación. `/matching` redirige al directorio. Las tablas y `explain_matching` se conservan sin uso para no borrar historial técnico. |
 | Contenidos y convenios | **Preparado** | Páginas demo rotuladas y esquemas existen; lectura desde tablas y administración completa están pendientes. |
 | Seguridad/QA | **Implementado** | RLS/grants, Storage privado, CSP nonce, rate limit, suites públicas, fixture SQL, integración RLS y E2E autenticado ejecutados; CI de GitHub quedó verde para el release. |
 | Primer `SUPERADMIN` | **Pendiente** | La RPC service-only está implementada; falta crear/confirmar la cuenta real y ejecutar el bootstrap único. |
-| Producción | **Implementado** | Dos migraciones, Auth config y seed piloto aplicados en Supabase; `main` desplegada en Vercel; rutas, CSP, directorio/RLS, lead idempotente y cron autenticado verificados el 2026-08-15. Email, pagos y primer admin conservan sus estados externos propios. |
+| Producción | **Baseline verificado** | Dos migraciones, Auth config y seed piloto aplicados en Supabase; `main` desplegada en Vercel; rutas, CSP, directorio/RLS, lead idempotente y cron autenticado verificados el 2026-08-15. La iteración `search-first`, la restricción de catálogo y la exclusión pública de honorarios requieren su propio release/smoke antes de atribuirse a producción. Email, pagos y primer admin conservan sus estados externos propios. |
 
 ## Próxima iteración
 
-1. Conectar matching UI a `matching_questions/options/rules` y `explain_matching`.
-2. Servir artículos y convenios publicados desde Supabase en lugar del repositorio demo.
-3. Ampliar `/admin` a taxonomías, planes, suscripciones, leads, reseñas, artículos y convenios.
-4. Habilitar Resend y Mercado Pago sólo con dominio, precios y credenciales aprobados.
-5. Incorporar MFA para roles administrativos y pruebas E2E autenticadas continuas contra un Supabase aislado.
+1. Validar el recorrido búsqueda inmediata → filtro → perfil → ingreso/contacto en móvil y escritorio, incluido el scroll autónomo del panel.
+2. Verificar en DB/PostgREST que sólo Psicología/Psicopedagogía sean publicables y que ninguna superficie pública exponga honorarios.
+3. Servir artículos y convenios publicados desde Supabase en lugar del repositorio demo.
+4. Ampliar `/admin` a taxonomías, planes, suscripciones, leads, reseñas, artículos y convenios.
+5. Habilitar Resend y Mercado Pago sólo con dominio, precios de planes B2P y credenciales aprobados.
+6. Incorporar MFA para roles administrativos y pruebas E2E autenticadas continuas contra un Supabase aislado.
 
 ## Mapa documental
 
-- Producto: [visión](product/vision.md), [modelo de negocio](product/business-model.md), [benchmark](product/redpsi-benchmark.md), [IA](product/information-architecture.md), [matching](product/matching.md).
+- Producto: [visión](product/vision.md), [modelo de negocio](product/business-model.md), [benchmark](product/redpsi-benchmark.md), [IA](product/information-architecture.md), [búsqueda/ranking y matching dormido](product/matching.md).
 - Técnica: [arquitectura](architecture/architecture.md), [datos](architecture/database.md), [seguridad](architecture/security.md).
 - Operación: [Vercel y ambientes](deployment/vercel.md).

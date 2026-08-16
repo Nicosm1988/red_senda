@@ -4,9 +4,9 @@
 
 | Estado | Alcance |
 | --- | --- |
-| **Implementado** | Migraciones local/remotas, grants/RLS, catálogo, directorio, ranking, identidad/legal, vertical profesional/admin, leads, Storage privado, auditoría y outbox. |
-| **Preparado** | Matching versionado, artículos, convenios, suscripciones y eventos de proveedor. |
-| **Pendiente** | Conectar matching/contenidos/convenios a sus UIs y ampliar la integración RLS a más políticas fuera del vertical crítico. |
+| **Implementado en el repositorio** | Migraciones, grants/RLS, catálogo público restringido a Psicología/Psicopedagogía, directorio/ranking sin honorarios, identidad/legal, vertical profesional/admin, leads, Storage privado, auditoría y outbox. |
+| **Preparado** | Matching versionado dormido, artículos, convenios, suscripciones y eventos de proveedor. |
+| **Pendiente** | Aplicar/verificar remotamente la migración de esta iteración, conectar contenidos/convenios a sus UIs y ampliar la integración RLS a más políticas fuera del vertical crítico. |
 
 ## Contrato
 
@@ -37,6 +37,8 @@ Supabase PostgreSQL 17 es la fuente de verdad. Supabase Auth administra identida
 
 Publicación de perfil: `DRAFT`, `PENDING_REVIEW`, `PUBLISHED`, `REJECTED`, `SUSPENDED`. Verificación, como eje separado: `NOT_VERIFIED`, `PENDING`, `VERIFIED`, `REJECTED`, `EXPIRED`.
 
+El catálogo histórico conserva tipos anteriores para no romper claves foráneas, pero sólo `psychology_orientation` y `psychopedagogy` están activos. `private.has_supported_professional_types` exige al menos uno de esos tipos y rechaza cualquier mezcla con tipos no soportados. La regla se aplica al envío a revisión, a la resolución admin, a la visibilidad pública y al ranking. Ambos tipos vigentes son regulados y requieren credencial aprobada para publicarse.
+
 ### Catálogo
 
 - `needs`, `services`, `specialties`, `audiences`, `career_stages`, `modalities`, `locations`, `languages`, `industries`.
@@ -51,9 +53,9 @@ Cada catálogo tiene ID estable, nombre, slug único, estado y orden. Los slugs 
 - `private.lead_contacts` y `private.lead_status_history`: contacto/fingerprint y trazabilidad no públicos.
 - `favorites`: unique `(user_id, professional_profile_id)`.
 - `reviews`: autor auditable, profesional, lead opcional, rating/texto y moderación.
-- `matching_questions`, `matching_options` y `matching_rules`: cuestionario y reglas versionadas con razón/peso.
-- `matching_sessions`, `matching_answers` y `matching_recommendations`: entradas, score, explicación y versiones reproducibles.
-- `private.matching_session_tokens`: ownership opaco de sesiones anónimas; nunca se guarda el token en claro.
+- `matching_questions`, `matching_options` y `matching_rules`: cuestionario y reglas versionadas históricas, actualmente dormidas.
+- `matching_sessions`, `matching_answers` y `matching_recommendations`: infraestructura preparada sin escritor/lector en la UX actual.
+- `private.matching_session_tokens`: ownership opaco de sesiones anónimas; no se emiten tokens mientras matching permanece retirado.
 - `notifications` + `private.notification_outbox`: estado visible y entrega transaccional. El payload persistido sólo referencia IDs; `claim_notification_outbox_from_backend` resuelve destinatario de forma efímera, reclama con lease y `lock_token`, y `complete_notification_outbox_from_backend` rechaza tokens vencidos/reclamados por otro worker.
 
 ### Monetización y B2B
@@ -78,7 +80,9 @@ Las tablas de artículos y convenios están preparadas y reciben datos demo en e
 
 ## Público vs. privado
 
-Los datos públicos se proyectan con `professional_directory`, una view `security_invoker` de perfiles `PUBLISHED`, y luego con DTOs del DAL. Email, teléfono, identificadores fiscales, matrícula completa, domicilio, mensajes de lead, notas internas, facturación y rutas de documentos nunca integran esa proyección. La separación `public`/`private` es una frontera deliberada; `private` no se agrega a los esquemas expuestos por PostgREST.
+Los datos públicos se proyectan con `professional_directory`, una view `security_invoker` de perfiles `PUBLISHED`, verificados y con tipos soportados exclusivamente, y luego con DTOs del DAL. La view conserva `review_rating` y `review_count`, pero excluye `starting_price`, `currency`, `show_starting_price` y cualquier precio por servicio. Email, teléfono, identificadores fiscales, matrícula completa, domicilio, mensajes de lead, notas internas, facturación y rutas de documentos tampoco integran esa proyección. La separación `public`/`private` es una frontera deliberada; `private` no se agrega a los esquemas expuestos por PostgREST.
+
+Las columnas históricas de honorarios pueden permanecer temporalmente en almacenamiento para migración/compatibilidad, pero `anon` y `authenticated` no tienen grants sobre ellas ni sobre precios de `professional_services`. `my_professional_profile` y las RPC de administración también excluyen esos campos. Los precios de `plans` pertenecen al circuito comercial B2P y no se mezclan con el contrato del profesional público.
 
 Las views accesibles a `anon`/`authenticated` usan `security_invoker = true`. Una función es `security invoker` por defecto; cualquier excepción `security definer` vive en un schema no expuesto, fija `search_path`, verifica actor y tiene `EXECUTE` revocado salvo roles exactos.
 
@@ -89,10 +93,10 @@ Las views accesibles a `anon`/`authenticated` usan `security_invoker = true`. Un
 | Grupo | `anon` | `authenticated` | Privilegiado |
 | --- | --- | --- | --- |
 | Catálogo/perfiles publicados | `SELECT` con policy pública | `SELECT` | CRUD administrativo auditado |
-| Datos propios/favoritos/matching | sin acceso directo salvo caso explícito | CRUD sólo propio | soporte justificado |
+| Datos propios/favoritos/matching dormido | sin acceso directo salvo caso explícito | CRUD sólo propio; sin consumidor UI de matching | soporte justificado |
 | Leads | sin lectura ni ejecución backend | lectura propia vía RPC y transición validada; creación sólo backend | operación/admin |
 | Credenciales/verificaciones | ninguno | estados propios vía RPC y objeto propio vía Storage RLS; no aprueba | reviewer autorizado |
-| Planes públicos | `SELECT` de activos | `SELECT` | gestión admin |
+| Planes comerciales B2P | `SELECT` de activos | `SELECT` | gestión admin |
 | Suscripciones/auditoría | ninguno | sólo la suscripción propia si aplica | acceso mínimo por función |
 
 Reglas obligatorias:
@@ -106,12 +110,15 @@ Reglas obligatorias:
 
 ### Superficie RPC
 
-- Públicas y de sólo lectura: `rank_professionals` y `explain_matching` para `anon|authenticated`.
+- Pública y activa de sólo lectura: `rank_professionals`, restringida a tipos soportados y sin señal de presupuesto.
+- Pública pero dormida: `explain_matching` conserva su grant histórico para compatibilidad; la aplicación no la invoca.
 - Backend-only: `consume_rate_limit_from_backend`, `create_lead_from_backend`, `record_analytics_event_from_backend`, `accept_terms_from_signup_backend`, `bootstrap_first_superadmin_from_backend`, `claim_notification_outbox_from_backend` y `complete_notification_outbox_from_backend`; sólo `service_role`.
 - Profesional autenticado: `accept_current_terms`, `my_professional_profile`, `submit_professional_profile`, `select_professional_plan`, `submit_professional_credential`, `my_credential_statuses`, `my_professional_leads` y `update_professional_lead_status`; cada función relevante verifica ownership y aceptación legal vigente.
 - Administración: `admin_pending_professional_profiles`, `admin_pending_credentials`, `admin_resolve_credential` y `admin_set_professional_publication`; el wrapper público exige sesión y la función privada vuelve a comprobar rol y aceptación legal.
 
 Helpers privilegiados viven en `private`; los wrappers de `public` son `security invoker` y tienen `EXECUTE` explícito. El DAL usa estos contratos en vez de abrir tablas sensibles.
+
+La firma de `rank_professionals` elimina `p_budget_max`; ningún consumidor público puede enviar presupuesto al ranking.
 
 ## Índices iniciales guiados por consultas
 
@@ -133,8 +140,8 @@ No crear todos los índices posibles: confirmar con consultas y `EXPLAIN (ANALYZ
 2. Incluir schema, constraints, grants, RLS e índices como una unidad revisable.
 3. `supabase db reset` y tests positivos/negativos por rol.
 4. Ejecutar advisors y revisar el diff antes de push/deploy.
-5. El seed actual contiene 16 perfiles, reseñas, artículos y convenios inequívocamente ficticios con `is_demo = true`, además del catálogo y los UUID de referencia. El primer release piloto lo aplica una sola vez y de forma intencional porque el catálogo inicial depende de esos UUID; luego no se reejecuta sin decisión documentada.
+5. El seed actual contiene 16 perfiles, reseñas, artículos y convenios inequívocamente ficticios con `is_demo = true`, además del catálogo y los UUID de referencia. Tres fixtures cumplen el nuevo contrato público de Psicología/Psicopedagogía; los demás se suspenden como datos históricos y sus honorarios se anulan. El primer release piloto aplicó el seed una sola vez porque el catálogo inicial depende de esos UUID; luego no se reejecuta sin decisión documentada.
 
-Las migraciones de producción son forward-only y compatibles con la versión anterior de la app cuando el despliegue lo requiera. Las dos migraciones, el seed piloto y la configuración Auth se aplicaron al proyecto alojado el 2026-08-15; los probes anónimos confirmaron directorio/ranking y denegación de `leads`, `analytics_events` y schema `private`. **Pendiente operativo:** política formal de backups, retención y eliminación de PII.
+Las migraciones de producción son forward-only y compatibles con la versión anterior de la app cuando el despliegue lo requiera. Las dos migraciones del baseline, el seed piloto y la configuración Auth se aplicaron al proyecto alojado el 2026-08-15; los probes anónimos confirmaron directorio/ranking y denegación de `leads`, `analytics_events` y schema `private`. La migración que restringe el catálogo y elimina honorarios del contrato público pertenece a una iteración posterior y no debe darse por aplicada remotamente hasta completar push y probes específicos. **Pendiente operativo:** política formal de backups, retención y eliminación de PII.
 
 Referencias vigentes: [seguridad del Data API](https://supabase.com/docs/guides/api/securing-your-api), [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security) y [cambio a grants explícitos](https://supabase.com/changelog/45329-breaking-change-tables-not-exposed-to-data-and-graphql-api-automatically).

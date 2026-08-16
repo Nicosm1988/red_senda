@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Breadcrumbs } from "@/components/public/breadcrumbs";
 import { EmptyState } from "@/components/public/empty-state";
-import { PageHero } from "@/components/public/page-hero";
 import { ProfessionalCard } from "@/components/public/professional-card";
 import { ProfessionalFiltersForm } from "@/components/public/professional-filters";
 import { buttonStyles } from "@/components/ui/button";
@@ -10,8 +10,8 @@ import { publicRepository } from "@/lib/data/public-repository";
 import { getNeedLabel, type ProfessionalFilters } from "@/lib/demo/public-data";
 
 export const metadata: Metadata = {
-  title: "Profesionales para decisiones y transiciones de carrera",
-  description: "Compará especialistas en orientación, carrera, empleabilidad y mentoría por enfoque, modalidad, experiencia y disponibilidad.",
+  title: "Psicólogos y psicopedagogos orientadores",
+  description: "Buscá psicólogos y psicopedagogos por enfoque, modalidad, experiencia, opiniones y disponibilidad.",
   alternates: { canonical: "/profesionales" },
 };
 
@@ -36,7 +36,6 @@ function parseFilters(params: Record<string, string | string[] | undefined>): Pr
     location: asArray(params.location),
     language: asArray(params.language),
     verified: single("verified") === "true",
-    price: single("price"),
     sort: single("sort") ?? "relevance",
   };
 }
@@ -49,8 +48,7 @@ function countActiveFilters(filters: ProfessionalFilters) {
     (filters.modality?.length ?? 0) +
     (filters.location?.length ?? 0) +
     (filters.language?.length ?? 0) +
-    (filters.verified ? 1 : 0) +
-    (filters.price ? 1 : 0)
+    (filters.verified ? 1 : 0)
   );
 }
 
@@ -61,34 +59,30 @@ export default async function ProfessionalsPage({ searchParams }: { searchParams
 
   return (
     <>
-      <PageHero
-        eyebrow="Red profesional"
-        title="Encontrá a alguien que comprenda el momento, no sólo el tema."
-        description="Compará enfoques, experiencia, credenciales y formas de trabajo. Podés buscar por profesión o empezar por lo que te está pasando."
-        breadcrumbs={[{ label: "Inicio", href: "/" }, { label: "Profesionales" }]}
-        actions={
-          <Link href="/matching" className={buttonStyles({ variant: "secondary" })}>
-            No sé qué profesional necesito
-          </Link>
-        }
-        aside={
-          <dl className="grid grid-cols-2 gap-4 rounded-[1.35rem] border border-line bg-paper p-5 text-sm">
-            <div>
-              <dt className="text-muted">Perfiles visibles</dt>
-              <dd className="mt-1 font-display text-3xl font-semibold text-ink">{professionals.length}</dd>
+      <section className="border-b border-line bg-canvas py-6 sm:py-8">
+        <Container>
+          <Breadcrumbs items={[{ label: "Inicio", href: "/" }, { label: "Profesionales" }]} />
+          <div className="mt-5 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-3xl">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-senda-dark">Psicología y psicopedagogía</p>
+              <h1 className="mt-2 text-3xl font-semibold tracking-[-0.035em] text-ink text-balance sm:text-4xl">
+                Encontrá a tu profesional orientador.
+              </h1>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-muted text-pretty">
+                Buscá por lo que necesitás, compará credenciales y opiniones, y contactá directamente.
+              </p>
             </div>
-            <div>
-              <dt className="text-muted">Costo de buscar</dt>
-              <dd className="mt-1 font-display text-3xl font-semibold text-ink">$0</dd>
-            </div>
-          </dl>
-        }
-      />
+            <Link href="/ingresar?next=/profesionales" className={buttonStyles({ variant: "secondary", size: "sm" })}>
+              Ingresar
+            </Link>
+          </div>
+        </Container>
+      </section>
 
-      <section className="bg-canvas py-10 sm:py-14 lg:py-16">
+      <section id="resultados" className="scroll-mt-24 bg-canvas py-6 sm:py-8 lg:py-10">
         <Container>
           <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
-            <aside aria-label="Filtros de profesionales" className="lg:sticky lg:top-24">
+            <aside aria-label="Filtros de profesionales" className="lg:sticky lg:top-24 lg:self-start">
               <ProfessionalFiltersForm selected={filters} activeCount={activeCount} />
             </aside>
 
@@ -114,7 +108,7 @@ export default async function ProfessionalsPage({ searchParams }: { searchParams
               </div>
 
               {professionals.length ? (
-                <div className="grid gap-5">
+                <div data-testid="professional-results" className="grid items-stretch gap-5 xl:grid-cols-2">
                   {professionals.map((professional, index) => (
                     <ProfessionalCard key={professional.id} professional={professional} priority={index === 0} />
                   ))}

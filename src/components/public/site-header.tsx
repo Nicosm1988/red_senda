@@ -5,8 +5,7 @@ import { Logo } from "@/components/public/logo";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const navigation = [
-  { href: "/profesionales", label: "Profesionales" },
-  { href: "/matching", label: "Orientarme" },
+  { href: "/profesionales", label: "Buscar profesional" },
   { href: "/recursos", label: "Recursos" },
   { href: "/convenios", label: "Convenios" },
   { href: "/para-profesionales", label: "Para profesionales" },
@@ -37,7 +36,7 @@ export function SiteHeader() {
             Crear perfil
           </Link>
           <Link href="/profesionales" className={buttonStyles({ size: "sm" })}>
-            Encontrar acompañamiento
+            Buscar profesional
           </Link>
         </div>
         <div className="ml-auto flex items-center gap-2 xl:hidden">
@@ -61,7 +60,7 @@ export function SiteHeader() {
                   Crear perfil profesional
                 </Link>
                 <Link href="/profesionales" className={`${buttonStyles({ size: "sm" })} mt-2`}>
-                  Encontrar acompañamiento
+                  Buscar profesional
                 </Link>
               </nav>
             </div>

@@ -30,36 +30,23 @@ describe("public professional repository", () => {
     }
   });
 
-  it("applies public price ranges", async () => {
-    const affordable = await publicRepository.listProfessionals({
-      price: "hasta-35000",
-    });
-    const midRange = await publicRepository.listProfessionals({
-      price: "35000-45000",
-    });
-    const premium = await publicRepository.listProfessionals({
-      price: "premium",
-    });
+  it("publishes only psychologists and psychopedagogues without fees", async () => {
+    const results = await publicRepository.listProfessionals();
 
-    expect(affordable.length).toBeGreaterThan(0);
+    expect(results.length).toBeGreaterThan(0);
     expect(
-      affordable.every(
-        (professional) =>
-          professional.currency === "ARS" && professional.priceFrom <= 35_000,
+      results.every((professional) =>
+        ["psicologia", "psicopedagogia"].includes(
+          professional.professionalType,
+        ),
       ),
     ).toBe(true);
     expect(
-      midRange.every(
+      results.every(
         (professional) =>
-          professional.currency === "ARS" &&
-          professional.priceFrom > 35_000 &&
-          professional.priceFrom <= 45_000,
-      ),
-    ).toBe(true);
-    expect(
-      premium.every(
-        (professional) =>
-          professional.currency === "USD" || professional.priceFrom > 45_000,
+          !("priceFrom" in professional) &&
+          !("currency" in professional) &&
+          !("showPrice" in professional),
       ),
     ).toBe(true);
   });
@@ -77,15 +64,15 @@ describe("public professional repository", () => {
 
   it("ranks matching professional types ahead of unrelated profiles", async () => {
     const results = await publicRepository.listProfessionals({
-      need: ["cambio-trabajo"],
-      type: ["empleabilidad"],
+      need: ["elegir-estudios"],
+      type: ["psicopedagogia"],
       modality: ["online"],
       sort: "match",
     });
 
     expect(results.length).toBeGreaterThan(0);
     expect(results[0]).toMatchObject({
-      professionalType: "empleabilidad",
+      professionalType: "psicopedagogia",
     });
   });
 

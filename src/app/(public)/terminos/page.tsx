@@ -33,8 +33,8 @@ export default function TermsPage() {
             <h2 className={headingClassName}>1. Alcance y aceptación</h2>
             <p>
               Estos términos regulan el acceso y uso de Red Senda, una plataforma digital para descubrir,
-              comparar y contactar profesionales vinculados con orientación, carrera, empleabilidad y
-              acompañamiento profesional. Al crear una cuenta o utilizar una función que exige aceptación,
+              comparar y contactar profesionales de Psicología y Psicopedagogía vinculados con orientación
+              educativa, vocacional y de trayectoria. Al crear una cuenta o utilizar una función que exige aceptación,
               confirmás que leíste y aceptaste la versión vigente. Si no estás de acuerdo, no uses esas
               funciones.
             </p>
@@ -52,7 +52,7 @@ export default function TermsPage() {
               parte de los acuerdos que las personas celebren entre sí.
             </p>
             <p>
-              El matching y el orden de resultados son orientativos. Buscan acercar opciones relevantes según
+              La búsqueda y el orden de resultados son orientativos. Buscan acercar opciones relevantes según
               la información disponible, pero no diagnostican, prescriben ni garantizan compatibilidad, empleo,
               admisión educativa, ingresos u otro resultado. Ante una urgencia médica o de salud mental, usá los
               servicios de emergencia correspondientes: Red Senda no es un canal de atención de urgencias.

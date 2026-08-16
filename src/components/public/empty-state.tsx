@@ -14,11 +14,11 @@ export function EmptyState({
       <h2 className="mt-5 font-display text-2xl font-semibold tracking-[-0.025em] text-ink">{title}</h2>
       <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-muted">{description}</p>
       <div className="mt-7 flex flex-wrap justify-center gap-3">
-        <Link className={buttonStyles({ variant: "secondary" })} href="/profesionales">
+        <Link className={buttonStyles()} href="/profesionales">
           Limpiar filtros
         </Link>
-        <Link className={buttonStyles()} href="/matching">
-          Usar el orientador
+        <Link className={buttonStyles({ variant: "secondary" })} href="/">
+          Volver al inicio
         </Link>
       </div>
     </div>

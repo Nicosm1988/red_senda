@@ -1,18 +1,29 @@
 # Red Senda
 
-Marketplace argentino de profesionales para acompañar decisiones de estudio, trabajo y carrera. El vertical implementado conecta búsqueda, perfiles, consultas, alta profesional, revisión de credenciales, publicación y gestión básica de leads.
+Marketplace argentino de psicólogos/as y psicopedagogos/as que acompañan decisiones de estudio, trabajo y carrera. El vertical conecta búsqueda inmediata, filtros, perfiles comparables, consultas, alta profesional, revisión de credenciales, publicación y gestión básica de leads.
 
-El directorio y los perfiles publicados se leen desde Supabase. El seed piloto contiene 16 perfiles inequívocamente ficticios con `is_demo = true`; `RED_SENDA_TEST_MODE=true` habilita el repositorio en memoria únicamente para pruebas automatizadas. Recursos y convenios todavía se sirven desde ese repositorio editorial demo y se rotulan como tales.
+El directorio y los perfiles publicados se leen desde Supabase. Sólo pueden cruzar la frontera pública los tipos `psychology_orientation` y `psychopedagogy`, presentados bajo la entrada “Profesional orientador”. El contrato público no expone honorarios ni filtros de precio; valoraciones y opiniones aprobadas sí forman parte de la confianza. El seed conserva 16 perfiles inequívocamente ficticios con `is_demo = true`, de los cuales 3 cumplen el nuevo contrato público; `RED_SENDA_TEST_MODE=true` habilita el repositorio en memoria únicamente para pruebas automatizadas. Recursos y convenios todavía se sirven desde ese repositorio editorial demo y se rotulan como tales.
 
 ## Estado actual
 
 | Estado | Alcance |
 | --- | --- |
-| **Implementado** | Directorio Supabase, filtros y ranking; perfil y lead idempotente; Auth; aceptación legal append-only; onboarding con documento privado; dashboard de leads; revisión admin de credencial y publicación; outbox con lease/token; producción Vercel/Supabase y cron autenticado verificados. |
-| **Preparado** | Modelo/RPC de matching administrable; planes en `DRAFT`, selección en `PENDING_PAYMENT`; esquemas de artículos y convenios; adaptadores de Resend y Mercado Pago que permanecen cerrados sin configuración válida. |
-| **Pendiente** | Conectar la UI de matching a `explain_matching`; servir recursos/convenios desde Supabase; precio y checkout aprobados; credenciales y smoke tests de proveedores; primer `SUPERADMIN`. |
+| **Implementado en el repositorio** | Home corta y `search-first`; directorio Supabase con filtros URL y scroll propio; ranking y perfiles sólo para Psicología/Psicopedagogía; contrato público sin honorarios; perfil y lead idempotente; Auth; aceptación legal append-only; onboarding con documento privado; dashboard de leads; revisión admin de credencial y publicación; outbox con lease/token. |
+| **Retirado de la UX** | No hay test/cuestionario de orientación. `/matching` queda como ruta legacy que redirige al directorio; no integra navegación ni sitemap. |
+| **Preparado, no activo** | Tablas/RPC históricas de matching; planes comerciales B2P separados en `DRAFT`, selección en `PENDING_PAYMENT`; esquemas de artículos y convenios; adaptadores de Resend y Mercado Pago cerrados sin configuración válida. |
+| **Pendiente** | Servir recursos/convenios desde Supabase; definir precio y checkout de los planes B2P sin mezclarlo con honorarios profesionales; credenciales y smoke tests de proveedores; primer `SUPERADMIN`; verificar y desplegar la iteración `search-first`. |
 
-Producción: [https://red-senda.vercel.app](https://red-senda.vercel.app), desplegada desde `main` y verificada el 2026-08-15. El alcance del smoke y los límites externos están registrados en [despliegue](docs/deployment/vercel.md).
+Baseline de producción: [https://red-senda.vercel.app](https://red-senda.vercel.app), desplegada desde `main` y verificada el 2026-08-15. Esa verificación es anterior a la iteración `search-first`; el alcance del smoke y los límites externos están registrados en [despliegue](docs/deployment/vercel.md).
+
+## Experiencia pública
+
+- La búsqueda aparece en la primera pantalla y conduce al directorio sin pasos intermedios.
+- La home evita recorridos largos y repite sólo CTA útiles: buscar, abrir perfil, contactar, ingresar o crear cuenta.
+- Los filtros conservan el estado en la URL y tienen scroll propio; el listado permanece legible mientras se refinan resultados.
+- Las cards alinean bloques comparables y muestran profesión, experiencia, modalidad, ubicación, disponibilidad y valoración, nunca precio.
+- No se usan fotografías generadas por IA. Cualquier recurso visual futuro debe ser propio o licenciado y tener procedencia registrada.
+
+“No hay test” describe la experiencia de orientación: no existe cuestionario para la persona usuaria. Las suites técnicas de Vitest, SQL/PostgREST y Playwright sí existen y son obligatorias para validar cambios.
 
 ## Stack
 
@@ -73,7 +84,7 @@ La integración destructiva `tests/integration/supabase-vertical.test.ts` y el E
 - La PII de consultas, credenciales, auditoría, pagos y outbox vive en `private`.
 - Los documentos se cargan en un bucket privado con rutas por usuario.
 - La autorización real se evalúa en Postgres/RLS y en RPCs; nunca desde metadata editable.
-- Los precios permanecen en `DRAFT`; una elección de plan queda en `PENDING_PAYMENT` y no activa cobro. El webhook de Mercado Pago falla cerrado hasta implementar y verificar firma y reconciliación en sandbox.
+- Los honorarios profesionales no forman parte del contrato público, del perfil, de los filtros ni del ranking. Los planes comerciales B2P permanecen separados en `DRAFT`; una elección queda en `PENDING_PAYMENT` y no activa cobro. El webhook de Mercado Pago falla cerrado hasta implementar y verificar firma y reconciliación en sandbox.
 - Sin `RESEND_API_KEY` y un `EMAIL_FROM` verificado, los emails quedan reintentables y nunca se marcan falsamente como enviados.
 
 ## Documentación
@@ -83,7 +94,7 @@ La integración destructiva `tests/integration/supabase-vertical.test.ts` y el E
 - [Base de datos](docs/architecture/database.md)
 - [Seguridad](docs/architecture/security.md)
 - [Producto](docs/product/vision.md)
-- [Matching](docs/product/matching.md)
+- [Búsqueda, ranking y matching dormido](docs/product/matching.md)
 - [Despliegue](docs/deployment/vercel.md)
 
 Los perfiles y textos demo son ficticios. No representan recomendaciones, diagnósticos ni profesionales reales.

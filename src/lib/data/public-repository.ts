@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createClient } from "@supabase/supabase-js";
+import { createHash } from "node:crypto";
 import { cache } from "react";
 
 import { publicEnv } from "@/lib/env/public";
@@ -47,9 +48,6 @@ type DirectoryRow = {
   experience_summary: string | null;
   education_summary: string | null;
   years_experience: number;
-  starting_price: number | string | null;
-  currency: string | null;
-  show_starting_price: boolean;
   availability_status: string;
   next_available_on: string | null;
   availability_note: string | null;
@@ -87,9 +85,6 @@ const directoryColumns = [
   "experience_summary",
   "education_summary",
   "years_experience",
-  "starting_price",
-  "currency",
-  "show_starting_price",
   "availability_status",
   "next_available_on",
   "availability_note",
@@ -125,18 +120,34 @@ const needGroups: Record<string, string> = {
 
 const professionalTypeGroups: Record<string, string> = {
   psychology_orientation: "psicologia",
-  psychopedagogy: "orientacion",
-  career_coaching: "coaching",
-  career_consulting: "empleabilidad",
-  recruiting: "empleabilidad",
-  interview_specialist: "empleabilidad",
-  personal_branding: "empleabilidad",
-  technology_mentoring: "mentoring",
-  executive_mentoring: "mentoring",
-  educational_guidance: "orientacion",
-  professional_reinvention: "coaching",
-  leadership_mentoring: "mentoring",
+  psychopedagogy: "psicopedagogia",
 };
+
+function hasOnlySupportedProfessionalTypes(
+  row: Pick<DirectoryRow, "professional_type_ids">,
+  taxonomies: Taxonomies,
+) {
+  const supportedIds = new Set(taxonomies.professionalTypes.map((entry) => entry.id));
+  return (
+    row.professional_type_ids.length > 0 &&
+    row.professional_type_ids.every((id) => supportedIds.has(id))
+  );
+}
+
+function rankingSearchSignature(filters: ProfessionalFilters) {
+  return createHash("sha256")
+    .update(
+      JSON.stringify({
+        language: filters.language ?? [],
+        location: filters.location ?? [],
+        modality: filters.modality ?? [],
+        need: filters.need ?? [],
+        q: filters.q?.trim() ?? "",
+        type: filters.type ?? [],
+      }),
+    )
+    .digest("hex");
+}
 
 const languageGroups: Record<string, string> = {
   es: "espanol",
@@ -179,7 +190,11 @@ const getTaxonomies = cache(async (): Promise<Taxonomies> => {
     industries,
     careerStages,
   ] = await Promise.all([
-    supabase.from("professional_types").select("id,code,slug,name").eq("is_active", true),
+    supabase
+      .from("professional_types")
+      .select("id,code,slug,name")
+      .in("code", ["psychology_orientation", "psychopedagogy"])
+      .eq("is_active", true),
     supabase.from("needs").select("id,code,slug,name").eq("is_active", true),
     supabase.from("services").select("id,code,slug,name").eq("is_active", true),
     supabase.from("specialties").select("id,code,slug,name").eq("is_active", true),
@@ -343,7 +358,6 @@ function toProfessional(
   const name = row.display_name || `${row.first_name} ${row.last_name}`.trim();
   const editorialDemo = row.is_demo ? demo : undefined;
   const verified = row.verification_state === "VERIFIED";
-  const price = row.starting_price === null ? 0 : Number(row.starting_price);
 
   return {
     id: row.id,
@@ -366,7 +380,7 @@ function toProfessional(
     ),
     contactNeeds: needs.map((entry) => ({ id: entry.id, label: entry.name })),
     professionalType:
-      (primaryType?.code && professionalTypeGroups[primaryType.code]) ?? "coaching",
+      (primaryType?.code && professionalTypeGroups[primaryType.code]) ?? "psicologia",
     specialties: specialties.map((entry) => entry.name),
     modalities: unique<Modality>(
       modalities.flatMap((entry) => {
@@ -393,9 +407,6 @@ function toProfessional(
     verified,
     featured: sponsored,
     yearsExperience: Number(row.years_experience),
-    priceFrom: Number.isFinite(price) ? price : 0,
-    currency: row.currency ?? "ARS",
-    showPrice: row.show_starting_price && row.starting_price !== null,
     isDemo: row.is_demo,
     acceptingLeads: row.is_accepting_leads,
     availabilityOrder: availabilityOrder(row.availability_status),
@@ -429,25 +440,18 @@ function toProfessional(
   };
 }
 
-function priceMatches(professional: Professional, filter?: string) {
-  if (!filter) return true;
-  if (professional.showPrice === false) return false;
-  if (professional.currency === "USD") return filter === "premium";
-  if (filter === "hasta-35000") return professional.priceFrom <= 35_000;
-  if (filter === "35000-45000") return professional.priceFrom > 35_000 && professional.priceFrom <= 45_000;
-  if (filter === "premium") return professional.priceFrom > 45_000;
-  return true;
-}
-
 async function listDatabaseProfessionals(filters: ProfessionalFilters = {}) {
   const taxonomies = await getTaxonomies();
   const supabase = createPublicClient();
   const needIds = idsForGroups(taxonomies.needs, filters.need, needGroups);
-  const typeIds = idsForGroups(
+  const selectedTypeIds = idsForGroups(
     taxonomies.professionalTypes,
     filters.type,
     professionalTypeGroups,
   );
+  const typeIds = selectedTypeIds.length
+    ? selectedTypeIds
+    : taxonomies.professionalTypes.map((entry) => entry.id);
   const selectedModalityIds = modalityIds(taxonomies.modalities, filters.modality);
   const selectedLocationIds = locationIds(taxonomies.locations, filters.location);
   const selectedLanguageIds = idsForGroups(
@@ -469,18 +473,8 @@ async function listDatabaseProfessionals(filters: ProfessionalFilters = {}) {
       p_language_ids: selectedLanguageIds,
       p_industry_ids: [],
       p_career_stage_ids: [],
-      p_budget_max:
-        filters.price === "hasta-35000"
-          ? 35_000
-          : filters.price === "35000-45000"
-            ? 45_000
-            : null,
       p_search: filters.q?.trim() || null,
-      p_search_signature: JSON.stringify({
-        need: filters.need ?? [],
-        type: filters.type ?? [],
-        modality: filters.modality ?? [],
-      }),
+      p_search_signature: rankingSearchSignature(filters),
       p_limit: 50,
     },
   );
@@ -511,6 +505,7 @@ async function listDatabaseProfessionals(filters: ProfessionalFilters = {}) {
   const demoProfessionals = await demoRepository.listProfessionals();
   const demoBySlug = new Map(demoProfessionals.map((item) => [item.slug, item]));
   const professionals = directory
+    .filter((row) => hasOnlySupportedProfessionalTypes(row, taxonomies))
     .map((row) =>
       toProfessional(
         row,
@@ -519,7 +514,7 @@ async function listDatabaseProfessionals(filters: ProfessionalFilters = {}) {
         demoBySlug.get(row.slug),
       ),
     )
-    .filter((professional) => (!filters.verified || professional.verified) && priceMatches(professional, filters.price))
+    .filter((professional) => !filters.verified || professional.verified)
     .sort((a, b) => (rankIndex.get(a.id) ?? 999) - (rankIndex.get(b.id) ?? 999));
 
   if (filters.sort === "availability") {
@@ -549,6 +544,7 @@ async function getDatabaseProfessional(slug: string) {
   if (!directoryData) return null;
 
   const row = directoryData as unknown as DirectoryRow;
+  if (!hasOnlySupportedProfessionalTypes(row, taxonomies)) return null;
   const [{ data: signal, error: signalError }, demoProfessionals] = await Promise.all([
     supabase
       .from("professional_ranking_signals")
@@ -649,16 +645,24 @@ export const publicRepository = {
   async listProfessionalSlugs() {
     if (shouldUseDemoData()) return demoRepository.listProfessionalSlugs();
     const supabase = createPublicClient();
+    const taxonomies = await getTaxonomies();
     const { data, error } = await supabase
       .from("professional_directory")
-      .select("slug")
+      .select("slug,professional_type_ids")
       .order("published_at", { ascending: false });
     if (error) {
       throw new Error("No se pudieron cargar las rutas profesionales.", {
         cause: error,
       });
     }
-    return (data ?? []).map(({ slug }) => ({ slug }));
+    return (data ?? [])
+      .filter((row) =>
+        hasOnlySupportedProfessionalTypes(
+          row as Pick<DirectoryRow, "professional_type_ids">,
+          taxonomies,
+        ),
+      )
+      .map(({ slug }) => ({ slug }));
   },
 
   listResources: demoRepository.listResources,

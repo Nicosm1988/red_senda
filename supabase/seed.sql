@@ -5,24 +5,24 @@ begin;
 -- ---------------------------------------------------------------------------
 
 insert into public.professional_types
-  (id, code, slug, name, description, is_regulated, sort_order)
+  (id, code, slug, name, description, is_regulated, sort_order, is_active)
 values
-  ('20000000-0000-4000-8000-000000000001', 'psychology_orientation', 'psicologia-orientacion', 'Psicología y orientación', 'Acompañamiento psicológico aplicado a decisiones educativas y laborales.', true, 10),
-  ('20000000-0000-4000-8000-000000000002', 'psychopedagogy', 'psicopedagogia', 'Psicopedagogía', 'Procesos de aprendizaje, elección y planificación educativa.', true, 20),
-  ('20000000-0000-4000-8000-000000000003', 'career_coaching', 'coaching-de-carrera', 'Coaching de carrera', 'Acompañamiento orientado a objetivos y desarrollo de carrera.', false, 30),
-  ('20000000-0000-4000-8000-000000000004', 'career_consulting', 'consultoria-de-carrera', 'Consultoría de carrera', 'Estrategia profesional y planificación de transiciones.', false, 40),
-  ('20000000-0000-4000-8000-000000000005', 'recruiting', 'recruiting', 'Recruiting y Talent Acquisition', 'Perspectiva de selección, empleabilidad y mercado laboral.', false, 50),
-  ('20000000-0000-4000-8000-000000000006', 'interview_specialist', 'preparacion-de-entrevistas', 'Especialista en entrevistas', 'Preparación práctica para procesos de selección.', false, 60),
-  ('20000000-0000-4000-8000-000000000007', 'personal_branding', 'marca-profesional', 'Marca profesional', 'CV, LinkedIn, portfolio y posicionamiento profesional.', false, 70),
-  ('20000000-0000-4000-8000-000000000008', 'technology_mentoring', 'mentoria-tecnologica', 'Mentoría tecnológica', 'Transición y crecimiento en roles de tecnología.', false, 80),
-  ('20000000-0000-4000-8000-000000000009', 'executive_mentoring', 'mentoria-ejecutiva', 'Mentoría ejecutiva', 'Liderazgo, gestión y desarrollo ejecutivo.', false, 90),
-  ('20000000-0000-4000-8000-000000000010', 'educational_guidance', 'orientacion-educativa', 'Orientación educativa', 'Exploración y planificación de trayectorias formativas.', false, 100),
-  ('20000000-0000-4000-8000-000000000011', 'professional_reinvention', 'reinvencion-profesional', 'Reinvención profesional', 'Rediseño de trayectoria y cambio de profesión.', false, 110),
-  ('20000000-0000-4000-8000-000000000012', 'leadership_mentoring', 'mentoria-de-liderazgo', 'Mentoría de liderazgo', 'Desarrollo de liderazgo y gestión de equipos.', false, 120)
+  ('20000000-0000-4000-8000-000000000001', 'psychology_orientation', 'psicologia-orientacion', 'Psicólogo/a', 'Acompañamiento psicológico aplicado a decisiones educativas y laborales.', true, 10, true),
+  ('20000000-0000-4000-8000-000000000002', 'psychopedagogy', 'psicopedagogia', 'Psicopedagogo/a', 'Procesos de aprendizaje, elección y planificación educativa.', true, 20, true),
+  ('20000000-0000-4000-8000-000000000003', 'career_coaching', 'coaching-de-carrera', 'Coaching de carrera', 'Acompañamiento orientado a objetivos y desarrollo de carrera.', false, 30, false),
+  ('20000000-0000-4000-8000-000000000004', 'career_consulting', 'consultoria-de-carrera', 'Consultoría de carrera', 'Estrategia profesional y planificación de transiciones.', false, 40, false),
+  ('20000000-0000-4000-8000-000000000005', 'recruiting', 'recruiting', 'Recruiting y Talent Acquisition', 'Perspectiva de selección, empleabilidad y mercado laboral.', false, 50, false),
+  ('20000000-0000-4000-8000-000000000006', 'interview_specialist', 'preparacion-de-entrevistas', 'Especialista en entrevistas', 'Preparación práctica para procesos de selección.', false, 60, false),
+  ('20000000-0000-4000-8000-000000000007', 'personal_branding', 'marca-profesional', 'Marca profesional', 'CV, LinkedIn, portfolio y posicionamiento profesional.', false, 70, false),
+  ('20000000-0000-4000-8000-000000000008', 'technology_mentoring', 'mentoria-tecnologica', 'Mentoría tecnológica', 'Transición y crecimiento en roles de tecnología.', false, 80, false),
+  ('20000000-0000-4000-8000-000000000009', 'executive_mentoring', 'mentoria-ejecutiva', 'Mentoría ejecutiva', 'Liderazgo, gestión y desarrollo ejecutivo.', false, 90, false),
+  ('20000000-0000-4000-8000-000000000010', 'educational_guidance', 'orientacion-educativa', 'Orientación educativa', 'Exploración y planificación de trayectorias formativas.', false, 100, false),
+  ('20000000-0000-4000-8000-000000000011', 'professional_reinvention', 'reinvencion-profesional', 'Reinvención profesional', 'Rediseño de trayectoria y cambio de profesión.', false, 110, false),
+  ('20000000-0000-4000-8000-000000000012', 'leadership_mentoring', 'mentoria-de-liderazgo', 'Mentoría de liderazgo', 'Desarrollo de liderazgo y gestión de equipos.', false, 120, false)
 on conflict (id) do update set
   code = excluded.code, slug = excluded.slug, name = excluded.name,
   description = excluded.description, is_regulated = excluded.is_regulated,
-  sort_order = excluded.sort_order, is_active = true;
+  sort_order = excluded.sort_order, is_active = excluded.is_active;
 
 insert into public.credential_types (id, code, name, description, sort_order)
 values
@@ -235,7 +235,7 @@ insert into public.professional_profiles
 values
   ('11111111-1111-4111-8111-111111111101', 'valentina-acosta', 'Valentina', 'Acosta', 'Para elegir sin apurarte y convertir la incertidumbre en una exploración posible', 'Perfil completamente ficticio creado para probar Red Senda. Acompaña a jóvenes y personas adultas a mirar intereses, capacidades y contexto antes de decidir, sin prometer respuestas automáticas.', 'Construye criterios propios, abre alternativas y propone pequeños pasos para probarlas.', 'Trayectoria ficticia en orientación vocacional y reorientación.', 'Formación y credenciales sintéticas, sin vínculo con una persona real.', 12, 35000, 'ARS', 'AVAILABLE', '2026-08-20', 'PUBLISHED', 'VERIFIED', '2026-01-15 12:00:00+00', true, true),
   ('11111111-1111-4111-8111-111111111102', 'lucas-ibarra', 'Lucas', 'Ibarra', 'Claridad para traducir experiencia, elegir el próximo paso y sostener el cambio', 'Perfil ficticio de demostración. Trabaja con personas que necesitan recuperar perspectiva, traducir su experiencia y convertir una intención de cambio en un plan realista.', 'Combina conversación estratégica, experimentos de carrera y seguimiento.', 'Experiencia demostrativa en coaching y desarrollo de carrera.', 'Certificaciones ficticias consignadas únicamente para pruebas.', 9, 42000, 'ARS', 'AVAILABLE', '2026-08-19', 'PUBLISHED', 'VERIFIED', '2026-01-16 12:00:00+00', true, true),
-  ('11111111-1111-4111-8111-111111111103', 'ines-moreno', 'Inés', 'Moreno', 'Herramientas concretas para que tu experiencia llegue a las conversaciones correctas', 'Perfil ficticio creado para el entorno demo. Ayuda a leer el mercado, enfocar una propuesta profesional y practicar conversaciones de selección con devoluciones claras.', 'Propone una auditoría de materiales, práctica y ajustes accionables.', 'Experiencia ficticia en Talent Acquisition y empleabilidad.', 'Información educativa totalmente sintética.', 11, 30000, 'ARS', 'LIMITED', '2026-08-22', 'PUBLISHED', 'VERIFIED', '2026-01-17 12:00:00+00', true, true),
+  ('11111111-1111-4111-8111-111111111103', 'ines-moreno', 'Inés', 'Moreno', 'Estrategias para aprender, elegir y construir una trayectoria educativa posible', 'Perfil ficticio creado para el entorno demo. Acompaña a jóvenes y personas adultas a comprender cómo aprenden, explorar opciones educativas y organizar decisiones de estudio sin respuestas automáticas.', 'Trabaja con entrevistas, estrategias de aprendizaje y exploración guiada de alternativas.', 'Experiencia ficticia en psicopedagogía y orientación educativa.', 'Información educativa y credenciales totalmente sintéticas.', 11, 30000, 'ARS', 'LIMITED', '2026-08-22', 'PUBLISHED', 'VERIFIED', '2026-01-17 12:00:00+00', true, true),
   ('11111111-1111-4111-8111-111111111104', 'tomas-ferrer', 'Tomás', 'Ferrer', 'Una mirada honesta para acercarte a tecnología sin empezar de cero ni comprar atajos', 'Perfil ficticio para probar filtros y matching. Acompaña a perfiles no técnicos a traducir experiencia, explorar familias de roles digitales y validar interés antes de elegir una formación larga.', 'Trabaja con mapas de roles, proyectos breves y revisión de evidencia.', 'Trayectoria demostrativa en producto digital y mentoría.', 'Datos formativos íntegramente ficticios.', 13, 45, 'USD', 'WAITLIST', null, 'PUBLISHED', 'VERIFIED', '2026-01-18 12:00:00+00', true, true),
   ('11111111-1111-4111-8111-111111111105', 'mariana-ortiz', 'Mariana', 'Ortiz', 'Un espacio para escuchar qué pide el cambio antes de convertirlo en una decisión', 'Perfil ficticio de prueba. Trabaja con malestar laboral, agotamiento y preguntas de identidad profesional para construir movimientos cuidadosos, sin fórmulas ni decisiones impulsivas.', 'Explora patrones, expectativas, recursos y sentidos ligados al trabajo.', 'Experiencia demostrativa en psicología laboral y transiciones.', 'Antecedentes y matrícula completamente sintéticos.', 15, 38000, 'ARS', 'ASK', null, 'PUBLISHED', 'VERIFIED', '2026-01-19 12:00:00+00', true, true),
   ('11111111-1111-4111-8111-111111111106', 'agustin-paz', 'Agustín', 'Paz', 'Acompañamiento entre pares para liderar una etapa nueva con criterio propio', 'Perfil ficticio creado para validar la experiencia del marketplace. Acompaña a responsables de equipo a leer mejor el sistema, conversar con claridad y decidir sin copiar estilos ajenos.', 'Trabaja sobre desafíos reales, actores, tensiones y alternativas.', 'Experiencia ejecutiva ficticia en operaciones y mentoría.', 'Formación de ejemplo que no corresponde a una persona real.', 18, 55, 'USD', 'LIMITED', '2026-08-29', 'PUBLISHED', 'NOT_VERIFIED', '2026-01-20 12:00:00+00', true, true),
@@ -286,7 +286,7 @@ insert into public.professional_profile_types
 values
   ('11111111-1111-4111-8111-111111111101','20000000-0000-4000-8000-000000000001',true),
   ('11111111-1111-4111-8111-111111111102','20000000-0000-4000-8000-000000000003',true),
-  ('11111111-1111-4111-8111-111111111103','20000000-0000-4000-8000-000000000005',true),
+  ('11111111-1111-4111-8111-111111111103','20000000-0000-4000-8000-000000000002',true),
   ('11111111-1111-4111-8111-111111111104','20000000-0000-4000-8000-000000000008',true),
   ('11111111-1111-4111-8111-111111111105','20000000-0000-4000-8000-000000000001',true),
   ('11111111-1111-4111-8111-111111111106','20000000-0000-4000-8000-000000000012',true),
@@ -296,7 +296,7 @@ values
   ('11111111-1111-4111-8111-111111111110','20000000-0000-4000-8000-000000000009',true),
   ('11111111-1111-4111-8111-111111111111','20000000-0000-4000-8000-000000000012',true),
   ('11111111-1111-4111-8111-111111111112','20000000-0000-4000-8000-000000000009',true),
-  ('11111111-1111-4111-8111-111111111113','20000000-0000-4000-8000-000000000010',true),
+  ('11111111-1111-4111-8111-111111111113','20000000-0000-4000-8000-000000000002',true),
   ('11111111-1111-4111-8111-111111111114','20000000-0000-4000-8000-000000000005',true),
   ('11111111-1111-4111-8111-111111111115','20000000-0000-4000-8000-000000000003',true),
   ('11111111-1111-4111-8111-111111111116','20000000-0000-4000-8000-000000000008',true)
@@ -307,7 +307,7 @@ select p.id, n.id
 from (values
   ('11111111-1111-4111-8111-111111111101'::uuid, array['22000000-0000-4000-8000-000000000001'::uuid,'22000000-0000-4000-8000-000000000002'::uuid]),
   ('11111111-1111-4111-8111-111111111102'::uuid, array['22000000-0000-4000-8000-000000000003'::uuid,'22000000-0000-4000-8000-000000000004'::uuid]),
-  ('11111111-1111-4111-8111-111111111103'::uuid, array['22000000-0000-4000-8000-000000000005'::uuid,'22000000-0000-4000-8000-000000000007'::uuid]),
+  ('11111111-1111-4111-8111-111111111103'::uuid, array['22000000-0000-4000-8000-000000000001'::uuid,'22000000-0000-4000-8000-000000000002'::uuid]),
   ('11111111-1111-4111-8111-111111111104'::uuid, array['22000000-0000-4000-8000-000000000006'::uuid,'22000000-0000-4000-8000-000000000010'::uuid]),
   ('11111111-1111-4111-8111-111111111105'::uuid, array['22000000-0000-4000-8000-000000000003'::uuid,'22000000-0000-4000-8000-000000000004'::uuid,'22000000-0000-4000-8000-000000000009'::uuid]),
   ('11111111-1111-4111-8111-111111111106'::uuid, array['22000000-0000-4000-8000-000000000009'::uuid,'22000000-0000-4000-8000-000000000010'::uuid]),
@@ -330,7 +330,7 @@ insert into public.professional_services
 values
   ('11111111-1111-4111-8111-111111111101','23000000-0000-4000-8000-000000000001','Proceso de orientación vocacional',26000,'ARS',60),
   ('11111111-1111-4111-8111-111111111102','23000000-0000-4000-8000-000000000002','Estrategia de carrera',36000,'ARS',60),
-  ('11111111-1111-4111-8111-111111111103','23000000-0000-4000-8000-000000000003','Estrategia de búsqueda laboral',22000,'ARS',60),
+  ('11111111-1111-4111-8111-111111111103','23000000-0000-4000-8000-000000000001','Orientación psicopedagógica',22000,'ARS',60),
   ('11111111-1111-4111-8111-111111111104','23000000-0000-4000-8000-000000000007','Mapa de transición tecnológica',47000,'ARS',75),
   ('11111111-1111-4111-8111-111111111105','23000000-0000-4000-8000-000000000010','Proceso de transición laboral',38000,'ARS',60),
   ('11111111-1111-4111-8111-111111111106','23000000-0000-4000-8000-000000000008','Mentoría de liderazgo',55,'USD',75),
@@ -345,6 +345,38 @@ values
   ('11111111-1111-4111-8111-111111111115','23000000-0000-4000-8000-000000000002','Planificación profesional demo',41000,'ARS',60),
   ('11111111-1111-4111-8111-111111111116','23000000-0000-4000-8000-000000000007','Transición digital demo',56000,'ARS',75)
 on conflict do nothing;
+
+-- Demo fixtures exercise the catalogue without publishing fees. Unsupported
+-- historical professions remain available only as suspended workflow data.
+update public.professional_profiles p
+set starting_price = null,
+    currency = null,
+    show_starting_price = false,
+    publication_status = case
+      when private.has_supported_professional_types(p.id)
+        then p.publication_status
+      else 'SUSPENDED'
+    end,
+    published_at = case
+      when private.has_supported_professional_types(p.id)
+        then p.published_at
+      else null
+    end,
+    is_accepting_leads = case
+      when private.has_supported_professional_types(p.id)
+        then p.is_accepting_leads
+      else false
+    end
+where p.is_demo;
+
+update public.professional_services ps
+set price_from = null,
+    currency = null
+where exists (
+  select 1
+  from public.professional_profiles p
+  where p.id = ps.professional_profile_id and p.is_demo
+);
 
 insert into public.professional_specialties (professional_profile_id, specialty_id)
 select ('11111111-1111-4111-8111-1111111111' || lpad(n::text, 2, '0'))::uuid,
@@ -427,12 +459,14 @@ on conflict do nothing;
 
 delete from public.professional_specialties
 where professional_profile_id in (
+  '11111111-1111-4111-8111-111111111103',
   '11111111-1111-4111-8111-111111111104',
   '11111111-1111-4111-8111-111111111105',
   '11111111-1111-4111-8111-111111111106'
 );
 insert into public.professional_specialties (professional_profile_id, specialty_id)
 values
+  ('11111111-1111-4111-8111-111111111103','24000000-0000-4000-8000-000000000001'),
   ('11111111-1111-4111-8111-111111111104','24000000-0000-4000-8000-000000000006'),
   ('11111111-1111-4111-8111-111111111105','24000000-0000-4000-8000-000000000002'),
   ('11111111-1111-4111-8111-111111111106','24000000-0000-4000-8000-000000000007')

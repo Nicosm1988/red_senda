@@ -8,7 +8,7 @@ import { Container } from "@/components/ui/container";
 
 export const metadata: Metadata = {
   title: "Sumarte como profesional",
-  description: "Construí una presencia profesional clara, recibí consultas con contexto y participá de una red de especialistas en trayectorias y transiciones.",
+  description: "Creá tu perfil como psicólogo/a o psicopedagogo/a, presentá tus credenciales y recibí consultas con contexto.",
   alternates: { canonical: "/para-profesionales" },
 };
 
@@ -27,7 +27,7 @@ export default function ForProfessionalsPage() {
       <PageHero
         eyebrow="Para profesionales"
         title="Una red que haga visible tu manera de acompañar."
-        description="Red Senda reúne especialistas en orientación, carrera, empleabilidad y mentoría para que cada persona pueda comprender diferencias reales y elegir con más criterio."
+        description="Red Senda reúne psicólogos y psicopedagogos que acompañan decisiones educativas, vocacionales y de trayectoria con credenciales revisadas."
         breadcrumbs={[{ label: "Inicio", href: "/" }, { label: "Para profesionales" }]}
         actions={
           <>
@@ -53,7 +53,7 @@ export default function ForProfessionalsPage() {
             />
             <dl className="grid grid-cols-2 gap-3">
               {[
-                ["3", "familias de valor: visibilidad, herramientas y red"],
+                ["2", "disciplinas habilitadas: psicología y psicopedagogía"],
                 ["100%", "de los destacados identificados"],
                 ["1", "criterio de verificación por disciplina"],
                 ["0", "diagnósticos automáticos u opacos"],
@@ -110,13 +110,11 @@ export default function ForProfessionalsPage() {
 
       <section className="bg-paper py-16 sm:py-20 lg:py-24">
         <Container>
-          <SectionHeading eyebrow="Quiénes pueden sumarse" title="Disciplinas diferentes, un estándar compartido de claridad y cuidado." description="La red está abierta a perfiles que acompañan decisiones y transiciones profesionales desde roles complementarios." />
-          <div className="mt-10 grid gap-px overflow-hidden rounded-[1.5rem] border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+          <SectionHeading eyebrow="Quiénes pueden sumarse" title="Dos disciplinas, un estándar compartido de claridad y cuidado." description="En esta etapa, la publicación está reservada a profesionales de Psicología y Psicopedagogía con la documentación correspondiente." />
+          <div className="mt-10 grid gap-px overflow-hidden rounded-[1.5rem] border border-line bg-line sm:grid-cols-2">
             {[
-              ["Orientación", "Psicología, psicopedagogía y orientación vocacional u ocupacional."],
-              ["Carrera", "Coaching y consultoría de desarrollo o reinvención profesional."],
-              ["Empleabilidad", "Recruiting, entrevistas, CV, LinkedIn y marca profesional."],
-              ["Mentoría", "Experiencia sectorial, liderazgo, tecnología y emprendimiento."],
+              ["Psicología", "Profesionales de Psicología que acompañan orientación vocacional, decisiones y transiciones."],
+              ["Psicopedagogía", "Profesionales de Psicopedagogía que acompañan aprendizaje, orientación educativa y elección de estudios."],
             ].map(([title, description]) => (
               <article key={title} className="bg-canvas p-6 sm:p-7">
                 <h2 className="font-display text-2xl font-semibold tracking-[-0.03em] text-ink">{title}</h2>
@@ -131,7 +129,7 @@ export default function ForProfessionalsPage() {
         <Container>
           <div className="mx-auto max-w-4xl text-center">
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-clay-dark">Convocatoria inicial</p>
-            <h2 className="mt-5 font-display text-4xl font-semibold leading-[1.02] tracking-[-0.04em] text-ink text-balance sm:text-5xl">Si tu trabajo ayuda a construir trayectorias, queremos conocerte.</h2>
+            <h2 className="mt-5 font-display text-4xl font-semibold leading-[1.02] tracking-[-0.04em] text-ink text-balance sm:text-5xl">Si sos psicólogo/a o psicopedagogo/a, queremos conocerte.</h2>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-muted">La incorporación incluye un perfil en borrador, carga privada de documentación y revisión humana antes de publicar.</p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link href="/registro?next=/profesionales/sumarse" className={buttonStyles({ size: "lg" })}>Crear mi perfil</Link>

@@ -36,34 +36,32 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://redsenda.com.ar"),
   title: {
-    default: "Red Senda · Decisiones profesionales acompañadas",
+    default: "Red Senda · Encontrá un profesional orientador",
     template: "%s · Red Senda",
   },
   description:
-    "Encontrá profesionales verificados para acompañar decisiones, búsquedas y transiciones de estudio, trabajo y carrera.",
+    "Encontrá psicólogos y psicopedagogos orientadores, compará perfiles y contactá al profesional que mejor se adapte a tu búsqueda.",
   applicationName: "Red Senda",
-  category: "career services",
+  category: "professional directory",
   keywords: [
     "orientación vocacional",
     "cambio de carrera",
     "empleabilidad",
-    "coaching de carrera",
-    "mentoría profesional",
+    "psicología",
+    "psicopedagogía",
     "Argentina",
   ],
   openGraph: {
     type: "website",
     locale: "es_AR",
     siteName: "Red Senda",
-    title: "Red Senda · Decisiones profesionales acompañadas",
-    description: "Una red de especialistas para encontrar claridad y acompañamiento en tu próximo movimiento profesional.",
-    images: ["/images/red-senda-hero-conversation-v2.webp"],
+    title: "Red Senda · Encontrá un profesional orientador",
+    description: "Buscá psicólogos y psicopedagogos orientadores, compará perfiles y contactá de forma directa.",
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Red Senda",
-    description: "Decisiones profesionales acompañadas por personas.",
-    images: ["/images/red-senda-hero-conversation-v2.webp"],
+    description: "Buscá psicólogos y psicopedagogos orientadores y contactá de forma directa.",
   },
 };
 

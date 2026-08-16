@@ -4,7 +4,8 @@
 
 | Estado | Alcance |
 | --- | --- |
-| **Implementado** | Grants/RLS, autorización por ownership/rol, CSP con nonce, origen en mutaciones de navegador, Storage privado, evidencia legal append-only, rate limit de leads/analytics, outbox con lease/token y probes remotos del release. |
+| **Baseline implementado** | Grants/RLS, autorización por ownership/rol, CSP con nonce, origen en mutaciones de navegador, Storage privado, evidencia legal append-only, rate limit de leads/analytics, outbox con lease/token y probes remotos del release 2026-08-15. |
+| **Implementado en el repositorio** | Elegibilidad repetida sólo para Psicología/Psicopedagogía, opiniones aprobadas ligadas a perfiles visibles y contratos/grants de cliente sin honorarios. |
 | **Preparado** | Endpoint de pagos cerrado, adaptador Resend, eventos/auditoría y scripts de calidad. |
 | **Pendiente** | Enforcement MFA admin, eventual BFF para sesión HttpOnly, antimalware de documentos, firma/reconciliación Mercado Pago, proveedor de alertas y revisión legal. |
 
@@ -16,7 +17,7 @@ Defensa en profundidad: navegador no confiable → validación/autorización Nex
 
 | Clase | Ejemplos | Regla |
 | --- | --- | --- |
-| Público | nombre profesional, headline, servicios, ciudad general | sólo perfil `PUBLISHED` y elegible; badge únicamente si está `VERIFIED` |
+| Público | nombre profesional, headline, servicios, ciudad general, rating y opiniones aprobadas | sólo perfil `PUBLISHED`, verificado y de Psicología/Psicopedagogía; nunca honorarios |
 | Cuenta | email de acceso, favoritos, preferencias | propietario y soporte justificado |
 | Confidencial | lead, teléfono, mensaje, suscripción | mínimo acceso y logs redactados |
 | Altamente sensible | credencial, matrícula completa, documento, notas de revisión | Storage privado, URL breve, admin autorizado |
@@ -61,7 +62,7 @@ Cada Server Action y Route Handler es invocable directamente: valida sesión, ro
 - Zod en servidor para body, params, searchParams, headers y payload externo.
 - Límites de longitud, formatos, listas permitidas y normalización antes de persistir.
 - **Implementado:** rate limit server-side por fingerprint de red y por perfil/email en contacto; rate limit separado para analytics.
-- **Pendiente:** límites específicos para login, uploads y webhook cuando se habilite. El matching actual no persiste respuestas, por lo que sólo emite eventos bajo el límite de analytics.
+- **Pendiente:** límites específicos para login, uploads y webhook cuando se habilite. Matching no tiene UI activa: no crea sesiones, no persiste respuestas ni emite eventos desde el recorrido público.
 - **Implementado:** honeypot, idempotencia/deduplicación diaria y límites por red/destinatario para leads. **Pendiente según abuso:** tiempo mínimo y captcha.
 - Sanitizar contenido enriquecido con allowlist; React escaping no cubre HTML arbitrario.
 - Queries parametrizadas mediante SDK/driver; nunca concatenar filtros u órdenes.
@@ -100,7 +101,8 @@ No registrar tokens, passwords, API keys, archivos, mensajes completos, emails/t
 | Falso “Verificado” | estado sólo por workflow admin auditado |
 | Webhook falsificado/repetido | endpoint cerrado; firma, timestamp e idempotencia pendientes antes de activarlo |
 | XSS en artículos/bios | escaping React + CSP; sanitización allowlist obligatoria si se habilita HTML enriquecido |
-| Inferencia clínica | reglas de copy, tests y revisión del matching |
+| Inferencia clínica | no hay cuestionario; copy no diagnóstico, búsqueda explícita y pruebas de regresión |
+| Exposición comercial indebida | view/RPC/DTO/grants sin honorarios; planes B2P separados |
 
 ## Gate de producción
 
@@ -110,5 +112,13 @@ No registrar tokens, passwords, API keys, archivos, mensajes completos, emails/t
 | **Preparado** | Lint, typecheck, unitarias, build, Playwright público, fixture SQL, integración RLS, E2E autenticado profesional/admin y advisors están automatizados en el release. |
 | **Pendiente** | Ampliar cobertura RLS fuera del vertical, observabilidad central y smoke remoto de URL firmada con una cuenta real autorizada. |
 | **Pendiente externo** | MFA administrativa, escaneo antimalware, sandbox Mercado Pago completo, entrega Resend, retención/eliminación de PII y revisión profesional de privacidad/términos/base legal. |
+
+## Guardrails públicos de esta iteración
+
+- La elegibilidad se valida en cada frontera: envío a revisión, publicación admin, view pública y ranking. Ocultar tipos no soportados en el formulario no es el control de seguridad.
+- Los grants de cliente y los contratos PostgREST excluyen columnas de honorarios, incluso para un perfil propio; los planes B2P usan contratos separados.
+- Sólo opiniones `APPROVED` son legibles públicamente y sólo si el perfil asociado continúa visible.
+- `/matching` redirige y no recibe respuestas. Las tablas/RPC dormidas no autorizan a presentar una funcionalidad activa ni a recolectar datos.
+- Las pruebas unitarias, DB/PostgREST y Playwright son controles técnicos; no deben confundirse con un test de orientación al usuario.
 
 Referencias: [Data API](https://supabase.com/docs/guides/api/securing-your-api), [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security) y [Storage privado](https://supabase.com/docs/guides/storage/buckets/fundamentals).

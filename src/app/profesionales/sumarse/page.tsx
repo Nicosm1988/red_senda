@@ -32,7 +32,12 @@ export default async function ProfessionalOnboardingPage({
       : undefined;
   const [typesResult, needsResult, servicesResult, modalitiesResult, languagesResult, plansResult, credentialTypesResult, credentialsResult, profileResult] =
     await Promise.all([
-      supabase.from("professional_types").select("id,name,description").eq("is_active", true).order("sort_order"),
+      supabase
+        .from("professional_types")
+        .select("id,name,description")
+        .in("code", ["psychology_orientation", "psychopedagogy"])
+        .eq("is_active", true)
+        .order("sort_order"),
       supabase.from("needs").select("id,name,short_description").eq("is_active", true).order("sort_order"),
       supabase.from("services").select("id,name,description").eq("is_active", true).order("sort_order"),
       supabase.from("modalities").select("id,name").eq("is_active", true).order("sort_order"),
@@ -101,7 +106,6 @@ export default async function ProfessionalOnboardingPage({
         experienceSummary: profile.experience_summary ?? "",
         educationSummary: profile.education_summary ?? "",
         yearsExperience: profile.years_experience,
-        startingPrice: profile.starting_price,
         availabilityStatus: profile.availability_status,
         linkedinUrl: profile.linkedin_url ?? "",
         websiteUrl: profile.website_url ?? "",

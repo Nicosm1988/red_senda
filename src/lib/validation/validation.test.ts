@@ -183,7 +183,7 @@ describe("analytics validation", () => {
     const tooLarge = { context: "x".repeat(4097) };
 
     expect(
-      analyticsPropertiesAreSafe("matching_completed", tooManyProperties),
+      analyticsPropertiesAreSafe("signup_started", tooManyProperties),
     ).toBe(false);
     expect(analyticsPropertiesAreSafe("signup_started", tooLarge)).toBe(false);
     expect(
@@ -205,7 +205,6 @@ describe("professional onboarding and moderation validation", () => {
     experienceSummary: "Doce años de práctica profesional.",
     educationSummary: "Licenciatura y formación de posgrado.",
     yearsExperience: "12",
-    startingPrice: "",
     availabilityStatus: "AVAILABLE",
     linkedinUrl: "",
     websiteUrl: "https://example.com",
@@ -222,7 +221,7 @@ describe("professional onboarding and moderation validation", () => {
     const parsed = onboardingSchema.parse(onboarding);
 
     expect(parsed.yearsExperience).toBe(12);
-    expect(parsed.startingPrice).toBeUndefined();
+    expect(parsed).not.toHaveProperty("startingPrice");
     expect(parsed.linkedinUrl).toBeUndefined();
     expect(parsed.websiteUrl).toBe("https://example.com");
   });

@@ -26,9 +26,6 @@ export type Professional = {
   verified: boolean;
   featured: boolean;
   yearsExperience: number;
-  priceFrom: number;
-  currency: string;
-  showPrice?: boolean;
   isDemo?: boolean;
   acceptingLeads?: boolean;
   availabilityOrder: number;
@@ -98,7 +95,6 @@ export type ProfessionalFilters = {
   location?: string[];
   language?: string[];
   verified?: boolean;
-  price?: string;
   sort?: string;
 };
 
@@ -114,11 +110,8 @@ export const needOptions = [
 ] as const;
 
 export const professionalTypeOptions = [
-  { value: "orientacion", label: "Orientación vocacional" },
-  { value: "psicologia", label: "Psicología laboral" },
-  { value: "coaching", label: "Coaching de carrera" },
-  { value: "empleabilidad", label: "Empleabilidad y recruiting" },
-  { value: "mentoring", label: "Mentoría" },
+  { value: "psicologia", label: "Psicólogo/a" },
+  { value: "psicopedagogia", label: "Psicopedagogo/a" },
 ] as const;
 
 export const modalityOptions = [
@@ -159,7 +152,7 @@ const professionals: Professional[] = [
     about:
       "Acompaño a jóvenes y personas adultas que necesitan volver a mirar sus intereses, capacidades y contexto antes de decidir. Mi trabajo no parte de un test que define respuestas: construimos criterios propios, abrimos alternativas y diseñamos pequeños pasos para probarlas en la realidad.",
     needs: ["elegir-estudios", "reinvencion"],
-    professionalType: "orientacion",
+    professionalType: "psicologia",
     specialties: ["Orientación vocacional", "Reorientación", "Diseño de trayectoria"],
     modalities: ["online", "presencial"],
     city: "Ciudad de Buenos Aires",
@@ -174,8 +167,6 @@ const professionals: Professional[] = [
     verified: true,
     featured: true,
     yearsExperience: 12,
-    priceFrom: 35000,
-    currency: "ARS",
     availabilityOrder: 2,
     availabilityLabel: "Próximo espacio: jueves",
     rating: 4.9,
@@ -228,8 +219,6 @@ const professionals: Professional[] = [
     verified: true,
     featured: false,
     yearsExperience: 9,
-    priceFrom: 42000,
-    currency: "ARS",
     availabilityOrder: 1,
     availabilityLabel: "Próximo espacio: martes",
     rating: 4.8,
@@ -261,14 +250,14 @@ const professionals: Professional[] = [
     slug: "ines-moreno",
     name: "Inés Moreno",
     initials: "IM",
-    role: "Especialista en empleabilidad",
-    credential: "Trayectoria profesional revisada",
-    headline: "Herramientas concretas para que tu experiencia se entienda y llegue a las conversaciones correctas.",
+    role: "Psicopedagoga · Orientadora educativa",
+    credential: "Matrícula profesional revisada",
+    headline: "Estrategias para aprender, elegir y construir una trayectoria educativa posible.",
     about:
-      "Después de años seleccionando perfiles, elegí acompañar búsquedas desde el otro lado de la mesa. Te ayudo a leer el mercado, enfocar tu propuesta y practicar conversaciones de selección con devoluciones claras y respetuosas.",
-    needs: ["cambio-trabajo", "posicionamiento", "entrevistas"],
-    professionalType: "empleabilidad",
-    specialties: ["CV y LinkedIn", "Entrevistas", "Estrategia de búsqueda"],
+      "Acompaño a jóvenes y personas adultas a comprender cómo aprenden, explorar opciones educativas y organizar decisiones de estudio. Construimos estrategias concretas sin reducir el proceso a una respuesta automática.",
+    needs: ["elegir-estudios", "reinvencion"],
+    professionalType: "psicopedagogia",
+    specialties: ["Psicopedagogía", "Orientación educativa", "Estrategias de aprendizaje"],
     modalities: ["online"],
     city: "Rosario",
     province: "rosario",
@@ -277,36 +266,34 @@ const professionals: Professional[] = [
     audiences: ["Profesionales", "Personas en búsqueda activa"],
     careerStages: ["Primer empleo", "Mitad de carrera"],
     industries: ["Tecnología", "Finanzas", "Servicios"],
-    serviceTypes: ["Sesión puntual", "Programa de búsqueda"],
+    serviceTypes: ["Proceso individual", "Consulta de orientación"],
     agreementSlugs: ["programa-reimpulso-litoral"],
     verified: true,
     featured: true,
     yearsExperience: 11,
-    priceFrom: 30000,
-    currency: "ARS",
     availabilityOrder: 4,
     availabilityLabel: "Próximo espacio: viernes",
     rating: 5,
     reviewCount: 34,
     workingStyle: [
-      "Auditamos objetivo, narrativa profesional y materiales actuales.",
-      "Priorizamos canales, contactos y postulaciones con mejor encaje.",
-      "Simulamos entrevistas y convertimos la devolución en ajustes accionables.",
+      "Conversamos sobre la trayectoria educativa, los intereses y las dificultades actuales.",
+      "Exploramos alternativas y estrategias de aprendizaje aplicables a cada contexto.",
+      "Cerramos con criterios y próximos pasos que la persona pueda sostener.",
     ],
     experience: [
-      { role: "Consultora de empleabilidad", organization: "Práctica independiente", period: "2018 — actualidad" },
-      { role: "Talent Acquisition Manager", organization: "Grupo Horizonte", period: "2011 — 2018" },
+      { role: "Psicopedagoga", organization: "Práctica independiente", period: "2018 — actualidad" },
+      { role: "Orientadora educativa", organization: "Programa Horizonte", period: "2014 — 2018" },
     ],
     education: [
-      { title: "Licenciatura en Relaciones del Trabajo", institution: "Universidad Nacional de Rosario" },
-      { title: "Diplomatura en Gestión del Talento", institution: "Universidad Torcuato Di Tella" },
+      { title: "Licenciatura en Psicopedagogía", institution: "Universidad Nacional de Rosario" },
+      { title: "Posgrado en Orientación Educativa", institution: "Universidad Nacional de Tres de Febrero" },
     ],
-    credentials: ["Trayectoria laboral revisada", "Formación universitaria validada"],
+    credentials: ["Matrícula profesional revisada", "Formación universitaria validada"],
     testimonials: [
       {
-        quote: "Por primera vez pude contar lo que sé hacer sin sonar genérica. Las entrevistas cambiaron mucho.",
-        author: "Florencia, 31",
-        context: "Búsqueda laboral",
+        quote: "Pude ordenar las opciones y encontrar una forma de estudiar que sí podía sostener.",
+        author: "Florencia, 22",
+        context: "Orientación educativa",
       },
     ],
   },
@@ -336,8 +323,6 @@ const professionals: Professional[] = [
     verified: true,
     featured: false,
     yearsExperience: 13,
-    priceFrom: 45,
-    currency: "USD",
     availabilityOrder: 3,
     availabilityLabel: "Próximo espacio: miércoles",
     rating: 4.9,
@@ -387,11 +372,9 @@ const professionals: Professional[] = [
     industries: ["Salud", "Educación", "Servicios"],
     serviceTypes: ["Proceso individual"],
     agreementSlugs: ["programa-reimpulso-litoral"],
-    verified: true,
+    verified: false,
     featured: false,
     yearsExperience: 15,
-    priceFrom: 38000,
-    currency: "ARS",
     availabilityOrder: 6,
     availabilityLabel: "Consulta por nuevos espacios",
     rating: 4.8,
@@ -444,8 +427,6 @@ const professionals: Professional[] = [
     verified: false,
     featured: false,
     yearsExperience: 18,
-    priceFrom: 55,
-    currency: "USD",
     availabilityOrder: 5,
     availabilityLabel: "Próximo espacio: en 10 días",
     rating: 4.7,
@@ -467,6 +448,10 @@ const professionals: Professional[] = [
     testimonials: [],
   },
 ];
+
+const publishedProfessionals = professionals.filter((professional) =>
+  ["psicologia", "psicopedagogia"].includes(professional.professionalType),
+);
 
 const resources: ResourceArticle[] = [
   {
@@ -725,15 +710,6 @@ const normalize = (value: string) =>
 const includesAny = (source: string[], filters?: string[]) =>
   !filters?.length || filters.some((filter) => source.includes(filter));
 
-const matchesPrice = (professional: Professional, price?: string) => {
-  if (!price) return true;
-  if (professional.currency === "USD") return price === "premium";
-  if (price === "hasta-35000") return professional.priceFrom <= 35000;
-  if (price === "35000-45000") return professional.priceFrom > 35000 && professional.priceFrom <= 45000;
-  if (price === "premium") return professional.priceFrom > 45000;
-  return true;
-};
-
 const matchingScore = (professional: Professional, filters: ProfessionalFilters) => {
   let score = professional.rating * 2 + Math.min(professional.reviewCount / 10, 4);
   score += filters.need?.filter((need) => professional.needs.includes(need)).length ?? 0;
@@ -745,7 +721,7 @@ const matchingScore = (professional: Professional, filters: ProfessionalFilters)
 export const publicRepository = {
   async listProfessionals(filters: ProfessionalFilters = {}) {
     const query = filters.q ? normalize(filters.q) : "";
-    const filtered = professionals.filter((professional) => {
+    const filtered = publishedProfessionals.filter((professional) => {
       const searchable = normalize(
         [
           professional.name,
@@ -764,8 +740,7 @@ export const publicRepository = {
         includesAny(professional.modalities, filters.modality) &&
         (!filters.location?.length || filters.location.includes(professional.province)) &&
         includesAny(professional.languages, filters.language) &&
-        (!filters.verified || professional.verified) &&
-        matchesPrice(professional, filters.price)
+        (!filters.verified || professional.verified)
       );
     });
 
@@ -791,17 +766,17 @@ export const publicRepository = {
   },
 
   async getProfessional(slug: string) {
-    return professionals.find((professional) => professional.slug === slug) ?? null;
+    return publishedProfessionals.find((professional) => professional.slug === slug) ?? null;
   },
 
   async getFeaturedProfessionals(limit = 3) {
-    return [...professionals]
+    return [...publishedProfessionals]
       .sort((a, b) => Number(b.featured) - Number(a.featured) || b.rating - a.rating)
       .slice(0, limit);
   },
 
   async listProfessionalSlugs() {
-    return professionals.map(({ slug }) => ({ slug }));
+    return publishedProfessionals.map(({ slug }) => ({ slug }));
   },
 
   async listResources() {
@@ -838,15 +813,6 @@ export const getNeedLabel = (value: string) =>
 
 export const getProfessionalTypeLabel = (value: string) =>
   professionalTypeOptions.find((option) => option.value === value)?.label ?? value;
-
-export const formatPrice = (professional: Pick<Professional, "priceFrom" | "currency">) => {
-  const locale = professional.currency === "ARS" ? "es-AR" : "es-US";
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: professional.currency,
-    maximumFractionDigits: 0,
-  }).format(professional.priceFrom);
-};
 
 export const formatRating = (rating: number) =>
   new Intl.NumberFormat("es-AR", {

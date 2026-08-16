@@ -125,7 +125,7 @@ export default async function ResourceDetailPage({ params }: ResourcePageProps) 
         <Container>
           <div className="flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
             <div><p className="text-xs font-bold uppercase tracking-[0.12em] text-sand">Del contenido a la conversación</p><h2 className="mt-3 max-w-3xl font-display text-3xl font-semibold tracking-[-0.035em]">Si esta pregunta te toca de cerca, encontrá a alguien para trabajarla.</h2></div>
-            <Link href="/matching" className={buttonStyles({ variant: "inverse", size: "lg" })}>Orientar mi búsqueda</Link>
+            <Link href="/profesionales" className={buttonStyles({ variant: "inverse", size: "lg" })}>Buscar profesionales</Link>
           </div>
         </Container>
       </section>

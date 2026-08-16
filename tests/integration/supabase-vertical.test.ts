@@ -307,17 +307,29 @@ describeIntegration(
           modalityId,
           languageId,
         ] = await Promise.all([
-          activeCatalogId(backend, "professional_types", "career_coaching"),
+          activeCatalogId(backend, "professional_types", "psychopedagogy"),
           activeCatalogId(
             backend,
             "credential_types",
-            "coaching_certificate",
+            "university_degree",
           ),
           activeCatalogId(backend, "needs", "job_change"),
           activeCatalogId(backend, "services", "career_strategy"),
           activeCatalogId(backend, "modalities", "ONLINE"),
           activeCatalogId(backend, "languages", "es"),
         ]);
+
+        const publicProfessionalTypes = await anonymous
+          .from("professional_types")
+          .select("code")
+          .order("sort_order");
+        assertNoError(
+          publicProfessionalTypes,
+          "Leer tipos profesionales públicos",
+        );
+        expect(
+          (publicProfessionalTypes.data ?? []).map(({ code }) => code),
+        ).toEqual(["psychology_orientation", "psychopedagogy"]);
 
         const profileResult = await professional
           .from("professional_profiles")
@@ -326,7 +338,7 @@ describeIntegration(
             slug: PROFILE_SLUG,
             first_name: "Prueba",
             last_name: "Integración",
-            headline: "Coach de carrera para transiciones profesionales",
+            headline: "Psicopedagogía para decisiones educativas y profesionales",
             bio: "Perfil ficticio creado exclusivamente por la prueba de integración local de Red Senda.",
             approach:
               "Acompañamiento práctico con objetivos, hipótesis y próximos pasos verificables.",
@@ -462,7 +474,7 @@ describeIntegration(
             p_object_path: objectPath,
             p_profile_id: profile.id,
             p_registration_number: null,
-            p_title: "Certificación ficticia de coaching",
+            p_title: "Título ficticio de Psicopedagogía",
           },
         );
         const credentialId = requireData(
@@ -580,6 +592,25 @@ describeIntegration(
         expect(directoryRow.modality_ids).toContain(modalityId);
         expect(directoryRow.language_ids).toContain(languageId);
 
+        const completePublicProfile = await anonymous
+          .from("professional_directory")
+          .select("*")
+          .eq("id", profile.id)
+          .single();
+        const completeDirectoryRow = requireData(
+          completePublicProfile,
+          "Leer contrato público completo sin precios",
+        ) as Record<string, unknown>;
+        expect(completeDirectoryRow).not.toHaveProperty("starting_price");
+        expect(completeDirectoryRow).not.toHaveProperty("currency");
+        expect(completeDirectoryRow).not.toHaveProperty("show_starting_price");
+
+        const forbiddenPublicPrice = await anonymous
+          .from("professional_profiles")
+          .select("starting_price")
+          .eq("id", profile.id);
+        expect(forbiddenPublicPrice.error).not.toBeNull();
+
         const searchResults: string[][] = [];
         for (const query of ["Integración", "integracion"]) {
           const search = await anonymous.rpc("rank_professionals", {
@@ -590,6 +621,11 @@ describeIntegration(
             (row) => row.professional_profile_id,
           );
           expect(resultIds).toContain(profile.id);
+          const rankedProfile = (
+            (search.data ?? []) as Array<Record<string, unknown>>
+          ).find((row) => row.professional_profile_id === profile.id);
+          expect(rankedProfile).not.toHaveProperty("starting_price");
+          expect(rankedProfile).not.toHaveProperty("currency");
           searchResults.push(resultIds.toSorted());
         }
         expect(searchResults[1]).toEqual(searchResults[0]);

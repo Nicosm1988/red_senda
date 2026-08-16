@@ -4,9 +4,10 @@
 
 | Estado | Alcance |
 | --- | --- |
-| **Implementado** | App Router, SSR Auth, directorio Supabase, APIs, vertical profesional/admin, CSP, outbox y release Vercel/Supabase verificado. |
-| **Preparado** | Matching administrable, esquemas de contenidos/convenios y adaptadores externos cerrados. |
-| **Pendiente** | Lectura productiva de contenidos/convenios, matching UI dinámico, pagos y entrega real de email verificados. |
+| **Implementado en el repositorio** | App Router, SSR Auth, home `search-first`, directorio Supabase limitado a Psicología/Psicopedagogía, filtros URL con scroll propio, contratos públicos sin honorarios, APIs, vertical profesional/admin, CSP y outbox. |
+| **Retirado de la UX** | Cuestionario de matching; `/matching` queda como redirección legacy al directorio. |
+| **Preparado** | Modelo/RPC de matching dormido, esquemas de contenidos/convenios y adaptadores externos cerrados. |
+| **Pendiente** | Release/smoke de esta iteración, lectura productiva de contenidos/convenios, pagos B2P y entrega real de email verificados. |
 
 ## Topología
 
@@ -50,12 +51,13 @@ Las dependencias apuntan hacia adentro: UI → caso de uso/DAL → proveedor. Lo
 
 - Pages/layouts son Server Components por defecto.
 - Filtros interactivos, pasos de formularios y controles con estado son islas Client Component pequeñas.
+- El panel de filtros conserva query params y tiene un contenedor de scroll propio; la composición visual no cambia la fuente de verdad server-side.
 - Datos privados no pasan completos al árbol React; el DAL construye DTOs explícitos.
 - Sólo módulos de servidor (`env`, Supabase admin, integraciones y workers) acceden a secretos; ningún Client Component los importa.
 - La política de caché es explícita por consulta. Catálogo público admite revalidación; sesión, leads, dashboard y admin no comparten caché entre usuarios.
 - La decisión admin de publicación invalida `/profesionales`; las demás estrategias de cache/revalidación se incorporan cuando exista gestión productiva de contenidos.
 
-En runtime normal, perfiles, filtros, taxonomías públicas, reseñas y planes se leen desde Supabase. El repositorio demo se selecciona sólo con `RED_SENDA_TEST_MODE=true` o con la URL inerte reservada a tests. Recursos y convenios son todavía una excepción explícita: sus páginas consumen datos editoriales demo rotulados.
+En runtime normal, perfiles, filtros, taxonomías públicas, reseñas y planes se leen desde Supabase. La frontera pública sólo proyecta Psicología/Psicopedagogía y excluye honorarios; las reseñas aprobadas conservan rating y texto. El repositorio demo se selecciona sólo con `RED_SENDA_TEST_MODE=true` o con la URL inerte reservada a pruebas. Recursos y convenios son todavía una excepción explícita: sus páginas consumen datos editoriales demo rotulados.
 
 ## Lecturas
 
@@ -87,9 +89,13 @@ Los contratos de dominio no contienen tipos del SDK. La integración de email de
 
 La integración de pagos sólo informa capacidad y conserva la selección en `PENDING_PAYMENT`. Los planes piloto tienen `pricing_status = DRAFT` y precio nulo. El webhook falla cerrado hasta disponer de términos comerciales, credenciales y contrato sandbox para firma/reconciliación. Ninguna integración real se activa por inferencia.
 
-## Matching y búsqueda
+## Búsqueda, ranking y matching dormido
 
-El catálogo normalizado alimenta filtros, SEO y `rank_professionals`. La primera UI de matching es determinística y explicable, pero sus cuatro preguntas y pesos están hardcodeados en el Client Component y las respuestas quedan sólo en memoria. El modelo versionado y `explain_matching` existen; conectarlos a la UI y persistir sesiones es la siguiente iteración. Detalles en [matching](../product/matching.md). El ranking limita la respuesta, valida el tamaño de filtros y desempata por ID; la UI actual todavía no expone paginación por cursor.
+El catálogo normalizado alimenta la búsqueda inmediata, los filtros, SEO y `rank_professionals`. Sólo los tipos activos `psychology_orientation` y `psychopedagogy` pueden cruzar la elegibilidad pública; la misma restricción se repite al enviar el perfil a revisión, al publicar, en `professional_directory` y en el ranking. Los tipos históricos se conservan inactivos para compatibilidad referencial.
+
+El contrato público de directorio, perfil y ranking no incluye honorarios, y la firma de `rank_professionals` ya no acepta `p_budget_max`. Las cards presentan filas comparables alineadas, y el panel de filtros mantiene su propio scroll sin perder el estado URL.
+
+La UI local de cuatro preguntas fue retirada. `/matching` redirige permanentemente a `/profesionales`, no aparece en navegación/sitemap y no crea sesiones ni analytics de respuestas. El modelo versionado y `explain_matching` permanecen dormidos; preservarlos no implica un compromiso de reactivación. Detalles en [búsqueda y ranking](../product/matching.md). El ranking limita la respuesta, valida el tamaño de filtros y desempata por ID; la UI actual todavía no expone paginación por cursor.
 
 ## Errores y observabilidad
 
@@ -110,7 +116,7 @@ El catálogo normalizado alimenta filtros, SEO y `rank_professionals`. La primer
 ## Verificación por cambio
 
 1. Lint y typecheck.
-2. Tests unitarios de reglas/validación.
+2. Pruebas unitarias de reglas/validación.
 3. `npm run test:integration` contra Supabase local reseteado para el vertical/RLS afectado.
 4. Build de producción.
 5. Playwright para flujos afectados.

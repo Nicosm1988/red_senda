@@ -101,7 +101,6 @@ export async function saveOnboardingAction(
     experienceSummary: value(formData, "experienceSummary"),
     educationSummary: value(formData, "educationSummary"),
     yearsExperience: value(formData, "yearsExperience"),
-    startingPrice: value(formData, "startingPrice"),
     availabilityStatus: value(formData, "availabilityStatus"),
     linkedinUrl: value(formData, "linkedinUrl"),
     websiteUrl: value(formData, "websiteUrl"),
@@ -127,6 +126,27 @@ export async function saveOnboardingAction(
   const userId = user.id;
   const supabase = await createClient();
 
+  const { data: supportedType, error: supportedTypeError } = await supabase
+    .from("professional_types")
+    .select("id")
+    .eq("id", parsed.data.professionalTypeId)
+    .in("code", ["psychology_orientation", "psychopedagogy"])
+    .eq("is_active", true)
+    .maybeSingle();
+
+  if (supportedTypeError || !supportedType) {
+    return {
+      status: "error",
+      message: "Elegí Psicología o Psicopedagogía para continuar.",
+      profileId: previousState.profileId,
+      errors: {
+        professionalTypeId: [
+          "Red Senda publica únicamente perfiles de Psicología y Psicopedagogía.",
+        ],
+      },
+    };
+  }
+
   const profilePayload = {
     first_name: parsed.data.firstName,
     last_name: parsed.data.lastName,
@@ -136,8 +156,6 @@ export async function saveOnboardingAction(
     experience_summary: parsed.data.experienceSummary || null,
     education_summary: parsed.data.educationSummary || null,
     years_experience: parsed.data.yearsExperience,
-    starting_price: parsed.data.startingPrice ?? null,
-    currency: parsed.data.startingPrice === undefined ? null : "ARS",
     availability_status: parsed.data.availabilityStatus,
     linkedin_url: parsed.data.linkedinUrl ?? null,
     website_url: parsed.data.websiteUrl ?? null,

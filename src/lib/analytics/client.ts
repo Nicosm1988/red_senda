@@ -7,8 +7,6 @@ export type AnalyticsEventName =
   | "professional_profile_viewed"
   | "contact_started"
   | "lead_created"
-  | "matching_started"
-  | "matching_completed"
   | "signup_started"
   | "professional_signup_completed"
   | "subscription_started"

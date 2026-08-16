@@ -50,8 +50,6 @@ type PendingProfile = {
   experience_summary: string | null;
   education_summary: string | null;
   years_experience: number;
-  starting_price: number | null;
-  currency: string | null;
   verification_state: string;
   publication_status: string;
   updated_at: string;
@@ -207,7 +205,6 @@ export default async function AdminPage({
                           <div><dt className="font-semibold text-ink">Experiencia</dt><dd className="mt-1 whitespace-pre-wrap leading-relaxed text-muted">{profile.experience_summary ?? "No informada"}</dd></div>
                           <div><dt className="font-semibold text-ink">Formación</dt><dd className="mt-1 whitespace-pre-wrap leading-relaxed text-muted">{profile.education_summary ?? "No informada"}</dd></div>
                           <div><dt className="font-semibold text-ink">Trayectoria</dt><dd className="mt-1 text-muted">{profile.years_experience} años declarados</dd></div>
-                          <div><dt className="font-semibold text-ink">Valor orientativo</dt><dd className="mt-1 text-muted">{profile.starting_price === null ? "A consultar" : `${profile.currency ?? "ARS"} ${profile.starting_price}`}</dd></div>
                         </dl>
                         <p className="mt-4 text-xs leading-relaxed text-muted">La URL pública se habilita únicamente después de aprobar la publicación.</p>
                       </details>

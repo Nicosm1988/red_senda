@@ -6,17 +6,17 @@
 | --- | --- |
 | **Implementado** | Catálogo `BASE|IMPULSO|REFERENTE`, selección de plan propia y boost técnico limitado a 2 puntos. |
 | **Preparado** | Entitlements, suscripciones, snapshots y eventos idempotentes de proveedor. |
-| **Pendiente** | Validar propuesta/precios, publicar `pricing_status`, checkout, cobro, facturación y un convenio real. |
+| **Pendiente** | Validar propuesta/precios de planes B2P, definir dónde se comunican, checkout, cobro, facturación y un convenio real. Los honorarios profesionales no se publican. |
 
 ## Tesis
 
-Red Senda genera demanda y confianza para profesionales de trayectorias y transiciones. El acceso B2C comienza gratuito; los ingresos provienen principalmente de la oferta profesional y, luego, de convenios institucionales.
+Red Senda genera demanda y confianza para psicólogos/as y psicopedagogos/as que acompañan trayectorias y transiciones. El acceso B2C comienza gratuito; los ingresos provienen principalmente de la oferta profesional y, luego, de convenios institucionales.
 
 ## Tres lados
 
 | Lado | Intercambio de valor | Ingreso inicial |
 | --- | --- | --- |
-| B2C | Búsqueda, matching, comparación, favoritos y contacto | Sin cargo en el MVP; favoritos todavía sin UI |
+| B2C | Búsqueda directa, filtros, comparación, opiniones y contacto | Sin cargo en el MVP; favoritos todavía sin UI |
 | B2P | Visibilidad, leads, reputación, contenido, analítica y comunidad | Suscripción recurrente |
 | B2B | Oferta curada para empleados, estudiantes, asociados o afiliados | Convenio/abono configurable |
 
@@ -30,7 +30,7 @@ No se promete una cantidad fija de leads sin datos. El sistema sí registra impr
 
 ## Planes
 
-Los nombres son una propuesta comercial administrable, no precios hardcodeados:
+Los nombres son una propuesta comercial administrable para profesionales, no honorarios de consulta ni precios hardcodeados en el marketplace:
 
 | Plan | Propuesta |
 | --- | --- |
@@ -40,7 +40,14 @@ Los nombres son una propuesta comercial administrable, no precios hardcodeados:
 
 `plans` define precio, `pricing_status`, `monthly_lead_quota`, `ranking_boost_points` (máximo 2) y `visibility_score`; `plan_entitlements` modela capacidades/límites. `subscriptions` conserva estado, período y snapshots, mientras los IDs/eventos del proveedor viven en `private`.
 
-Estado actual: los tres planes del seed tienen `price_amount = null` y `pricing_status = DRAFT`. La página toma nombre/descripción/estado de precio desde Supabase, pero la lista editorial de beneficios aún vive en código. Elegir un plan sólo crea o reemplaza una selección `PENDING_PAYMENT`; no activa una suscripción paga ni un cobro. Publicar importes y convertir entitlements en la única fuente de beneficios es **pendiente**.
+Estado actual: los tres planes del seed tienen `price_amount = null` y `pricing_status = DRAFT`. La página toma nombre/descripción/estado de precio desde Supabase, pero la lista editorial de beneficios aún vive en código. Elegir un plan sólo crea o reemplaza una selección `PENDING_PAYMENT`; no activa una suscripción paga ni un cobro. Definir importes, audiencia/visibilidad y convertir entitlements en la única fuente de beneficios es **pendiente**.
+
+## Separación obligatoria de precios
+
+- Los honorarios del servicio profesional no se publican en cards, perfil, filtros, búsqueda, DTOs ni ranking.
+- `professional_directory` y los contratos PostgREST públicos excluyen los campos de honorarios; la firma del ranking no acepta presupuesto.
+- Los planes `BASE|IMPULSO|REFERENTE` son una relación comercial B2P entre Red Senda y el profesional. Sus importes, cuando se aprueben, no habilitan a reintroducir precios de consulta en la experiencia B2C.
+- Un plan puede mejorar capacidades o aplicar el boost acotado documentado, pero nunca compra verificación, rating, opiniones ni elegibilidad.
 
 ## Gobernanza comercial del ranking
 
@@ -70,7 +77,7 @@ No elegir uno de forma irreversible sin entrevistas, voluntad de pago y revisió
 1. Contenido y páginas útiles captan demanda orgánica.
 2. Más demanda pertinente produce leads de mayor calidad.
 3. Mejores resultados atraen y retienen profesionales.
-4. Más oferta aumenta cobertura y calidad del matching.
+4. Más oferta enfocada aumenta cobertura y calidad de la búsqueda.
 5. Verificación, reseñas moderadas y respuesta mejoran confianza.
 6. La cobertura habilita convenios y nuevos contenidos.
 

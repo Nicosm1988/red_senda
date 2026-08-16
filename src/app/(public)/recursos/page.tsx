@@ -32,7 +32,7 @@ export default async function ResourcesPage() {
           {featured ? <ResourceCard article={featured} featured /> : null}
           <div className="mt-14 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <SectionHeading eyebrow="Biblioteca" title="Preguntas que abren caminos." />
-            <Link href="/matching" className={buttonStyles({ variant: "secondary" })}>Orientar mi búsqueda</Link>
+            <Link href="/profesionales" className={buttonStyles({ variant: "secondary" })}>Buscar profesionales</Link>
           </div>
           <div className="mt-9 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {rest.map((article) => <ResourceCard key={article.slug} article={article} />)}
