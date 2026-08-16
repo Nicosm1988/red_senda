@@ -2,8 +2,7 @@
 
 ## Estado
 
-- **Baseline implementado el 2026-08-15:** dos migraciones, configuración Auth y seed piloto en Supabase; `main` desplegada en Vercel; variables aisladas; CI, rutas públicas, CSP, RLS, lead idempotente y cron autenticado verificados.
-- **Iteración local pendiente de release/smoke:** home `search-first`, retiro del cuestionario, catálogo público limitado a Psicología/Psicopedagogía y eliminación de honorarios de todos los contratos públicos.
+- **Release verificado el 2026-08-15:** cuatro migraciones alineadas en Supabase y commit `de0fbef` desplegado en Vercel; home `search-first`, retiro del cuestionario, catálogo público limitado a Psicología/Psicopedagogía y eliminación de honorarios de los contratos públicos comprobados en producción.
 - **Pendiente externo:** primer `SUPERADMIN`, entrega Resend y contrato/sandbox Mercado Pago. El smoke autenticado remoto se completa después de crear la cuenta real autorizada.
 
 ## Destino
@@ -118,13 +117,13 @@ npm run test:e2e:auth
 
 ## Smoke tests de producción
 
-Estado del baseline: **smoke público completado el 2026-08-15**. En ese release se verificaron home, directorio, filtro, perfil, contacto, el matching entonces vigente, planes, recursos, convenios, metadata SEO y navegación móvil/escritorio; todas las rutas respondieron correctamente y no hubo errores de runtime. Ese resultado es histórico y no prueba la iteración actual. Los 38 scripts del HTML inspeccionado compartieron el nonce CSP y se confirmaron headers de seguridad/no-cache.
+Estado actual: **smoke público y de contrato completado el 2026-08-15** para `de0fbef`. Se verificaron la home compacta, búsqueda en primera pantalla, directorio de tres perfiles compatibles, filtro Psicopedagogía, perfiles/contacto, ausencia de fotos y honorarios, redirect de `/matching`, 404 de tipos históricos y móvil 390×844. Las cuatro migraciones quedaron alineadas; `professional_directory` no tiene campos de honorarios, la firma antigua de ranking no existe, los grants de precios están revocados y DB lint/advisors no informan problemas.
 
 También se verificaron el directorio/ranking remoto de Supabase y las denegaciones anónimas de `leads`, `analytics_events` y `private`. Un lead sintético same-origin se creó y reintentó con la misma clave: hubo una sola fila; luego se eliminaron de forma dirigida el lead y sus efectos de prueba. El cron respondió 401 sin secreto y 200 con Bearer válido. El CI de GitHub ejecutó calidad, fixture SQL, integración Supabase y E2E autenticado con resultado verde.
 
 Los siguientes checks requieren insumos externos y permanecen pendientes: sesión real profesional/admin y URL firmada remota; entrega desde un dominio Resend verificado; firma/replay/reconciliación Mercado Pago en sandbox.
 
-Antes de atribuir la nueva experiencia a producción, ejecutar además:
+El release actual cumplió estos checks; deben repetirse en cambios futuros:
 
 - Home: búsqueda y selector “Profesional orientador” visibles en la primera pantalla; sin cuestionario, CTA “No sé qué ayuda necesito” ni fotografías generadas por IA.
 - Directorio: sólo Psicología/Psicopedagogía, filtros persistidos en URL y panel con scroll propio en desktop/móvil.

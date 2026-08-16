@@ -4,10 +4,10 @@
 
 | Estado | Alcance |
 | --- | --- |
-| **Implementado en el repositorio** | Home corta con búsqueda inmediata; directorio → perfil → lead; filtros URL con scroll propio; publicación limitada a Psicología/Psicopedagogía; contrato público sin honorarios; alta profesional → credencial privada → revisión admin → publicación; dashboard básico. |
+| **Implementado y desplegado** | Home corta con búsqueda inmediata; directorio → perfil → lead; filtros URL con scroll propio; publicación limitada a Psicología/Psicopedagogía; contrato público sin honorarios; alta profesional → credencial privada → revisión admin → publicación; dashboard básico. |
 | **Retirado de la UX** | Test/cuestionario de matching, CTA de orientación y navegación a `/matching`; la ruta legacy redirige al directorio. |
 | **Preparado, no activo** | Modelo de matching administrable dormido, planes/suscripciones B2P, artículos, convenios y proveedores externos. |
-| **Pendiente** | Release/smoke de esta iteración, entrega real de email, precio/cobro de planes B2P, contenido/convenios productivos y expansión de consolas. |
+| **Pendiente** | Entrega real de email, precio/cobro de planes B2P, contenido/convenios productivos y expansión de consolas. |
 
 ## Norte
 

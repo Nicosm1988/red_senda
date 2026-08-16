@@ -8,12 +8,12 @@ El directorio y los perfiles publicados se leen desde Supabase. Sólo pueden cru
 
 | Estado | Alcance |
 | --- | --- |
-| **Implementado en el repositorio** | Home corta y `search-first`; directorio Supabase con filtros URL y scroll propio; ranking y perfiles sólo para Psicología/Psicopedagogía; contrato público sin honorarios; perfil y lead idempotente; Auth; aceptación legal append-only; onboarding con documento privado; dashboard de leads; revisión admin de credencial y publicación; outbox con lease/token. |
+| **Implementado y desplegado** | Home corta y `search-first`; directorio Supabase con filtros URL y scroll propio; ranking y perfiles sólo para Psicología/Psicopedagogía; contrato público sin honorarios; perfil y lead idempotente; Auth; aceptación legal append-only; onboarding con documento privado; dashboard de leads; revisión admin de credencial y publicación; outbox con lease/token. |
 | **Retirado de la UX** | No hay test/cuestionario de orientación. `/matching` queda como ruta legacy que redirige al directorio; no integra navegación ni sitemap. |
 | **Preparado, no activo** | Tablas/RPC históricas de matching; planes comerciales B2P separados en `DRAFT`, selección en `PENDING_PAYMENT`; esquemas de artículos y convenios; adaptadores de Resend y Mercado Pago cerrados sin configuración válida. |
-| **Pendiente** | Servir recursos/convenios desde Supabase; definir precio y checkout de los planes B2P sin mezclarlo con honorarios profesionales; credenciales y smoke tests de proveedores; primer `SUPERADMIN`; verificar y desplegar la iteración `search-first`. |
+| **Pendiente** | Servir recursos/convenios desde Supabase; definir precio y checkout de los planes B2P sin mezclarlo con honorarios profesionales; credenciales y smoke tests de proveedores; primer `SUPERADMIN`. |
 
-Baseline de producción: [https://red-senda.vercel.app](https://red-senda.vercel.app), desplegada desde `main` y verificada el 2026-08-15. Esa verificación es anterior a la iteración `search-first`; el alcance del smoke y los límites externos están registrados en [despliegue](docs/deployment/vercel.md).
+Producción: [https://red-senda.vercel.app](https://red-senda.vercel.app), commit `de0fbef`, cuatro migraciones alineadas y release `search-first` verificado el 2026-08-15. El alcance del smoke y los límites externos están registrados en [despliegue](docs/deployment/vercel.md).
 
 ## Experiencia pública
 

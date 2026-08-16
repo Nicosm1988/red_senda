@@ -62,7 +62,7 @@ Red Senda se organiza como una búsqueda directa de profesionales orientadores. 
 | **Implementado** | No hay scraper/importador de RedPsi en el repositorio; copy, diseño, tokens y componentes fueron creados para Red Senda. |
 | **Implementado** | Los 16 perfiles y demás datos demo se declaran ficticios mediante `is_demo` y rótulos visibles. |
 | **Implementado** | Ranking y patrocinio siguen reglas propias y transparentes. |
-| **Implementado en el repositorio** | La experiencia es `search-first`, no presenta test de orientación, no publica honorarios y restringe el catálogo a Psicología/Psicopedagogía. Su release/smoke remoto se registra por separado. |
+| **Implementado y verificado en producción** | La experiencia es `search-first`, no presenta test de orientación, no publica honorarios y restringe el catálogo a Psicología/Psicopedagogía. El release/smoke remoto está registrado en despliegue. |
 | **Pendiente recurrente** | Revisar que nuevas taxonomías, textos y assets mantengan origen propio/licencia registrada y no introduzcan similitud sustancial. |
 
 Si una investigación competitiva futura requiere material no incluido en el brief, debe limitarse a observación humana legítima de información pública, documentar sólo aprendizajes abstractos y pasar revisión legal cuando exista duda.

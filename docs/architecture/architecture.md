@@ -4,10 +4,10 @@
 
 | Estado | Alcance |
 | --- | --- |
-| **Implementado en el repositorio** | App Router, SSR Auth, home `search-first`, directorio Supabase limitado a Psicología/Psicopedagogía, filtros URL con scroll propio, contratos públicos sin honorarios, APIs, vertical profesional/admin, CSP y outbox. |
+| **Implementado y desplegado** | App Router, SSR Auth, home `search-first`, directorio Supabase limitado a Psicología/Psicopedagogía, filtros URL con scroll propio, contratos públicos sin honorarios, APIs, vertical profesional/admin, CSP y outbox. |
 | **Retirado de la UX** | Cuestionario de matching; `/matching` queda como redirección legacy al directorio. |
 | **Preparado** | Modelo/RPC de matching dormido, esquemas de contenidos/convenios y adaptadores externos cerrados. |
-| **Pendiente** | Release/smoke de esta iteración, lectura productiva de contenidos/convenios, pagos B2P y entrega real de email verificados. |
+| **Pendiente** | Lectura productiva de contenidos/convenios, pagos B2P y entrega real de email verificados. |
 
 ## Topología
 

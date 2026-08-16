@@ -156,16 +156,14 @@ Para toda tarea futura:
 | Contenidos y convenios | **Preparado** | Páginas demo rotuladas y esquemas existen; lectura desde tablas y administración completa están pendientes. |
 | Seguridad/QA | **Implementado** | RLS/grants, Storage privado, CSP nonce, rate limit, suites públicas, fixture SQL, integración RLS y E2E autenticado ejecutados; CI de GitHub quedó verde para el release. |
 | Primer `SUPERADMIN` | **Pendiente** | La RPC service-only está implementada; falta crear/confirmar la cuenta real y ejecutar el bootstrap único. |
-| Producción | **Baseline verificado** | Dos migraciones, Auth config y seed piloto aplicados en Supabase; `main` desplegada en Vercel; rutas, CSP, directorio/RLS, lead idempotente y cron autenticado verificados el 2026-08-15. La iteración `search-first`, la restricción de catálogo y la exclusión pública de honorarios requieren su propio release/smoke antes de atribuirse a producción. Email, pagos y primer admin conservan sus estados externos propios. |
+| Producción | **Release verificado** | Cuatro migraciones alineadas en Supabase y commit `de0fbef` desplegado en Vercel; home `search-first`, catálogo exclusivo, filtros, perfiles, ausencia de honorarios, RPC/grants, lint/advisors y smoke desktop/móvil verificados el 2026-08-15. Email, pagos, primer admin y sesión real remota conservan sus estados externos propios. |
 
 ## Próxima iteración
 
-1. Validar el recorrido búsqueda inmediata → filtro → perfil → ingreso/contacto en móvil y escritorio, incluido el scroll autónomo del panel.
-2. Verificar en DB/PostgREST que sólo Psicología/Psicopedagogía sean publicables y que ninguna superficie pública exponga honorarios.
-3. Servir artículos y convenios publicados desde Supabase en lugar del repositorio demo.
-4. Ampliar `/admin` a taxonomías, planes, suscripciones, leads, reseñas, artículos y convenios.
-5. Habilitar Resend y Mercado Pago sólo con dominio, precios de planes B2P y credenciales aprobados.
-6. Incorporar MFA para roles administrativos y pruebas E2E autenticadas continuas contra un Supabase aislado.
+1. Servir artículos y convenios publicados desde Supabase en lugar del repositorio demo.
+2. Ampliar `/admin` a taxonomías, planes, suscripciones, leads, reseñas, artículos y convenios.
+3. Habilitar Resend y Mercado Pago sólo con dominio, precios de planes B2P y credenciales aprobados.
+4. Incorporar MFA para roles administrativos y mantener las pruebas E2E autenticadas contra un Supabase aislado.
 
 ## Mapa documental
 
