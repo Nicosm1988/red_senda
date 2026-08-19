@@ -1,6 +1,6 @@
 # Red Senda — contexto maestro
 
-Actualizado: 2026-08-15. Este documento registra decisiones y contratos del producto; no prueba por sí solo que una funcionalidad esté implementada. El estado real se confirma con código, migraciones y tests.
+Actualizado: 2026-08-19. Este documento registra decisiones y contratos del producto; no prueba por sí solo que una funcionalidad esté implementada. El estado real se confirma con código, migraciones y tests.
 
 ## Resumen
 
@@ -126,6 +126,8 @@ Nunca se inventan valores ni se degradan integraciones reales a mocks silencioso
 | D-013 | Publicación sólo de Psicología/Psicopedagogía | La etiqueta paraguas es “Profesional orientador”; tipos históricos quedan inactivos para preservar integridad referencial. |
 | D-014 | Honorarios fuera de toda superficie pública | Perfil, filtros, directorio y ranking no exponen precios; los planes comerciales B2P continúan separados. |
 | D-015 | Prohibidas las fotografías generadas por IA | La identidad visual usa tipografía, formas, iconografía y recursos propios o licenciados con procedencia verificable. |
+| D-016 | `/recursos` y `/convenios` leen de Supabase, con `body` en Markdown ligero (`## Heading`) para secciones/lead | Evita tablas o JSON adicionales para prosa; reutiliza el patrón normalizado ya elegido para el resto del catálogo. |
+| D-017 | `articles.takeaways` y `agreements.audience_summary/coverage_summary/benefits/eligibility/access_steps` se agregaron por migración | La demo original exigía contenido editorial estructurado que el esquema inicial no tenía; se agregó como columnas normalizadas mínimas, no JSON. |
 
 Cualquier cambio irreversible, legal o económicamente relevante requiere una ADR breve o actualización de esta tabla.
 
@@ -153,17 +155,16 @@ Para toda tarea futura:
 | Email — entrega real | **Pendiente** | Requiere dominio, `RESEND_API_KEY`, `EMAIL_FROM` y smoke test. Sin ellos el outbox queda `FAILED` reintentable, no `SENT`. |
 | Planes/pagos | **Preparado** | Los tres planes están `DRAFT`, sin importes; elegir crea/actualiza `PENDING_PAYMENT`. Checkout, firma y reconciliación Mercado Pago están pendientes. |
 | Matching | **Retirado de UX / dormido** | No hay cuestionario, CTA ni navegación. `/matching` redirige al directorio. Las tablas y `explain_matching` se conservan sin uso para no borrar historial técnico. |
-| Contenidos y convenios | **Preparado** | Páginas demo rotuladas y esquemas existen; lectura desde tablas y administración completa están pendientes. |
+| Contenidos y convenios | **Lectura pública implementada** | `/recursos` y `/convenios` leen artículos y convenios `PUBLISHED` desde Supabase (incluye seed real, `is_demo` rotulado). La consola admin para crear/moderar artículos y convenios sigue pendiente; hasta entonces el contenido sólo se carga por seed/SQL directo. |
 | Seguridad/QA | **Implementado** | RLS/grants, Storage privado, CSP nonce, rate limit, suites públicas, fixture SQL, integración RLS y E2E autenticado ejecutados; CI de GitHub quedó verde para el release. |
 | Primer `SUPERADMIN` | **Pendiente** | La RPC service-only está implementada; falta crear/confirmar la cuenta real y ejecutar el bootstrap único. |
 | Producción | **Release verificado** | Cuatro migraciones alineadas en Supabase y commit `de0fbef` desplegado en Vercel; home `search-first`, catálogo exclusivo, filtros, perfiles, ausencia de honorarios, RPC/grants, lint/advisors y smoke desktop/móvil verificados el 2026-08-15. Email, pagos, primer admin y sesión real remota conservan sus estados externos propios. |
 
 ## Próxima iteración
 
-1. Servir artículos y convenios publicados desde Supabase en lugar del repositorio demo.
-2. Ampliar `/admin` a taxonomías, planes, suscripciones, leads, reseñas, artículos y convenios.
-3. Habilitar Resend y Mercado Pago sólo con dominio, precios de planes B2P y credenciales aprobados.
-4. Incorporar MFA para roles administrativos y mantener las pruebas E2E autenticadas contra un Supabase aislado.
+1. Ampliar `/admin` a taxonomías, planes, suscripciones, leads, reseñas, artículos y convenios.
+2. Habilitar Resend y Mercado Pago sólo con dominio, precios de planes B2P y credenciales aprobados.
+3. Incorporar MFA para roles administrativos y mantener las pruebas E2E autenticadas contra un Supabase aislado.
 
 ## Mapa documental
 

@@ -508,17 +508,114 @@ on conflict (professional_profile_id) do update set
   ranking_version = excluded.ranking_version;
 
 insert into public.articles
-  (id, author_profile_id, category_id, title, slug, excerpt, body, tags,
+  (id, author_profile_id, category_id, title, slug, excerpt, body, tags, takeaways,
    status, seo_title, seo_description, published_at, moderated_at, is_demo)
 values
-  ('33000000-0000-4000-8000-000000000001','11111111-1111-4111-8111-111111111101','2c000000-0000-4000-8000-000000000001','Elegir sin tener todas las respuestas','elegir-sin-todas-las-respuestas-demo','Una guía breve para convertir la incertidumbre en preguntas que sí se pueden investigar.','Este artículo es contenido ficticio de demostración. Elegir no exige adivinar el futuro: puede empezar por reconocer intereses, condiciones y alternativas, conversar con personas y diseñar experiencias pequeñas antes de comprometer una decisión.','{decisiones,orientacion}','PUBLISHED','Elegir sin todas las respuestas','Preguntas y experimentos para explorar decisiones educativas.', '2026-02-01 12:00:00+00','2026-02-01 10:00:00+00',true),
-  ('33000000-0000-4000-8000-000000000002','11111111-1111-4111-8111-111111111102','2c000000-0000-4000-8000-000000000003','Cómo convertir un cambio en un experimento','convertir-cambio-en-experimento-demo','Una forma práctica de reducir el riesgo cuando estás pensando en una transición profesional.','Contenido ficticio para pruebas. En lugar de tratar un cambio como una única decisión irreversible, se puede formular una hipótesis, definir qué evidencia falta y realizar un experimento acotado: una conversación, un proyecto breve o una observación del trabajo real.','{transiciones,carrera}','PUBLISHED','Cambios profesionales como experimentos','Una aproximación gradual y basada en evidencia para explorar transiciones.', '2026-02-05 12:00:00+00','2026-02-05 10:00:00+00',true),
-  ('33000000-0000-4000-8000-000000000003','11111111-1111-4111-8111-111111111103','2c000000-0000-4000-8000-000000000002','Leer una búsqueda laboral con criterio','leer-busqueda-laboral-demo','Qué observar en un aviso antes de adaptar tu postulación y decidir si vale la pena avanzar.','Artículo demostrativo y ficticio. Conviene separar requisitos centrales, señales de contexto y preferencias. Esa lectura permite identificar evidencias relevantes de la propia experiencia y preparar preguntas para el proceso, sin intentar imitar cada palabra del aviso.','{empleabilidad,busqueda}','PUBLISHED','Cómo leer una búsqueda laboral','Criterios para analizar avisos y preparar postulaciones relevantes.', '2026-02-10 12:00:00+00','2026-02-10 10:00:00+00',true),
-  ('33000000-0000-4000-8000-000000000004','11111111-1111-4111-8111-111111111104','2c000000-0000-4000-8000-000000000003','Transición a tecnología: empezar por los roles','transicion-tecnologia-empezar-roles-demo','Tecnología no es un único destino: una primera exploración puede comparar familias de roles.','Contenido ficticio de demo. Producto, datos, desarrollo, diseño y operaciones requieren combinaciones distintas de capacidades. Antes de elegir un curso, resulta útil estudiar tareas reales, conversar con quienes las realizan y contrastar la brecha con la experiencia propia.','{tecnologia,transiciones}','PUBLISHED','Transición a tecnología y familias de roles','Cómo explorar roles tecnológicos antes de elegir formación.', '2026-02-15 12:00:00+00','2026-02-15 10:00:00+00',true),
-  ('33000000-0000-4000-8000-000000000005','11111111-1111-4111-8111-111111111107','2c000000-0000-4000-8000-000000000002','Preparar historias para una entrevista','preparar-historias-entrevista-demo','Una estructura simple para comunicar contexto, decisiones, acciones y resultados sin memorizar discursos.','Artículo ficticio para demostración. Seleccionar algunos episodios relevantes ayuda a responder con precisión. Para cada uno se puede registrar el contexto, el desafío, la acción propia, el resultado y el aprendizaje, manteniendo siempre información confidencial fuera de la conversación.','{entrevistas,empleabilidad}','PUBLISHED','Historias claras para entrevistas','Cómo preparar ejemplos concretos para una entrevista laboral.', '2026-02-20 12:00:00+00','2026-02-20 10:00:00+00',true),
-  ('33000000-0000-4000-8000-000000000006','11111111-1111-4111-8111-111111111109','2c000000-0000-4000-8000-000000000004','Primeros meses liderando un equipo','primeros-meses-liderando-demo','Preguntas útiles para ordenar expectativas, acuerdos y aprendizaje al asumir un rol de liderazgo.','Contenido ficticio de prueba. Un nuevo rol de liderazgo requiere entender el propósito del equipo, escuchar a las personas, acordar decisiones y construir un ritmo de seguimiento. No se trata de tener todas las respuestas sino de hacer explícito cómo se trabajará.','{liderazgo,equipos}','PUBLISHED','Primeros meses como líder','Preguntas y acuerdos para iniciar un rol de liderazgo.', '2026-02-25 12:00:00+00','2026-02-25 10:00:00+00',true)
+  ('33000000-0000-4000-8000-000000000001','11111111-1111-4111-8111-111111111101','2c000000-0000-4000-8000-000000000001','Elegir sin tener todas las respuestas','elegir-sin-todas-las-respuestas-demo','Una guía breve para convertir la incertidumbre en preguntas que sí se pueden investigar.',
+   'Elegir no exige adivinar el futuro: puede empezar por reconocer intereses, condiciones y alternativas, conversar con personas y diseñar experiencias pequeñas antes de comprometer una decisión.
+
+## Separá lo que ya sabés de lo que falta explorar
+
+Antes de buscar más información conviene escribir lo que ya es conocido: intereses declarados, tareas que generan energía y condiciones no negociables como presupuesto o ubicación. Esa lista reduce el terreno real de incertidumbre.
+
+Lo que queda afuera de esa lista es lo que vale la pena investigar activamente, en lugar de seguir dando vueltas sobre lo que ya se sabe.
+
+## Diseñá pasos reversibles antes que una decisión definitiva
+
+Una materia suelta, una certificación corta o una conversación con alguien que ejerce esa profesión aportan evidencia real sin cerrar otras puertas.
+
+Ese tipo de pasos intermedios convierte una decisión abstracta en una serie de decisiones pequeñas y revisables, más fáciles de sostener que una apuesta única.',
+   '{decisiones,orientacion}',
+   '{"Separá lo que ya sabés de lo que necesitás investigar.","Priorizá pasos reversibles antes de un compromiso definitivo.","Buscá evidencia conversando con quienes ya recorrieron ese camino."}',
+   'PUBLISHED','Elegir sin todas las respuestas','Preguntas y experimentos para explorar decisiones educativas.', '2026-02-01 12:00:00+00','2026-02-01 10:00:00+00',true),
+  ('33000000-0000-4000-8000-000000000002','11111111-1111-4111-8111-111111111102','2c000000-0000-4000-8000-000000000003','Cómo convertir un cambio en un experimento','convertir-cambio-en-experimento-demo','Una forma práctica de reducir el riesgo cuando estás pensando en una transición profesional.',
+   'En lugar de tratar un cambio de carrera como una única decisión irreversible, se puede formular una hipótesis, definir qué evidencia falta y diseñar un experimento acotado.
+
+## Convertí la duda en una hipótesis concreta
+
+"Quiero cambiar de rubro" es difícil de poner a prueba. "Quiero saber si un rol de análisis de datos me resulta sostenible" sí se puede investigar con una acción concreta.
+
+Nombrar la hipótesis con precisión ayuda a decidir qué información falta y evita confundir intuición con evidencia.
+
+## Elegí el experimento más chico que aporte evidencia real
+
+Una conversación con alguien del área, un proyecto breve o una observación del trabajo cotidiano suelen bastar para contrastar la fantasía con la tarea real.
+
+El objetivo no es acertar a la primera, sino acumular información propia que reduzca el riesgo de la decisión siguiente.',
+   '{transiciones,carrera}',
+   '{"Transformá la duda en una hipótesis que se pueda poner a prueba.","Elegí experimentos pequeños antes de un cambio definitivo.","Cada experimento deja evidencia propia, no sólo intuición."}',
+   'PUBLISHED','Cambios profesionales como experimentos','Una aproximación gradual y basada en evidencia para explorar transiciones.', '2026-02-05 12:00:00+00','2026-02-05 10:00:00+00',true),
+  ('33000000-0000-4000-8000-000000000003','11111111-1111-4111-8111-111111111103','2c000000-0000-4000-8000-000000000002','Leer una búsqueda laboral con criterio','leer-busqueda-laboral-demo','Qué observar en un aviso antes de adaptar tu postulación y decidir si vale la pena avanzar.',
+   'Conviene separar requisitos centrales, señales de contexto y preferencias antes de adaptar una postulación o decidir si vale la pena avanzar.
+
+## Distinguí lo excluyente de lo deseable
+
+Un aviso mezcla condiciones centrales con preferencias del equipo. Separarlas permite entender qué barreras son reales y cuáles admiten matices.
+
+Esa lectura evita descartarse por no cumplir un punto que, en la práctica, no define el proceso.
+
+## Buscá señales de contexto antes de postularte
+
+El tono, las responsabilidades descriptas y la forma de redactar el aviso anticipan parte de la cultura del equipo y del momento que atraviesa el área.
+
+Esas señales también sirven para preparar preguntas propias durante el proceso, en lugar de responder únicamente a lo que pide la empresa.',
+   '{empleabilidad,busqueda}',
+   '{"Separá requisitos excluyentes de preferencias deseables.","Leé el contexto del aviso, no sólo la lista de tareas.","Preparate preguntas propias antes de avanzar en el proceso."}',
+   'PUBLISHED','Cómo leer una búsqueda laboral','Criterios para analizar avisos y preparar postulaciones relevantes.', '2026-02-10 12:00:00+00','2026-02-10 10:00:00+00',true),
+  ('33000000-0000-4000-8000-000000000004','11111111-1111-4111-8111-111111111104','2c000000-0000-4000-8000-000000000003','Transición a tecnología: empezar por los roles','transicion-tecnologia-empezar-roles-demo','Tecnología no es un único destino: una primera exploración puede comparar familias de roles.',
+   'Tecnología no es un único destino: antes de elegir una formación conviene comparar familias de roles y las tareas reales que implican.
+
+## Comparé tareas, no títulos
+
+Producto, datos, desarrollo, diseño y operaciones requieren combinaciones distintas de capacidades, aunque compartan la etiqueta "tecnología".
+
+Mirar tareas concretas de cada rol evita elegir una formación en base a un nombre atractivo pero poco preciso.
+
+## Contrastá la brecha con tu experiencia actual
+
+Conversar con quienes ejercen esos roles y revisar procesos reales de trabajo ayuda a estimar qué tan lejos está la experiencia previa de ese nuevo camino.
+
+Esa brecha, una vez nombrada, permite elegir una formación acotada en lugar de un recorrido genérico y extenso.',
+   '{tecnologia,transiciones}',
+   '{"Comparé familias de roles por sus tareas, no por su nombre.","Hablá con quienes ya ejercen el rol que te interesa.","Elegí formación específica según la brecha real, no genérica."}',
+   'PUBLISHED','Transición a tecnología y familias de roles','Cómo explorar roles tecnológicos antes de elegir formación.', '2026-02-15 12:00:00+00','2026-02-15 10:00:00+00',true),
+  ('33000000-0000-4000-8000-000000000005','11111111-1111-4111-8111-111111111107','2c000000-0000-4000-8000-000000000002','Preparar historias para una entrevista','preparar-historias-entrevista-demo','Una estructura simple para comunicar contexto, decisiones, acciones y resultados sin memorizar discursos.',
+   'Prepararse no significa memorizar respuestas perfectas, sino elegir algunas historias que muestren contexto, decisiones, acciones y resultados con precisión.
+
+## Elegí pocas historias, no muchas respuestas
+
+Cuatro o cinco episodios bien elegidos alcanzan para responder preguntas distintas si se conoce bien el contexto, el aporte propio y el resultado obtenido.
+
+Repasar demasiadas respuestas memorizadas suele generar un discurso rígido en lugar de una conversación genuina.
+
+## Estructurá cada historia con cuidado
+
+Contexto, desafío, acción propia, resultado y aprendizaje son suficientes para comunicar una experiencia con claridad, sin exponer información confidencial.
+
+Esa estructura también ayuda a identificar qué historias todavía faltan pulir antes de la entrevista.',
+   '{entrevistas,empleabilidad}',
+   '{"Elegí pocas historias representativas, no una respuesta por pregunta.","Usá una misma estructura: contexto, acción, resultado, aprendizaje.","Cuidá la información confidencial al elegir tus ejemplos."}',
+   'PUBLISHED','Historias claras para entrevistas','Cómo preparar ejemplos concretos para una entrevista laboral.', '2026-02-20 12:00:00+00','2026-02-20 10:00:00+00',true),
+  ('33000000-0000-4000-8000-000000000006','11111111-1111-4111-8111-111111111109','2c000000-0000-4000-8000-000000000004','Primeros meses liderando un equipo','primeros-meses-liderando-demo','Preguntas útiles para ordenar expectativas, acuerdos y aprendizaje al asumir un rol de liderazgo.',
+   'Un nuevo rol de liderazgo no exige tener todas las respuestas, sino hacer explícito cómo se van a tomar las decisiones.
+
+## Escuchá antes de reorganizar
+
+Entender el propósito del equipo, sus acuerdos previos y las tensiones existentes evita cambios apresurados que generan más resistencia que resultado.
+
+Las primeras conversaciones individuales suelen aportar más información que cualquier plan armado de antemano.
+
+## Construí un ritmo de seguimiento explícito
+
+Acordar cómo y cuándo se van a revisar prioridades, resultados y obstáculos da previsibilidad al equipo y reduce la ambigüedad del inicio.
+
+Ese ritmo también ayuda a la persona que lidera a corregir el rumbo con información temprana, en lugar de esperar señales tardías.',
+   '{liderazgo,equipos}',
+   '{"Escuchá al equipo antes de proponer cambios.","Hacé explícito cómo se van a tomar las decisiones.","Construí un ritmo de seguimiento desde el principio."}',
+   'PUBLISHED','Primeros meses como líder','Preguntas y acuerdos para iniciar un rol de liderazgo.', '2026-02-25 12:00:00+00','2026-02-25 10:00:00+00',true)
 on conflict (id) do update set
   title = excluded.title, excerpt = excluded.excerpt, body = excluded.body,
+  tags = excluded.tags, takeaways = excluded.takeaways,
   status = excluded.status, published_at = excluded.published_at,
   moderated_at = excluded.moderated_at, is_demo = true;
 
@@ -531,13 +628,31 @@ on conflict (id) do update set name = excluded.name, summary = excluded.summary,
 
 insert into public.agreements
   (id, institution_id, slug, name, summary, terms_public, status,
-   modality_notes, discount_percent, quota_total, valid_from, valid_until,
+   modality_notes, audience_summary, coverage_summary, benefits, eligibility, access_steps,
+   discount_percent, quota_total, valid_from, valid_until,
    is_public, is_demo)
 values
-  ('45000000-0000-4000-8000-000000000001','44000000-0000-4000-8000-000000000001','orientacion-estudiantil-demo','Orientación estudiantil demo','Convenio ficticio para probar una propuesta de orientación destinada a estudiantes.','Condiciones ilustrativas sujetas a definición; no constituye una oferta real.','PUBLISHED','Atención online y presencial según profesional.',15,40,'2026-01-01','2026-12-31',true,true),
-  ('45000000-0000-4000-8000-000000000002','44000000-0000-4000-8000-000000000002','transiciones-comunidad-demo','Transiciones para la comunidad demo','Convenio ficticio para probar acompañamiento en búsqueda y cambio profesional.','Condiciones de demostración sin validez comercial.','PUBLISHED','Atención online.',10,60,'2026-01-01','2026-12-31',true,true)
+  ('45000000-0000-4000-8000-000000000001','44000000-0000-4000-8000-000000000001','orientacion-estudiantil-demo','Orientación estudiantil demo','Convenio ficticio para probar una propuesta de orientación destinada a estudiantes.','Condiciones ilustrativas sujetas a definición; no constituye una oferta real.','PUBLISHED',
+   'Atención online y presencial según profesional.',
+   'Estudiantes de grado y de los últimos años de secundario del instituto, en proceso de elegir o revisar una carrera.',
+   'Atención remota en todo el país y encuentros presenciales en sede del instituto.',
+   '{"Turnos de orientación con arancel reducido","Acceso prioritario a los cupos disponibles","Seguimiento durante todo el ciclo lectivo"}',
+   '{"Formar parte de la comunidad educativa del instituto","Presentar la credencial o constancia institucional vigente","Aceptar los términos generales de Red Senda"}',
+   '{"Solicitá el código de convenio en tu institución","Ingresá el código al contactar a un profesional adherido","Coordiná el primer encuentro dentro de los cupos disponibles"}',
+   15,40,'2026-01-01','2026-12-31',true,true),
+  ('45000000-0000-4000-8000-000000000002','44000000-0000-4000-8000-000000000002','transiciones-comunidad-demo','Transiciones para la comunidad demo','Convenio ficticio para probar acompañamiento en búsqueda y cambio profesional.','Condiciones de demostración sin validez comercial.','PUBLISHED',
+   'Atención online.',
+   'Personas asociadas a la comunidad que atraviesan una búsqueda laboral o un cambio de rumbo profesional.',
+   'Atención remota para personas asociadas en cualquier ubicación.',
+   '{"Arancel especial para personas asociadas","Prioridad en la asignación de cupos mensuales","Contenidos exclusivos sobre búsqueda laboral"}',
+   '{"Acreditar membresía vigente en la comunidad","Completar el formulario de acceso institucional","Aceptar los términos generales de Red Senda"}',
+   '{"Verificá tu membresía activa en la comunidad","Accedé al enlace institucional compartido por la comunidad","Elegí un profesional adherido y coordiná el primer contacto"}',
+   10,60,'2026-01-01','2026-12-31',true,true)
 on conflict (id) do update set
   name = excluded.name, summary = excluded.summary, status = excluded.status,
+  modality_notes = excluded.modality_notes,
+  audience_summary = excluded.audience_summary, coverage_summary = excluded.coverage_summary,
+  benefits = excluded.benefits, eligibility = excluded.eligibility, access_steps = excluded.access_steps,
   is_public = excluded.is_public, is_demo = true;
 
 insert into public.agreement_professionals

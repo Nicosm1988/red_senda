@@ -2,18 +2,19 @@
 
 Marketplace argentino de psicólogos/as y psicopedagogos/as que acompañan decisiones de estudio, trabajo y carrera. El vertical conecta búsqueda inmediata, filtros, perfiles comparables, consultas, alta profesional, revisión de credenciales, publicación y gestión básica de leads.
 
-El directorio y los perfiles publicados se leen desde Supabase. Sólo pueden cruzar la frontera pública los tipos `psychology_orientation` y `psychopedagogy`, presentados bajo la entrada “Profesional orientador”. El contrato público no expone honorarios ni filtros de precio; valoraciones y opiniones aprobadas sí forman parte de la confianza. El seed conserva 16 perfiles inequívocamente ficticios con `is_demo = true`, de los cuales 3 cumplen el nuevo contrato público; `RED_SENDA_TEST_MODE=true` habilita el repositorio en memoria únicamente para pruebas automatizadas. Recursos y convenios todavía se sirven desde ese repositorio editorial demo y se rotulan como tales.
+El directorio y los perfiles publicados se leen desde Supabase. Sólo pueden cruzar la frontera pública los tipos `psychology_orientation` y `psychopedagogy`, presentados bajo la entrada “Profesional orientador”. El contrato público no expone honorarios ni filtros de precio; valoraciones y opiniones aprobadas sí forman parte de la confianza. El seed conserva 16 perfiles inequívocamente ficticios con `is_demo = true`, de los cuales 3 cumplen el nuevo contrato público; `RED_SENDA_TEST_MODE=true` habilita el repositorio en memoria únicamente para pruebas automatizadas. Recursos y convenios también se leen desde Supabase (`articles`/`agreements` en estado `PUBLISHED`); todavía no existe una consola admin para crearlos o moderarlos, así que por ahora sólo se cargan por seed o SQL directo.
 
 ## Estado actual
 
 | Estado | Alcance |
 | --- | --- |
 | **Implementado y desplegado** | Home corta y `search-first`; directorio Supabase con filtros URL y scroll propio; ranking y perfiles sólo para Psicología/Psicopedagogía; contrato público sin honorarios; perfil y lead idempotente; Auth; aceptación legal append-only; onboarding con documento privado; dashboard de leads; revisión admin de credencial y publicación; outbox con lease/token. |
+| **Implementado, pendiente de deploy** | `/recursos` y `/convenios` leen artículos y convenios publicados desde Supabase (migración `20260819120000`, incluye el fix de grants de `owns_professional_profile` que esa lectura destapó). |
 | **Retirado de la UX** | No hay test/cuestionario de orientación. `/matching` queda como ruta legacy que redirige al directorio; no integra navegación ni sitemap. |
-| **Preparado, no activo** | Tablas/RPC históricas de matching; planes comerciales B2P separados en `DRAFT`, selección en `PENDING_PAYMENT`; esquemas de artículos y convenios; adaptadores de Resend y Mercado Pago cerrados sin configuración válida. |
-| **Pendiente** | Servir recursos/convenios desde Supabase; definir precio y checkout de los planes B2P sin mezclarlo con honorarios profesionales; credenciales y smoke tests de proveedores; primer `SUPERADMIN`. |
+| **Preparado, no activo** | Tablas/RPC históricas de matching; planes comerciales B2P separados en `DRAFT`, selección en `PENDING_PAYMENT`; adaptadores de Resend y Mercado Pago cerrados sin configuración válida. |
+| **Pendiente** | Consola admin para artículos/convenios; definir precio y checkout de los planes B2P sin mezclarlo con honorarios profesionales; credenciales y smoke tests de proveedores; primer `SUPERADMIN`. |
 
-Producción: [https://red-senda.vercel.app](https://red-senda.vercel.app), commit `de0fbef`, cuatro migraciones alineadas y release `search-first` verificado el 2026-08-15. El alcance del smoke y los límites externos están registrados en [despliegue](docs/deployment/vercel.md).
+Producción: [https://red-senda.vercel.app](https://red-senda.vercel.app), commit `de0fbef`, cuatro migraciones alineadas y release `search-first` verificado el 2026-08-15. El alcance del smoke y los límites externos están registrados en [despliegue](docs/deployment/vercel.md). La lectura de recursos/convenios desde Supabase está implementada y verificada localmente pero no forma parte de ese release.
 
 ## Experiencia pública
 
