@@ -229,12 +229,12 @@ test("professional cards align by section and the filter rail scrolls independen
     expect(Math.max(...cardLayout.factColumnWidths) - Math.min(...cardLayout.factColumnWidths)).toBeLessThanOrEqual(1);
   }
 
-  const filterRail = page.getByTestId("professional-filters-desktop");
+  const filterRail = page.getByTestId("professional-filters-desktop-scroll");
   await expectIndependentVerticalScroll(filterRail);
 
   await page.setViewportSize({ width: 390, height: 600 });
   await page.goto("/profesionales");
-  const mobileFilterRail = page.getByTestId("professional-filters-mobile").locator("..");
+  const mobileFilterRail = page.getByTestId("professional-filters-mobile-scroll");
   await expectIndependentVerticalScroll(mobileFilterRail);
 });
 

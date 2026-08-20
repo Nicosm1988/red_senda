@@ -124,16 +124,20 @@ function FilterFields({ selected, idPrefix }: { selected: ProfessionalFilters; i
           Credenciales revisadas por Red Senda.
         </span>
       </label>
-
-      <div className="sticky bottom-0 -mx-1 flex gap-2 border-t border-line bg-paper px-1 pb-1 pt-4">
-        <Button className="flex-1" type="submit">
-          Buscar
-        </Button>
-        <Link href="/profesionales" className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-muted underline-offset-4 hover:text-ink hover:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35">
-          Limpiar
-        </Link>
-      </div>
     </>
+  );
+}
+
+function FilterActions() {
+  return (
+    <div className="flex shrink-0 gap-2 border-t border-line bg-paper p-4 shadow-[0_-10px_20px_-16px_rgba(23,32,29,0.35)]">
+      <Button className="flex-1" type="submit">
+        Buscar
+      </Button>
+      <Link href="/profesionales" className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-muted underline-offset-4 hover:text-ink hover:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35">
+        Limpiar
+      </Link>
+    </div>
   );
 }
 
@@ -178,16 +182,24 @@ export function ProfessionalFiltersForm({ selected, activeCount }: { selected: P
         data-testid="professional-filters-desktop"
         onChange={applySelection}
         onSubmit={trackFilterSubmit}
-        className="hidden max-h-[calc(100dvh-7.5rem)] overscroll-contain rounded-[1.5rem] border border-line bg-paper p-5 [scrollbar-gutter:stable] lg:block lg:overflow-y-auto"
+        className="hidden max-h-[calc(100dvh-7.5rem)] flex-col overflow-hidden rounded-[1.5rem] border border-line bg-paper lg:flex"
       >
-        <div className="mb-4 flex items-center justify-between">
+        <div className="flex shrink-0 items-center justify-between p-5 pb-4">
           <h2 className="text-lg font-semibold tracking-[-0.02em] text-ink">Afinar búsqueda</h2>
           {activeCount > 0 ? <span className="rounded-full bg-senda-soft px-2.5 py-1 text-xs font-bold text-senda-dark">{activeCount} activos</span> : null}
         </div>
-        <FilterFields key={urlStateKey} selected={selected} idPrefix="desktop" />
+        <div data-testid="professional-filters-desktop-scroll" className="flex-1 overscroll-contain px-5 [scrollbar-gutter:stable] lg:overflow-y-auto">
+          <FilterFields key={urlStateKey} selected={selected} idPrefix="desktop" />
+        </div>
+        <FilterActions />
       </form>
 
-      <details open className="filter-panel max-h-[min(72dvh,40rem)] overflow-y-auto overscroll-contain rounded-[1.25rem] border border-line bg-paper [scrollbar-gutter:stable] lg:hidden">
+      {/* Native <details> does not shrink flex descendants to fit a max-height
+          (confirmed: the equivalent plain <form> below does this correctly),
+          so the scrollable region gets an explicit height budget instead of
+          flex-1, leaving room for the summary (3.5rem) and the actions
+          footer (4.75rem). */}
+      <details open className="filter-panel max-h-[min(72dvh,40rem)] overflow-hidden rounded-[1.25rem] border border-line bg-paper lg:hidden">
         <summary className="sticky top-0 z-10 flex min-h-14 cursor-pointer list-none items-center justify-between border-b border-line bg-paper px-5 font-semibold text-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-senda/35">
           <span>Filtros y orden</span>
           <span className="text-xs text-senda-dark">{activeCount > 0 ? `${activeCount} activos` : "Elegir"}</span>
@@ -199,9 +211,11 @@ export function ProfessionalFiltersForm({ selected, activeCount }: { selected: P
           data-testid="professional-filters-mobile"
           onChange={applySelection}
           onSubmit={trackFilterSubmit}
-          className="p-5"
         >
-          <FilterFields key={urlStateKey} selected={selected} idPrefix="mobile" />
+          <div data-testid="professional-filters-mobile-scroll" className="max-h-[calc(min(72dvh,40rem)-8.25rem)] overflow-y-auto overscroll-contain px-5 [scrollbar-gutter:stable]">
+            <FilterFields key={urlStateKey} selected={selected} idPrefix="mobile" />
+          </div>
+          <FilterActions />
         </form>
       </details>
     </>
