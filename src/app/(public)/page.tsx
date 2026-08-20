@@ -4,6 +4,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { Badge } from "@/components/ui/badge";
 import { buttonStyles } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { RouteMap } from "@/components/public/route-map";
 
 export const metadata: Metadata = {
   title: "Encontrá psicólogos y psicopedagogos",
@@ -37,15 +38,19 @@ export default function HomePage() {
       <section className="rs-atmosphere-hero flex min-h-[calc(100svh-7rem)] items-center overflow-hidden py-5 sm:py-8 lg:py-10">
         <Container>
           <div className="overflow-hidden rounded-[1.6rem] border border-line bg-paper shadow-soft lg:grid lg:grid-cols-[minmax(0,.88fr)_minmax(480px,1.12fr)]">
-            <div className="bg-ink px-5 py-7 text-white sm:px-8 sm:py-9 lg:flex lg:flex-col lg:justify-between lg:p-10">
+            <div className="overflow-hidden bg-ink px-5 py-7 text-white sm:px-8 sm:py-9 lg:flex lg:flex-col lg:p-10">
               <div>
                 <Badge tone="clay">Acompañamiento profesional</Badge>
-                <h1 className="mt-5 max-w-xl font-display text-[clamp(1.9rem,3vw,2.5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-balance">
+                <h1 className="mt-5 max-w-xl font-display text-[clamp(2.1rem,3.6vw,2.9rem)] font-medium leading-[1.03] tracking-[-0.045em] text-balance">
                   Encontrá tu profesional.
                 </h1>
                 <p className="mt-4 max-w-lg text-sm leading-6 text-white/72 sm:text-base">
                   Compará psicólogos y psicopedagogos por experiencia, modalidad y valoraciones. Elegí un perfil y enviá tu consulta de forma directa.
                 </p>
+              </div>
+
+              <div className="hidden flex-1 items-center justify-end pr-2 lg:flex" aria-hidden="true">
+                <RouteMap className="w-56 opacity-30" />
               </div>
 
               <div className="mt-7 hidden border-t border-white/14 pt-5 sm:block">

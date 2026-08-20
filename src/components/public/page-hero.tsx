@@ -26,7 +26,7 @@ export function PageHero({
         <div className={`mt-6 grid items-end gap-8 ${aside ? "lg:grid-cols-[1.3fr_.7fr]" : ""}`}>
           <div className="max-w-[56rem]">
             <Badge tone="senda">{eyebrow}</Badge>
-            <h1 className="mt-4 font-display text-[clamp(2.1rem,5vw,4rem)] font-semibold leading-[1.02] tracking-[-0.035em] text-ink text-balance">
+            <h1 className="mt-4 font-display text-[clamp(2.3rem,5.4vw,4.25rem)] font-medium leading-[1.02] tracking-[-0.04em] text-ink text-balance">
               {title}
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-muted text-pretty sm:text-base">{description}</p>
