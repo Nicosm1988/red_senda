@@ -14,14 +14,14 @@ const navigation = [
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-paper/95 supports-[backdrop-filter]:bg-paper/90 supports-[backdrop-filter]:backdrop-blur-md">
-      <Container className="flex min-h-16 items-center justify-between gap-4">
+      <Container className="flex min-h-20 items-center justify-between gap-4 sm:min-h-24">
         <Logo />
         <nav aria-label="Navegación principal" className="hidden items-center gap-0.5 xl:flex">
           {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-full px-3 py-2 text-[0.8rem] font-medium text-muted transition-colors hover:bg-mist hover:text-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35 motion-reduce:transition-none"
+              className="whitespace-nowrap rounded-full px-3 py-2 text-[0.8rem] font-medium text-muted transition-colors hover:bg-mist hover:text-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35 motion-reduce:transition-none"
             >
               {item.label}
             </Link>

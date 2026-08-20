@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { PointerIllumination } from "@/components/effects/pointer-illumination";
 import "./globals.css";
 
 // One local variable font powers body and display text, matching Universo
@@ -95,6 +96,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <a href="#contenido" className="skip-link">
           Saltar al contenido
         </a>
+        <PointerIllumination />
         {children}
         <Analytics />
         <SpeedInsights />

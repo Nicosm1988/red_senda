@@ -4,7 +4,7 @@ type ButtonVariant = "primary" | "secondary" | "quiet" | "inverse";
 type ButtonSize = "sm" | "md" | "lg";
 
 const base =
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold tracking-[-0.01em] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none";
+  "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-full border px-5 text-sm font-semibold tracking-[-0.01em] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none";
 
 const variants: Record<ButtonVariant, string> = {
   primary: "border-ink bg-ink text-white hover:border-senda hover:bg-senda",

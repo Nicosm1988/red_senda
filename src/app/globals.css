@@ -21,25 +21,25 @@
 
   --text-xs: 0.75rem;
   --text-xs--line-height: 1.45;
-  --text-sm: 0.8125rem;
+  --text-sm: 0.875rem;
   --text-sm--line-height: 1.55;
-  --text-base: 0.9375rem;
+  --text-base: 1rem;
   --text-base--line-height: 1.55;
-  --text-lg: 1.0625rem;
+  --text-lg: 1.125rem;
   --text-lg--line-height: 1.5;
-  --text-xl: 1.1875rem;
+  --text-xl: 1.25rem;
   --text-xl--line-height: 1.4;
-  --text-2xl: 1.375rem;
+  --text-2xl: 1.5rem;
   --text-2xl--line-height: 1.3;
-  --text-3xl: 1.75rem;
+  --text-3xl: 1.875rem;
   --text-3xl--line-height: 1.18;
-  --text-4xl: 2.125rem;
+  --text-4xl: 2.25rem;
   --text-4xl--line-height: 1.12;
-  --text-5xl: 2.625rem;
+  --text-5xl: 3rem;
   --text-5xl--line-height: 1.08;
-  --text-6xl: 3.125rem;
+  --text-6xl: 3.75rem;
   --text-6xl--line-height: 1.04;
-  --text-7xl: 3.75rem;
+  --text-7xl: 4.5rem;
   --text-7xl--line-height: 1;
 }
 
@@ -85,16 +85,29 @@ html {
   text-rendering: optimizeLegibility;
 }
 
+@media (min-width: 1024px) {
+  html {
+    font-size: 109%;
+  }
+}
+
 body {
   margin: 0;
   min-width: 320px;
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-body);
-  font-size: 0.9375rem;
+  font-size: 1rem;
   line-height: 1.55;
   letter-spacing: -0.006em;
   -webkit-font-smoothing: antialiased;
+  /* Ported from Universo Senda's body background: the same soft radial +
+     diagonal pastel wash on every page, not just hero bands. */
+  background-image:
+    radial-gradient(circle at 14% -6%, color-mix(in srgb, var(--color-sky-dark) 14%, transparent), transparent 34%),
+    radial-gradient(circle at 88% 4%, color-mix(in srgb, var(--color-senda) 9%, transparent), transparent 30%),
+    linear-gradient(180deg, var(--color-paper) 0%, var(--color-senda-soft) 46%, var(--color-paper) 100%);
+  background-attachment: fixed;
 }
 
 h1,
@@ -351,6 +364,69 @@ textarea {
   background-size: 9rem 9rem, 13rem 13rem;
   mask-image: linear-gradient(to bottom, black, transparent 82%);
   pointer-events: none;
+}
+
+/* Ported from Universo Senda's pointer-illumination effect: a soft glow
+   that follows the mouse, plus an optional stronger glow on elements
+   marked [data-cursor-glow] (e.g. cards). Disabled for touch/coarse
+   pointers and prefers-reduced-motion. */
+.pointer-illumination {
+  --pointer-illumination-size: 28rem;
+  position: fixed;
+  top: calc(var(--pointer-illumination-size) / -2);
+  left: calc(var(--pointer-illumination-size) / -2);
+  z-index: 40;
+  width: var(--pointer-illumination-size);
+  height: var(--pointer-illumination-size);
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--color-senda) 12%, transparent) 0%,
+    color-mix(in srgb, var(--color-clay) 7%, transparent) 38%,
+    transparent 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-100vw, -100vh, 0);
+  contain: strict;
+  transition: opacity 160ms ease-out;
+  will-change: transform, opacity;
+}
+
+.pointer-illumination[data-visible="true"] {
+  opacity: 0.82;
+}
+
+[data-cursor-glow] {
+  position: relative;
+  isolation: isolate;
+}
+
+[data-cursor-glow]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    15rem circle at var(--cursor-x, 50%) var(--cursor-y, 50%),
+    color-mix(in srgb, var(--color-senda) 10%, transparent),
+    transparent 72%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease-out;
+}
+
+[data-cursor-glow][data-cursor-active="true"]::before {
+  opacity: 1;
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .pointer-illumination,
+  [data-cursor-glow]::before {
+    display: none;
+  }
 }
 
 .editorial-rule {

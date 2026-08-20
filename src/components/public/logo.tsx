@@ -8,7 +8,7 @@ export function Logo({ inverse = false }: { inverse?: boolean }) {
       className={`group inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-sm focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35 ${inverse ? "text-white" : "text-ink"}`}
     >
       <svg
-        className="rs-logo__mark size-7"
+        className="rs-logo__mark size-11 sm:size-12"
         viewBox="0 0 52 52"
         fill="none"
         aria-hidden="true"
@@ -25,7 +25,7 @@ export function Logo({ inverse = false }: { inverse?: boolean }) {
         </g>
         <circle className="rs-logo__sun" cx="26" cy="26" r="3.6" />
       </svg>
-      <span className="font-display text-[1.05rem] font-semibold tracking-[-0.02em]">
+      <span className="font-display text-2xl font-medium tracking-[-0.02em] sm:text-3xl">
         Red <span className={inverse ? "text-sand" : "text-senda"}>Senda</span>
       </span>
     </Link>
