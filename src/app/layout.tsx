@@ -1,16 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
-const ibmPlexSans = IBM_Plex_Sans({
-  subsets: ["latin"],
-  weight: "variable",
+// One local variable font powers body and display text, matching Universo
+// Senda's identity. The licensed asset lives in the repo so production
+// builds don't depend on Google Fonts availability.
+const raleway = localFont({
+  src: "./fonts/raleway-variable.ttf",
+  variable: "--font-raleway",
+  weight: "100 900",
+  style: "normal",
   display: "swap",
-  variable: "--font-ibm-plex-sans",
   fallback: ["Arial", "sans-serif"],
 });
 
@@ -68,8 +72,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   colorScheme: "light dark",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfaf7" },
-    { media: "(prefers-color-scheme: dark)", color: "#111815" },
+    { media: "(prefers-color-scheme: light)", color: "#fbf9fc" },
+    { media: "(prefers-color-scheme: dark)", color: "#221b34" },
   ],
 };
 
@@ -79,7 +83,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html
       lang="es"
-      className={ibmPlexSans.variable}
+      className={raleway.variable}
       data-scroll-behavior="smooth"
       data-theme="light"
       suppressHydrationWarning

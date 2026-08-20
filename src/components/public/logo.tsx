@@ -7,13 +7,24 @@ export function Logo({ inverse = false }: { inverse?: boolean }) {
       aria-label="Red Senda, inicio"
       className={`group inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-sm focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35 ${inverse ? "text-white" : "text-ink"}`}
     >
-      <span
+      <svg
+        className="rs-logo__mark size-7"
+        viewBox="0 0 52 52"
+        fill="none"
         aria-hidden="true"
-        className={`relative block size-6.5 rounded-full border ${inverse ? "border-white/65" : "border-senda/50"}`}
+        focusable="false"
       >
-        <span className={`absolute left-[5px] top-[13px] h-px w-[16px] -rotate-[24deg] ${inverse ? "bg-current" : "bg-senda"}`} />
-        <span className={`absolute left-[15px] top-[7px] size-1.5 rounded-full ${inverse ? "bg-sand" : "bg-clay"}`} />
-      </span>
+        <circle className="rs-logo__boundary" cx="26" cy="26" r="22.5" />
+        <g className="rs-logo__orbit rs-logo__orbit--one">
+          <ellipse cx="26" cy="26" rx="23.5" ry="13.5" />
+          <circle className="rs-logo__waypoint" cx="48" cy="22" r="1.9" />
+        </g>
+        <g className="rs-logo__orbit rs-logo__orbit--two">
+          <ellipse cx="26" cy="26" rx="16" ry="23" />
+          <circle className="rs-logo__waypoint rs-logo__waypoint--accent" cx="21" cy="3.8" r="1.5" />
+        </g>
+        <circle className="rs-logo__sun" cx="26" cy="26" r="3.6" />
+      </svg>
       <span className="font-display text-[1.05rem] font-semibold tracking-[-0.02em]">
         Red <span className={inverse ? "text-sand" : "text-senda"}>Senda</span>
       </span>

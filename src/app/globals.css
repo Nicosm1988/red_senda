@@ -1,23 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #fbfaf7;
-  --color-canvas: #f1f2ef;
-  --color-mist: #e7ebe7;
-  --color-ink: #17201d;
-  --color-muted: #56615d;
-  --color-line: #d7ddd8;
-  --color-line-strong: #bac4bd;
-  --color-senda: #37695a;
-  --color-senda-dark: #265346;
-  --color-senda-soft: #dfebe5;
-  --color-clay: #a8513b;
-  --color-clay-dark: #783925;
-  --color-clay-soft: #f2e3dd;
-  --color-sand: #e2c990;
-  --color-sky-soft: #e0ebed;
-  --color-sky-dark: #315961;
-  --shadow-soft: 0 16px 48px rgba(23, 32, 29, 0.09);
+  --color-paper: #fbf9fc;
+  --color-canvas: #f5f5f5;
+  --color-mist: #ece8ef;
+  --color-ink: #1d172c;
+  --color-muted: #57506b;
+  --color-line: #e1dce8;
+  --color-line-strong: #cbc2d8;
+  --color-senda: #cc148c;
+  --color-senda-dark: #a80e70;
+  --color-senda-soft: #f3e6f0;
+  --color-clay: #6b3fa0;
+  --color-clay-dark: #4d2d74;
+  --color-clay-soft: #ece5f5;
+  --color-sand: #d50034;
+  --color-sky-soft: #efe9f7;
+  --color-sky-dark: #5a3f8f;
+  --shadow-soft: 0 16px 48px rgba(29, 23, 44, 0.09);
 
   --text-xs: 0.75rem;
   --text-xs--line-height: 1.45;
@@ -50,28 +50,28 @@
 
 :root {
   color-scheme: light;
-  --font-body: var(--font-ibm-plex-sans), "IBM Plex Sans", Arial, sans-serif;
-  --font-heading: var(--font-ibm-plex-sans), "IBM Plex Sans", Arial, sans-serif;
+  --font-body: var(--font-raleway), "Raleway", Arial, sans-serif;
+  --font-heading: var(--font-raleway), "Raleway", Arial, sans-serif;
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --color-paper: #141a18;
-  --color-canvas: #0f1513;
-  --color-mist: #202925;
-  --color-ink: #edf1ee;
-  --color-muted: #aab7b0;
-  --color-line: #303b36;
-  --color-line-strong: #46534d;
-  --color-senda: #8bbda9;
-  --color-senda-dark: #20473c;
-  --color-senda-soft: #203a31;
-  --color-clay: #e0967f;
-  --color-clay-dark: #f1b29e;
-  --color-clay-soft: #3b2620;
-  --color-sand: #e2c990;
-  --color-sky-soft: #1d343b;
-  --color-sky-dark: #acd0d7;
+  --color-paper: #221b34;
+  --color-canvas: #1d172c;
+  --color-mist: #241d38;
+  --color-ink: #f5f2f7;
+  --color-muted: #c9bfe0;
+  --color-line: #3a3050;
+  --color-line-strong: #4a3a5c;
+  --color-senda: #e8459e;
+  --color-senda-dark: #a80e70;
+  --color-senda-soft: #2a1f38;
+  --color-clay: #c9a6f0;
+  --color-clay-dark: #dcc4f7;
+  --color-clay-soft: #2a2140;
+  --color-sand: #ff6b9e;
+  --color-sky-soft: #241d38;
+  --color-sky-dark: #b8a0e8;
   --shadow-soft: 0 18px 55px rgba(0, 0, 0, 0.3);
 }
 
@@ -184,38 +184,131 @@ textarea {
    Filled controls and dark editorial panels keep deeper, white-safe surfaces. */
 :root[data-theme="dark"] .bg-ink,
 :root[data-theme="dark"] [class~="bg-ink/90"] {
-  background-color: #18231f;
+  background-color: #18131f;
 }
 
 :root[data-theme="dark"] .border-ink {
-  border-color: #18231f;
+  border-color: #18131f;
 }
 
 :root[data-theme="dark"] .bg-senda,
 :root[data-theme="dark"] .hover\:bg-senda:hover {
-  background-color: #376c5b;
+  background-color: #a80e70;
 }
 
 :root[data-theme="dark"] .bg-senda-dark {
-  background-color: #20473c;
+  background-color: #a80e70;
 }
 
 :root[data-theme="dark"] .text-senda-dark {
-  color: #a9d0c0;
+  color: #f0a8d2;
 }
 
 :root[data-theme="dark"] .bg-clay {
-  background-color: #914b37;
+  background-color: #6b3fa0;
 }
 
 :root[data-theme="dark"] .bg-sand.text-ink,
 :root[data-theme="dark"] .hover\:bg-sand:hover {
-  color: #17201d;
+  color: #1d172c;
 }
 
 :root[data-theme="dark"] .text-red-700,
 :root[data-theme="dark"] .text-red-800 {
   color: #fca5a5;
+}
+
+/* Ported from Universo Senda's animated orbiting-rings mark (senda-logo.tsx),
+   renamed to avoid colliding with that repo's own class names. */
+.rs-logo__mark {
+  overflow: visible;
+}
+
+.rs-logo__boundary,
+.rs-logo__orbit ellipse {
+  stroke: currentColor;
+  stroke-width: 1.1;
+  opacity: 0.6;
+  vector-effect: non-scaling-stroke;
+}
+
+.rs-logo__orbit {
+  transform-box: view-box;
+  transform-origin: center;
+}
+
+.rs-logo__orbit--one {
+  transform: rotate(-18deg);
+}
+
+.rs-logo__orbit--two {
+  opacity: 0.75;
+  transform: rotate(31deg);
+}
+
+.rs-logo__waypoint {
+  fill: currentColor;
+  stroke: none;
+}
+
+.rs-logo__waypoint--accent {
+  fill: var(--color-sand);
+}
+
+.rs-logo__sun {
+  fill: var(--color-senda);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rs-logo__orbit--one {
+    animation: rs-logo-orbit-clockwise 28s linear infinite;
+  }
+
+  .rs-logo__orbit--two {
+    animation: rs-logo-orbit-counterclockwise 37s linear infinite;
+  }
+}
+
+@keyframes rs-logo-orbit-clockwise {
+  from {
+    transform: rotate(-18deg);
+  }
+  to {
+    transform: rotate(342deg);
+  }
+}
+
+@keyframes rs-logo-orbit-counterclockwise {
+  from {
+    transform: rotate(31deg);
+  }
+  to {
+    transform: rotate(-329deg);
+  }
+}
+
+/* Atmospheric hero wash, adapted from Universo Senda's .wati-page-hero:
+   a soft radial gradient plus a very faint fading dot-grid texture. */
+.rs-atmosphere-hero {
+  position: relative;
+  background:
+    radial-gradient(circle at 12% 18%, color-mix(in srgb, var(--color-sky-dark) 16%, transparent), transparent 38%),
+    radial-gradient(circle at 92% 8%, color-mix(in srgb, var(--color-senda) 14%, transparent), transparent 34%),
+    var(--color-canvas);
+}
+
+.rs-atmosphere-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.3;
+  background-image:
+    radial-gradient(circle at 22% 28%, var(--color-ink) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 68% 72%, var(--color-sand) 0 1.2px, transparent 1.7px);
+  background-size: 9rem 9rem, 13rem 13rem;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+  pointer-events: none;
 }
 
 .editorial-rule {

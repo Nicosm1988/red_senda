@@ -19,7 +19,7 @@ export function PageHero({
   aside?: ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden border-b border-line bg-canvas py-10 sm:py-12 lg:py-16">
+    <section className="rs-atmosphere-hero relative overflow-hidden border-b border-line py-10 sm:py-12 lg:py-16">
       <div aria-hidden="true" className="absolute -right-20 -top-28 size-64 rounded-[42%_58%_65%_35%/56%_45%_55%_44%] border border-senda/15" />
       <Container>
         {breadcrumbs ? <Breadcrumbs items={breadcrumbs} /> : null}

@@ -34,7 +34,7 @@ export default function HomePage() {
     <>
       <JsonLd data={organizationJsonLd} />
 
-      <section className="flex min-h-[calc(100svh-7rem)] items-center bg-canvas py-5 sm:py-8 lg:py-10">
+      <section className="rs-atmosphere-hero flex min-h-[calc(100svh-7rem)] items-center overflow-hidden py-5 sm:py-8 lg:py-10">
         <Container>
           <div className="overflow-hidden rounded-[1.6rem] border border-line bg-paper shadow-soft lg:grid lg:grid-cols-[minmax(0,.88fr)_minmax(480px,1.12fr)]">
             <div className="bg-ink px-5 py-7 text-white sm:px-8 sm:py-9 lg:flex lg:flex-col lg:justify-between lg:p-10">
