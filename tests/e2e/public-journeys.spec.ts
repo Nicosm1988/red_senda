@@ -388,13 +388,15 @@ test("directory and profile hide prices and experience years while keeping ratin
 
   const firstCard = page.getByTestId("professional-card").first();
   await expect(firstCard.locator('[data-card-section="actions"]')).toContainText(
-    /\d+[,.]\d\s*·\s*\d+\s+opiniones?/i,
+    /\d+[,.]\d\s*·\s*\d+\s+(?:opinión|opiniones)/i,
   );
   await firstCard.getByRole("link", { name: "Ver perfil" }).click();
 
   expect(await page.locator("main").innerText()).not.toMatch(forbiddenPublicPrice);
   expect(await page.locator("main").innerText()).not.toMatch(forbiddenExperienceYears);
-  await expect(page.locator("main")).toContainText(/\d+[,.]\d\s*·\s*\d+\s+opiniones?/i);
+  await expect(page.locator("main")).toContainText(
+    /\d+[,.]\d\s*·\s*\d+\s+(?:opinión|opiniones)/i,
+  );
   await expect(page.getByRole("heading", { name: "Opiniones" })).toBeVisible();
   const publishedOpinion = page.locator('section[aria-labelledby="opiniones"] blockquote').first();
   await expect(publishedOpinion).toBeVisible();
