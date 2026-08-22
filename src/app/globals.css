@@ -85,12 +85,6 @@ html {
   text-rendering: optimizeLegibility;
 }
 
-@media (min-width: 1024px) {
-  html {
-    font-size: 109%;
-  }
-}
-
 body {
   margin: 0;
   min-width: 320px;

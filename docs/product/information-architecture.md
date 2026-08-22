@@ -20,7 +20,7 @@ Este documento separa la superficie existente del contrato objetivo. `Implementa
 
 Los filtros del directorio viven en query params normalizados para persistir/compartir estado. Selects y checks aplican el refinamiento automáticamente; el texto se confirma con “Buscar”. El panel tiene altura acotada y scroll propio para que refinar no desplace innecesariamente el listado; en móvil se presenta como control accesible. Los namespaces explícitos evitan colisiones con el slug de perfil. No existe filtro de precio y no se generan combinaciones masivas sin contenido y demanda reales.
 
-Dentro de cada fila del grid, las cards comparten niveles visuales: identidad/badges, presentación, necesidades, datos comparables y acciones. Una diferencia de longitud puede ampliar el nivel común, pero no desplazar sólo los CTA o metadatos de una card. En una columna móvil, el orden semántico se conserva sin alturas artificiales innecesarias.
+En desktop, los resultados forman una lista vertical de filas horizontales compactas: iniciales, identidad/badges, presentación, necesidades, datos comparables y una columna estable de acciones. “Contactar” es la acción dominante y “Ver perfil” la secundaria. Las columnas de modalidad, ubicación, experiencia y acciones conservan anchos comparables entre filas; los perfiles relacionados fuera del directorio pueden mantener el formato de card. En móvil, cada fila se apila sin alterar el orden semántico ni imponer alturas artificiales.
 
 ## Dashboard profesional
 

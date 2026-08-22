@@ -5,10 +5,10 @@ export function Logo({ inverse = false }: { inverse?: boolean }) {
     <Link
       href="/"
       aria-label="Red Senda, inicio"
-      className={`group inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-sm focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35 ${inverse ? "text-white" : "text-ink"}`}
+      className={`group inline-flex min-h-11 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-sm min-[360px]:gap-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35 ${inverse ? "text-white" : "text-ink"}`}
     >
       <svg
-        className="rs-logo__mark size-11 sm:size-12"
+        className="rs-logo__mark size-9 min-[360px]:size-11 sm:size-12"
         viewBox="0 0 52 52"
         fill="none"
         aria-hidden="true"
@@ -25,7 +25,7 @@ export function Logo({ inverse = false }: { inverse?: boolean }) {
         </g>
         <circle className="rs-logo__sun" cx="26" cy="26" r="3.6" />
       </svg>
-      <span className="font-display text-2xl font-medium tracking-[-0.02em] sm:text-3xl">
+      <span className="font-display text-xl font-medium tracking-[-0.02em] min-[360px]:text-2xl sm:text-3xl">
         Red <span className={inverse ? "text-sand" : "text-senda"}>Senda</span>
       </span>
     </Link>

@@ -59,16 +59,16 @@ export default async function ProfessionalsPage({ searchParams }: { searchParams
 
   return (
     <>
-      <section className="border-b border-line bg-canvas py-6 sm:py-8">
+      <section className="border-b border-line bg-canvas py-4 sm:py-5">
         <Container>
           <Breadcrumbs items={[{ label: "Inicio", href: "/" }, { label: "Profesionales" }]} />
-          <div className="mt-5 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-3xl">
+          <div className="mt-3 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="min-w-0 max-w-4xl">
               <p className="text-xs font-bold uppercase tracking-[0.12em] text-senda-dark">Psicología y psicopedagogía</p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-[-0.035em] text-ink text-balance sm:text-4xl">
+              <h1 className="mt-1.5 break-words text-2xl font-semibold leading-tight tracking-[-0.035em] text-ink sm:text-3xl">
                 Encontrá a tu profesional orientador.
               </h1>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-muted text-pretty">
+              <p className="mt-2 hidden max-w-3xl text-sm leading-6 text-muted text-pretty sm:block">
                 Buscá por lo que necesitás, compará credenciales y opiniones, y contactá directamente.
               </p>
             </div>
@@ -79,20 +79,20 @@ export default async function ProfessionalsPage({ searchParams }: { searchParams
         </Container>
       </section>
 
-      <section id="resultados" className="scroll-mt-24 bg-canvas py-6 sm:py-8 lg:py-10">
+      <section id="resultados" className="scroll-mt-24 bg-canvas py-4 sm:py-5 lg:py-6">
         <Container>
-          <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
-            <aside aria-label="Filtros de profesionales" className="lg:sticky lg:top-24 lg:self-start">
+          <div className="grid gap-5 xl:grid-cols-[260px_minmax(0,1fr)] xl:items-start">
+            <aside aria-label="Filtros de profesionales" className="xl:sticky xl:top-24 xl:self-start">
               <ProfessionalFiltersForm selected={filters} activeCount={activeCount} />
             </aside>
 
-            <div>
-              <div className="mb-6 flex flex-col gap-4 rounded-[1.25rem] border border-line bg-paper p-5 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <p className="text-sm font-semibold text-ink">
+            <div className="min-w-0">
+              <div className="mb-4 flex flex-col gap-3 rounded-xl border border-line bg-paper px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0">
+                  <p role="status" aria-live="polite" aria-atomic="true" className="text-sm font-semibold text-ink">
                     {professionals.length === 1 ? "1 profesional coincide" : `${professionals.length} profesionales coinciden`}
                   </p>
-                  <p className="mt-1 text-xs leading-5 text-muted">
+                  <p className="mt-1 hidden text-xs leading-5 text-muted sm:block">
                     El orden combina pertinencia, calidad del perfil y señales públicas. Los destacados siempre están identificados.
                   </p>
                 </div>
@@ -108,9 +108,14 @@ export default async function ProfessionalsPage({ searchParams }: { searchParams
               </div>
 
               {professionals.length ? (
-                <div data-testid="professional-results" className="grid items-stretch gap-5 xl:grid-cols-2">
+                <div data-testid="professional-results" className="grid gap-3">
                   {professionals.map((professional, index) => (
-                    <ProfessionalCard key={professional.id} professional={professional} priority={index === 0} />
+                    <ProfessionalCard
+                      key={professional.id}
+                      professional={professional}
+                      priority={index === 0}
+                      variant="listing"
+                    />
                   ))}
                 </div>
               ) : (

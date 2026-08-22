@@ -132,8 +132,20 @@ test("home → filtered search → profile → contact", async ({ page }) => {
 test("directory filters apply immediately and stay synchronized with the URL", async ({ page }) => {
   await page.goto("/profesionales");
 
-  const professionalType = page.locator('select[name="type"]:visible');
-  const jobChange = page.getByRole("checkbox", {
+  const mobileFilterPanel = page.locator("details.filter-panel");
+  const useMobileFilters = await mobileFilterPanel.isVisible();
+  const revealMobileFilters = async () => {
+    if (!useMobileFilters) return;
+    const isOpen = await mobileFilterPanel.evaluate((element) => (element as HTMLDetailsElement).open);
+    if (!isOpen) await mobileFilterPanel.locator("summary").click();
+  };
+
+  await revealMobileFilters();
+  const filterForm = page.getByTestId(
+    useMobileFilters ? "professional-filters-mobile" : "professional-filters-desktop",
+  );
+  const professionalType = filterForm.locator('select[name="type"]');
+  const jobChange = filterForm.getByRole("checkbox", {
     name: "Cambiar o encontrar trabajo",
   });
 
@@ -148,8 +160,10 @@ test("directory filters apply immediately and stay synchronized with the URL", a
   await expect(page).toHaveURL(/type=psicologia/);
   await expect(professionalType).toHaveValue("psicologia");
 
+  await revealMobileFilters();
   await jobChange.check();
   await expect(page).toHaveURL(/need=cambio-trabajo/);
+  await revealMobileFilters();
   await expect(jobChange).toBeChecked();
 
   const resultCards = page.getByTestId("professional-card").filter({
@@ -160,43 +174,66 @@ test("directory filters apply immediately and stay synchronized with the URL", a
     await expect(card.getByText(/Psicólog[oa]/i)).toBeVisible();
   }
 
-  await page.getByRole("link", { name: "Limpiar" }).click();
+  await revealMobileFilters();
+  await filterForm.getByRole("link", { name: "Limpiar" }).click();
   await expect(page).toHaveURL(/\/profesionales$/);
+  await revealMobileFilters();
   await expect(jobChange).not.toBeChecked();
 
   await page.goBack();
   await expect(page).toHaveURL(/type=psicologia/);
   await expect(page).toHaveURL(/need=cambio-trabajo/);
+  await revealMobileFilters();
   await expect(professionalType).toHaveValue("psicologia");
   await expect(jobChange).toBeChecked();
 });
 
-test("professional cards align by section and the filter rail scrolls independently", async ({ page }) => {
+test("directory uses compact aligned rows and the filter rail scrolls independently", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 720 });
   await page.goto("/profesionales");
 
   const cards = page.getByTestId("professional-card");
   expect(await cards.count()).toBeGreaterThanOrEqual(2);
+  await expect(cards.first()).toBeVisible();
+
+  const directoryLayout = page
+    .getByTestId("professional-results")
+    .locator("..")
+    .locator("..");
+  const directoryLayoutBox = await directoryLayout.boundingBox();
+  expect(directoryLayoutBox).not.toBeNull();
+  expect(directoryLayoutBox?.x ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(60);
+  expect(directoryLayoutBox?.width ?? 0).toBeGreaterThanOrEqual(1300);
 
   const layout = await cards.evaluateAll((elements) => {
-    const sectionNames = ["identity", "headline", "needs", "facts", "actions"];
-
     return elements.slice(0, 2).map((card) => {
       const cardRect = card.getBoundingClientRect();
+      const actions = card.querySelectorAll('[data-card-section="actions"]');
+      const actionsRect = actions.item(0)?.getBoundingClientRect();
+      const facts = card.querySelectorAll('[data-card-section="facts"]');
       const factColumns = card.querySelectorAll('[data-card-section="facts"] > div');
 
       return {
-        card: { top: cardRect.top, width: cardRect.width, height: cardRect.height },
-        factColumnWidths: Array.from(factColumns, (column) => column.getBoundingClientRect().width),
-        sections: sectionNames.map((name) => {
-          const matches = card.querySelectorAll(`[data-card-section="${name}"]`);
-          const rect = matches.item(0)?.getBoundingClientRect();
+        actions: {
+          count: actions.length,
+          left: actionsRect?.left ?? null,
+          width: actionsRect?.width ?? null,
+        },
+        card: {
+          bottom: cardRect.bottom,
+          height: cardRect.height,
+          left: cardRect.left,
+          top: cardRect.top,
+          width: cardRect.width,
+        },
+        factsCount: facts.length,
+        factColumns: Array.from(factColumns, (column) => {
+          const rect = column.getBoundingClientRect();
 
           return {
-            count: matches.length,
-            name,
-            top: rect?.top ?? null,
-            width: rect?.width ?? null,
+            left: rect.left,
+            top: rect.top,
+            width: rect.width,
           };
         }),
       };
@@ -206,27 +243,31 @@ test("professional cards align by section and the filter rail scrolls independen
   const [firstCardLayout, secondCardLayout] = layout;
   if (!firstCardLayout || !secondCardLayout) throw new Error("Se necesitan 2 tarjetas para verificar la alineación.");
 
-  expect(Math.abs(firstCardLayout.card.top - secondCardLayout.card.top)).toBeLessThanOrEqual(1);
-  expect(Math.abs(firstCardLayout.card.height - secondCardLayout.card.height)).toBeLessThanOrEqual(1);
+  expect(secondCardLayout.card.top).toBeGreaterThanOrEqual(firstCardLayout.card.bottom);
+  expect(Math.abs(firstCardLayout.card.left - secondCardLayout.card.left)).toBeLessThanOrEqual(1);
   expect(Math.abs(firstCardLayout.card.width - secondCardLayout.card.width)).toBeLessThanOrEqual(1);
-  for (let index = 0; index < firstCardLayout.sections.length; index += 1) {
-    const firstSection = firstCardLayout.sections[index];
-    const secondSection = secondCardLayout.sections[index];
-    if (!firstSection || !secondSection) throw new Error("Falta una fila esperada en la tarjeta.");
+  expect(firstCardLayout.card.height).toBeLessThanOrEqual(245);
+  expect(secondCardLayout.card.height).toBeLessThanOrEqual(245);
 
-    expect(firstSection.count, `La primera tarjeta debe tener una sola sección ${firstSection.name}.`).toBe(1);
-    expect(secondSection.count, `La segunda tarjeta debe tener una sola sección ${secondSection.name}.`).toBe(1);
-    expect(firstSection.top).not.toBeNull();
-    expect(secondSection.top).not.toBeNull();
-    expect(firstSection.width).not.toBeNull();
-    expect(secondSection.width).not.toBeNull();
-    expect(Math.abs((firstSection.top ?? 0) - (secondSection.top ?? 0))).toBeLessThanOrEqual(1);
-    expect(Math.abs((firstSection.width ?? 0) - (secondSection.width ?? 0))).toBeLessThanOrEqual(1);
-  }
+  expect(firstCardLayout.actions.count).toBe(1);
+  expect(secondCardLayout.actions.count).toBe(1);
+  expect(firstCardLayout.actions.left).not.toBeNull();
+  expect(secondCardLayout.actions.left).not.toBeNull();
+  expect(firstCardLayout.actions.width).not.toBeNull();
+  expect(secondCardLayout.actions.width).not.toBeNull();
+  expect(Math.abs((firstCardLayout.actions.left ?? 0) - (secondCardLayout.actions.left ?? 0))).toBeLessThanOrEqual(1);
+  expect(Math.abs((firstCardLayout.actions.width ?? 0) - (secondCardLayout.actions.width ?? 0))).toBeLessThanOrEqual(1);
 
   for (const cardLayout of [firstCardLayout, secondCardLayout]) {
-    expect(cardLayout.factColumnWidths).toHaveLength(3);
-    expect(Math.max(...cardLayout.factColumnWidths) - Math.min(...cardLayout.factColumnWidths)).toBeLessThanOrEqual(1);
+    expect(cardLayout.factsCount).toBe(1);
+    expect(cardLayout.factColumns).toHaveLength(3);
+
+    const factColumnWidths = cardLayout.factColumns.map((column) => column.width);
+    const factColumnTops = cardLayout.factColumns.map((column) => column.top);
+    expect(Math.max(...factColumnWidths) - Math.min(...factColumnWidths)).toBeLessThanOrEqual(1);
+    expect(Math.max(...factColumnTops) - Math.min(...factColumnTops)).toBeLessThanOrEqual(1);
+    expect(cardLayout.factColumns[1]?.left ?? 0).toBeGreaterThan(cardLayout.factColumns[0]?.left ?? Number.POSITIVE_INFINITY);
+    expect(cardLayout.factColumns[2]?.left ?? 0).toBeGreaterThan(cardLayout.factColumns[1]?.left ?? Number.POSITIVE_INFINITY);
   }
 
   const filterRail = page.getByTestId("professional-filters-desktop-scroll");
@@ -234,8 +275,37 @@ test("professional cards align by section and the filter rail scrolls independen
 
   await page.setViewportSize({ width: 390, height: 600 });
   await page.goto("/profesionales");
+
+  const mobileFilterPanel = page.locator("details.filter-panel");
   const mobileFilterRail = page.getByTestId("professional-filters-mobile-scroll");
+  const firstMobileResult = page.getByTestId("professional-card").first();
+
+  await expect(mobileFilterPanel).toBeVisible();
+  expect(await mobileFilterPanel.evaluate((element) => (element as HTMLDetailsElement).open)).toBe(false);
+  await expect(mobileFilterRail).toBeHidden();
+  await expect(firstMobileResult).toBeVisible();
+
+  const firstMobileResultBox = await firstMobileResult.boundingBox();
+  expect(firstMobileResultBox).not.toBeNull();
+  expect(firstMobileResultBox?.y ?? Number.POSITIVE_INFINITY).toBeLessThan(550);
+
+  await mobileFilterPanel.locator("summary").click();
+  expect(await mobileFilterPanel.evaluate((element) => (element as HTMLDetailsElement).open)).toBe(true);
   await expectIndependentVerticalScroll(mobileFilterRail);
+
+  const horizontalOverflow = await page.evaluate(() => ({
+    clientWidth: document.documentElement.clientWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+  }));
+  expect(horizontalOverflow.scrollWidth).toBeLessThanOrEqual(horizontalOverflow.clientWidth + 1);
+
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto("/profesionales");
+  const narrowOverflow = await page.evaluate(() => ({
+    clientWidth: document.documentElement.clientWidth,
+    scrollWidth: document.documentElement.scrollWidth,
+  }));
+  expect(narrowOverflow.scrollWidth).toBeLessThanOrEqual(narrowOverflow.clientWidth + 1);
 });
 
 test("every professional card communicates its verification state", async ({ page }) => {

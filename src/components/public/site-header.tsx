@@ -14,7 +14,7 @@ const navigation = [
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-paper/95 supports-[backdrop-filter]:bg-paper/90 supports-[backdrop-filter]:backdrop-blur-md">
-      <Container className="flex min-h-20 items-center justify-between gap-4 sm:min-h-24">
+      <Container className="flex min-h-20 items-center justify-between gap-2 sm:min-h-24 sm:gap-4">
         <Logo />
         <nav aria-label="Navegación principal" className="hidden items-center gap-0.5 xl:flex">
           {navigation.map((item) => (
@@ -39,10 +39,10 @@ export function SiteHeader() {
             Buscar profesional
           </Link>
         </div>
-        <div className="ml-auto flex items-center gap-2 xl:hidden">
+        <div className="ml-auto flex items-center gap-1 min-[360px]:gap-2 xl:hidden">
           <ThemeToggle />
           <details className="mobile-nav relative">
-            <summary className="flex min-h-11 cursor-pointer list-none items-center rounded-full border border-line px-4 text-sm font-semibold text-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center rounded-full border border-line px-3 text-sm font-semibold text-ink min-[360px]:px-4 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-senda/35">
               Menú
             </summary>
             <div className="absolute right-0 top-[calc(100%+10px)] w-[min(86vw,320px)] rounded-[1.1rem] border border-line bg-paper p-3 shadow-soft">
