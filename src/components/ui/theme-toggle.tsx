@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 type Theme = "light" | "dark";
 
 const storageKey = "red-senda-theme:v1";
+const themeChangeEvent = "red-senda-theme-change";
 
 function currentTheme(): Theme {
   return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
@@ -12,6 +13,7 @@ function currentTheme(): Theme {
 
 function applyTheme(theme: Theme, persist = true) {
   document.documentElement.dataset.theme = theme;
+  window.dispatchEvent(new CustomEvent<Theme>(themeChangeEvent, { detail: theme }));
   if (!persist) return;
   try {
     window.localStorage.setItem(storageKey, theme);
@@ -38,11 +40,19 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     function handleStorage(event: StorageEvent) {
       if (event.key !== storageKey || (event.newValue !== "light" && event.newValue !== "dark")) return;
       applyTheme(event.newValue, false);
-      syncAccessibleState(event.newValue);
+    }
+
+    function handleThemeChange(event: Event) {
+      const theme = (event as CustomEvent<Theme>).detail;
+      if (theme === "light" || theme === "dark") syncAccessibleState(theme);
     }
 
     window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
+    window.addEventListener(themeChangeEvent, handleThemeChange);
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener(themeChangeEvent, handleThemeChange);
+    };
   }, []);
 
   return (
@@ -53,13 +63,9 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       aria-label="Cambiar entre modo claro y oscuro"
       aria-pressed="false"
       title="Cambiar entre modo claro y oscuro"
-      onClick={(event) => {
+      onClick={() => {
         const nextTheme = currentTheme() === "dark" ? "light" : "dark";
         applyTheme(nextTheme);
-        const nextLabel = nextTheme === "dark" ? "claro" : "oscuro";
-        event.currentTarget.setAttribute("aria-pressed", String(nextTheme === "dark"));
-        event.currentTarget.setAttribute("aria-label", `Activar modo ${nextLabel}`);
-        event.currentTarget.title = `Activar modo ${nextLabel}`;
       }}
     >
       <svg className="theme-icon theme-icon-sun size-[1.1rem]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">

@@ -214,7 +214,6 @@ export default async function ProfessionalProfilePage({ params }: ProfessionalPa
                         <li key={`${item.role}-${item.organization}`}>
                           <h3 className="text-sm font-bold text-ink">{item.role}</h3>
                           <p className="mt-1 text-sm text-muted">{item.organization}</p>
-                          <p className="mt-1 text-xs text-muted">{item.period}</p>
                         </li>
                       ))}
                     </ol>

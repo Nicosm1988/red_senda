@@ -68,7 +68,7 @@ function ProfessionalListingCard({ professional, priority }: Omit<ProfessionalCa
 
         <dl
           data-card-section="facts"
-          className="mt-3 grid gap-3 border-t border-line pt-3 text-xs min-[480px]:grid-cols-3 min-[480px]:gap-4"
+          className="mt-3 grid gap-3 border-t border-line pt-3 text-xs min-[480px]:grid-cols-2 min-[480px]:gap-4"
         >
           <div className="min-w-0">
             <dt className="font-semibold text-muted">Modalidad</dt>
@@ -79,10 +79,6 @@ function ProfessionalListingCard({ professional, priority }: Omit<ProfessionalCa
           <div className="min-w-0">
             <dt className="font-semibold text-muted">Ubicación</dt>
             <dd className="mt-1 break-words leading-5 text-ink">{professional.city}</dd>
-          </div>
-          <div className="min-w-0">
-            <dt className="font-semibold text-muted">Experiencia</dt>
-            <dd className="mt-1 break-words leading-5 text-ink">{professional.yearsExperience} años</dd>
           </div>
         </dl>
       </div>
@@ -165,18 +161,14 @@ export function ProfessionalCard({ professional, priority = false, variant = "ca
         ))}
       </ul>
 
-      <dl data-card-section="facts" className="relative grid grid-cols-3 overflow-hidden rounded-xl border border-line bg-line text-xs">
+      <dl data-card-section="facts" className="relative grid grid-cols-2 overflow-hidden rounded-xl border border-line bg-line text-xs">
         <div className="min-w-0 bg-paper p-3">
           <dt className="font-semibold text-muted">Modalidad</dt>
           <dd className="mt-1 break-words leading-5 text-ink">{professional.modalities.map((item) => (item === "online" ? "Online" : "Presencial")).join(" · ")}</dd>
         </div>
-        <div className="min-w-0 border-x border-line bg-paper p-3">
+        <div className="min-w-0 border-l border-line bg-paper p-3">
           <dt className="font-semibold text-muted">Ubicación</dt>
           <dd className="mt-1 break-words leading-5 text-ink">{professional.city}</dd>
-        </div>
-        <div className="min-w-0 bg-paper p-3">
-          <dt className="font-semibold text-muted">Experiencia</dt>
-          <dd className="mt-1 break-words leading-5 text-ink">{professional.yearsExperience} años</dd>
         </div>
       </dl>
 

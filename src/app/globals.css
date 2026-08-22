@@ -365,7 +365,7 @@ textarea {
    marked [data-cursor-glow] (e.g. cards). Disabled for touch/coarse
    pointers and prefers-reduced-motion. */
 .pointer-illumination {
-  --pointer-illumination-size: 28rem;
+  --pointer-illumination-size: 16rem;
   position: fixed;
   top: calc(var(--pointer-illumination-size) / -2);
   left: calc(var(--pointer-illumination-size) / -2);
@@ -403,7 +403,7 @@ textarea {
   z-index: 0;
   border-radius: inherit;
   background: radial-gradient(
-    15rem circle at var(--cursor-x, 50%) var(--cursor-y, 50%),
+    9rem circle at var(--cursor-x, 50%) var(--cursor-y, 50%),
     color-mix(in srgb, var(--color-senda) 10%, transparent),
     transparent 72%
   );
@@ -420,6 +420,27 @@ textarea {
   .pointer-illumination,
   [data-cursor-glow]::before {
     display: none;
+  }
+}
+
+@keyframes home-showcase-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0.45rem, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.home-showcase-slide {
+  animation: home-showcase-enter 240ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-showcase-slide {
+    animation: none;
   }
 }
 

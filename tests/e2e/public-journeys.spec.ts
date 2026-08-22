@@ -46,8 +46,29 @@ test("home is search-first, compact, and free of photos or questionnaires", asyn
   expect((searchBox?.y ?? Number.POSITIVE_INFINITY) + (searchBox?.height ?? 0)).toBeLessThanOrEqual(viewportHeight);
   expect((searchButtonBox?.y ?? Number.POSITIVE_INFINITY) + (searchButtonBox?.height ?? 0)).toBeLessThanOrEqual(viewportHeight);
 
+  const viewportWidth = page.viewportSize()?.width ?? 1440;
+  const searchHeroBox = await page.getByTestId("home-search-hero").boundingBox();
+  expect(searchHeroBox).not.toBeNull();
+  if (viewportWidth >= 1024) {
+    expect(searchHeroBox?.height ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(560);
+  }
+
   const mainHeight = await page.locator("main").evaluate((element) => element.scrollHeight);
-  expect(mainHeight).toBeLessThanOrEqual(viewportHeight * 1.5);
+  expect(mainHeight).toBeLessThanOrEqual(viewportHeight * (viewportWidth < 768 ? 2.15 : 1.6));
+
+  const networkShowcase = page.locator('[aria-roledescription="carrusel"]');
+  await expect(networkShowcase).toBeVisible();
+  await expect(page.getByText("Qué es Red Senda")).toBeVisible();
+  await expect(networkShowcase.getByText(/Opinión (?:demo|moderada)/)).toBeVisible();
+  await expect(networkShowcase.locator("img, picture")).toHaveCount(0);
+
+  const activeProfessionalName = networkShowcase
+    .getByTestId("home-professional-slide")
+    .getByRole("heading", { level: 4 });
+  const firstProfessionalName = await activeProfessionalName.innerText();
+  await networkShowcase.getByRole("button", { name: "Pausar rotación automática" }).click();
+  await networkShowcase.getByRole("button", { name: "Ver siguiente profesional" }).click();
+  await expect(activeProfessionalName).not.toHaveText(firstProfessionalName);
 
   await search.getByRole("searchbox").fill("orientación");
   await search.locator('select[name="type"]').selectOption("psicopedagogia");
@@ -57,6 +78,27 @@ test("home is search-first, compact, and free of photos or questionnaires", asyn
   await expect(page).toHaveURL(/q=orientaci%C3%B3n/);
   await expect(page).toHaveURL(/type=psicopedagogia/);
   await expect(page).toHaveURL(/modality=online/);
+});
+
+test("home keeps the professional search immediately usable at 320 px", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto("/");
+
+  const heroBox = await page.getByTestId("home-search-hero").boundingBox();
+  const searchButtonBox = await page
+    .getByRole("search")
+    .getByRole("button", { name: "Buscar profesionales" })
+    .boundingBox();
+  const horizontalOverflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+
+  expect(heroBox).not.toBeNull();
+  expect(searchButtonBox).not.toBeNull();
+  expect(heroBox?.height ?? Number.POSITIVE_INFINITY).toBeLessThanOrEqual(600);
+  expect(searchButtonBox?.y ?? Number.POSITIVE_INFINITY).toBeGreaterThanOrEqual(0);
+  expect((searchButtonBox?.y ?? 0) + (searchButtonBox?.height ?? 0)).toBeLessThanOrEqual(568);
+  expect(horizontalOverflow).toBe(0);
 });
 
 test("home → filtered search → profile → contact", async ({ page }) => {
@@ -260,14 +302,13 @@ test("directory uses compact aligned rows and the filter rail scrolls independen
 
   for (const cardLayout of [firstCardLayout, secondCardLayout]) {
     expect(cardLayout.factsCount).toBe(1);
-    expect(cardLayout.factColumns).toHaveLength(3);
+    expect(cardLayout.factColumns).toHaveLength(2);
 
     const factColumnWidths = cardLayout.factColumns.map((column) => column.width);
     const factColumnTops = cardLayout.factColumns.map((column) => column.top);
     expect(Math.max(...factColumnWidths) - Math.min(...factColumnWidths)).toBeLessThanOrEqual(1);
     expect(Math.max(...factColumnTops) - Math.min(...factColumnTops)).toBeLessThanOrEqual(1);
     expect(cardLayout.factColumns[1]?.left ?? 0).toBeGreaterThan(cardLayout.factColumns[0]?.left ?? Number.POSITIVE_INFINITY);
-    expect(cardLayout.factColumns[2]?.left ?? 0).toBeGreaterThan(cardLayout.factColumns[1]?.left ?? Number.POSITIVE_INFINITY);
   }
 
   const filterRail = page.getByTestId("professional-filters-desktop-scroll");
@@ -337,11 +378,13 @@ test("the end of a professional profile repeats the contact action", async ({ pa
   await expect(page.locator("#contactar form")).toBeVisible();
 });
 
-test("directory and profile never publish prices and keep ratings and opinions", async ({ page }) => {
+test("directory and profile hide prices and experience years while keeping ratings and opinions", async ({ page }) => {
   await page.goto("/profesionales");
 
   const forbiddenPublicPrice = /\b(?:ARS|USD)\b|\$\s*\d|valor\s+orientativo|honorarios?|precio\s+(?:desde|por|de\s+la\s+consulta)/i;
+  const forbiddenExperienceYears = /\b\d+\s+años?\b|\b(?:19|20)\d{2}\s*(?:—|-)\s*(?:actualidad|(?:19|20)\d{2})\b/i;
   expect(await page.locator("main").innerText()).not.toMatch(forbiddenPublicPrice);
+  expect(await page.locator("main").innerText()).not.toMatch(forbiddenExperienceYears);
 
   const firstCard = page.getByTestId("professional-card").first();
   await expect(firstCard.locator('[data-card-section="actions"]')).toContainText(
@@ -350,6 +393,7 @@ test("directory and profile never publish prices and keep ratings and opinions",
   await firstCard.getByRole("link", { name: "Ver perfil" }).click();
 
   expect(await page.locator("main").innerText()).not.toMatch(forbiddenPublicPrice);
+  expect(await page.locator("main").innerText()).not.toMatch(forbiddenExperienceYears);
   await expect(page.locator("main")).toContainText(/\d+[,.]\d\s*·\s*\d+\s+opiniones?/i);
   await expect(page.getByRole("heading", { name: "Opiniones" })).toBeVisible();
   const publishedOpinion = page.locator('section[aria-labelledby="opiniones"] blockquote').first();

@@ -49,7 +49,6 @@ type DirectoryRow = {
   approach: string | null;
   experience_summary: string | null;
   education_summary: string | null;
-  years_experience: number;
   availability_status: string;
   next_available_on: string | null;
   availability_note: string | null;
@@ -86,7 +85,6 @@ const directoryColumns = [
   "approach",
   "experience_summary",
   "education_summary",
-  "years_experience",
   "availability_status",
   "next_available_on",
   "availability_note",
@@ -408,7 +406,6 @@ function toProfessional(
     agreementSlugs: editorialDemo?.agreementSlugs ?? [],
     verified,
     featured: sponsored,
-    yearsExperience: Number(row.years_experience),
     isDemo: row.is_demo,
     acceptingLeads: row.is_accepting_leads,
     availabilityOrder: availabilityOrder(row.availability_status),
@@ -423,7 +420,6 @@ function toProfessional(
         {
           role: "Experiencia relevante",
           organization: row.experience_summary ?? "Trayectoria informada en el perfil.",
-          period: `${row.years_experience} años de experiencia declarada`,
         },
       ],
     education:

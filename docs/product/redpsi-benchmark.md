@@ -36,6 +36,7 @@ Son patrones comunes del mercado, no especificaciones para replicar una implemen
 Red Senda se organiza como una búsqueda directa de profesionales orientadores. Agrega:
 
 - una home deliberadamente corta, sin cuestionario, con búsqueda y CTA de conversión en la primera pantalla;
+- una franja compacta y accesible de profesionales/opiniones con controles propios, iniciales en lugar de fotografías y copy original sobre qué es Red Senda;
 - filtros claros y estado compartible en la URL;
 - panel de filtros con scroll propio y un listado horizontal compacto cuyos bloques comparables se alinean entre resultados;
 - catálogo público limitado a Psicología/Psicopedagogía bajo la entrada “Profesional orientador”;

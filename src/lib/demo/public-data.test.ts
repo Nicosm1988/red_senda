@@ -30,7 +30,7 @@ describe("public professional repository", () => {
     }
   });
 
-  it("publishes only psychologists and psychopedagogues without fees", async () => {
+  it("publishes only psychologists and psychopedagogues without fees or numeric seniority", async () => {
     const results = await publicRepository.listProfessionals();
 
     expect(results.length).toBeGreaterThan(0);
@@ -46,7 +46,9 @@ describe("public professional repository", () => {
         (professional) =>
           !("priceFrom" in professional) &&
           !("currency" in professional) &&
-          !("showPrice" in professional),
+          !("showPrice" in professional) &&
+          !("yearsExperience" in professional) &&
+          professional.experience.every((item) => !("period" in item)),
       ),
     ).toBe(true);
   });

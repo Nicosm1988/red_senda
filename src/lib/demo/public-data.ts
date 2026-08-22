@@ -25,7 +25,6 @@ export type Professional = {
   agreementSlugs: string[];
   verified: boolean;
   featured: boolean;
-  yearsExperience: number;
   isDemo?: boolean;
   acceptingLeads?: boolean;
   availabilityOrder: number;
@@ -33,7 +32,7 @@ export type Professional = {
   rating: number;
   reviewCount: number;
   workingStyle: string[];
-  experience: Array<{ role: string; organization: string; period: string }>;
+  experience: Array<{ role: string; organization: string }>;
   education: Array<{ title: string; institution: string }>;
   credentials: string[];
   testimonials: Array<{ quote: string; author: string; context: string }>;
@@ -166,7 +165,6 @@ const professionals: Professional[] = [
     agreementSlugs: ["comunidad-universitaria-del-rio"],
     verified: true,
     featured: true,
-    yearsExperience: 12,
     availabilityOrder: 2,
     availabilityLabel: "Próximo espacio: jueves",
     rating: 4.9,
@@ -177,8 +175,8 @@ const professionals: Professional[] = [
       "Cierre con criterios de decisión y una hoja de ruta concreta.",
     ],
     experience: [
-      { role: "Orientadora vocacional", organization: "Práctica independiente", period: "2014 — actualidad" },
-      { role: "Coordinadora de orientación", organization: "Programa Puentes", period: "2018 — 2023" },
+      { role: "Orientadora vocacional", organization: "Práctica independiente" },
+      { role: "Coordinadora de orientación", organization: "Programa Puentes" },
     ],
     education: [
       { title: "Licenciatura en Psicología", institution: "Universidad de Buenos Aires" },
@@ -218,7 +216,6 @@ const professionals: Professional[] = [
     agreementSlugs: ["alianza-talento-norte"],
     verified: true,
     featured: false,
-    yearsExperience: 9,
     availabilityOrder: 1,
     availabilityLabel: "Próximo espacio: martes",
     rating: 4.8,
@@ -229,8 +226,8 @@ const professionals: Professional[] = [
       "Trabajamos con ciclos cortos de acción, revisión y aprendizaje.",
     ],
     experience: [
-      { role: "Coach de carrera", organization: "Práctica independiente", period: "2017 — actualidad" },
-      { role: "People Development Lead", organization: "Estudio Sur", period: "2012 — 2019" },
+      { role: "Coach de carrera", organization: "Práctica independiente" },
+      { role: "People Development Lead", organization: "Estudio Sur" },
     ],
     education: [
       { title: "Licenciatura en Recursos Humanos", institution: "Universidad Empresarial Siglo 21" },
@@ -270,7 +267,6 @@ const professionals: Professional[] = [
     agreementSlugs: ["programa-reimpulso-litoral"],
     verified: true,
     featured: true,
-    yearsExperience: 11,
     availabilityOrder: 4,
     availabilityLabel: "Próximo espacio: viernes",
     rating: 5,
@@ -281,8 +277,8 @@ const professionals: Professional[] = [
       "Cerramos con criterios y próximos pasos que la persona pueda sostener.",
     ],
     experience: [
-      { role: "Psicopedagoga", organization: "Práctica independiente", period: "2018 — actualidad" },
-      { role: "Orientadora educativa", organization: "Programa Horizonte", period: "2014 — 2018" },
+      { role: "Psicopedagoga", organization: "Práctica independiente" },
+      { role: "Orientadora educativa", organization: "Programa Horizonte" },
     ],
     education: [
       { title: "Licenciatura en Psicopedagogía", institution: "Universidad Nacional de Rosario" },
@@ -322,7 +318,6 @@ const professionals: Professional[] = [
     agreementSlugs: ["alianza-talento-norte"],
     verified: true,
     featured: false,
-    yearsExperience: 13,
     availabilityOrder: 3,
     availabilityLabel: "Próximo espacio: miércoles",
     rating: 4.9,
@@ -333,8 +328,8 @@ const professionals: Professional[] = [
       "Diseñamos un proyecto de prueba y un plan de aprendizaje acotado.",
     ],
     experience: [
-      { role: "Product Director", organization: "Colectivo Norte", period: "2021 — actualidad" },
-      { role: "Product Manager", organization: "Plataformas regionales", period: "2013 — 2021" },
+      { role: "Product Director", organization: "Colectivo Norte" },
+      { role: "Product Manager", organization: "Plataformas regionales" },
     ],
     education: [
       { title: "Ingeniería Industrial", institution: "Universidad Nacional de Cuyo" },
@@ -374,7 +369,6 @@ const professionals: Professional[] = [
     agreementSlugs: ["programa-reimpulso-litoral"],
     verified: false,
     featured: false,
-    yearsExperience: 15,
     availabilityOrder: 6,
     availabilityLabel: "Consulta por nuevos espacios",
     rating: 4.8,
@@ -385,8 +379,8 @@ const professionals: Professional[] = [
       "Cuando corresponde, construimos condiciones para un cambio sostenible.",
     ],
     experience: [
-      { role: "Psicóloga laboral", organization: "Práctica clínica y organizacional", period: "2011 — actualidad" },
-      { role: "Consultora", organization: "Red de Salud Ocupacional", period: "2013 — 2020" },
+      { role: "Psicóloga laboral", organization: "Práctica clínica y organizacional" },
+      { role: "Consultora", organization: "Red de Salud Ocupacional" },
     ],
     education: [
       { title: "Licenciatura en Psicología", institution: "Universidad Nacional de Córdoba" },
@@ -426,7 +420,6 @@ const professionals: Professional[] = [
     agreementSlugs: ["alianza-talento-norte"],
     verified: false,
     featured: false,
-    yearsExperience: 18,
     availabilityOrder: 5,
     availabilityLabel: "Próximo espacio: en 10 días",
     rating: 4.7,
@@ -437,8 +430,8 @@ const professionals: Professional[] = [
       "Revisamos resultados y convertimos la experiencia en criterio transferible.",
     ],
     experience: [
-      { role: "Mentor ejecutivo", organization: "Práctica independiente", period: "2020 — actualidad" },
-      { role: "Gerente de Operaciones", organization: "Compañía regional", period: "2008 — 2020" },
+      { role: "Mentor ejecutivo", organization: "Práctica independiente" },
+      { role: "Gerente de Operaciones", organization: "Compañía regional" },
     ],
     education: [
       { title: "Licenciatura en Administración", institution: "Universidad Nacional de La Plata" },
@@ -449,9 +442,11 @@ const professionals: Professional[] = [
   },
 ];
 
-const publishedProfessionals = professionals.filter((professional) =>
-  ["psicologia", "psicopedagogia"].includes(professional.professionalType),
-);
+const publishedProfessionals = professionals
+  .filter((professional) =>
+    ["psicologia", "psicopedagogia"].includes(professional.professionalType),
+  )
+  .map((professional) => ({ ...professional, isDemo: true }));
 
 const resources: ResourceArticle[] = [
   {

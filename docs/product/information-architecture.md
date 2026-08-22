@@ -6,7 +6,7 @@ Este documento separa la superficie existente del contrato objetivo. `Implementa
 
 | Ruta | Estado | Propósito/indexación actual |
 | --- | --- | --- |
-| `/` | **Implementado en el repositorio** | Home corta: búsqueda visible en la primera pantalla, accesos a búsquedas frecuentes e ingreso/registro; index. |
+| `/` | **Implementado en el repositorio** | Home corta: búsqueda compacta visible en la primera pantalla, accesos frecuentes e ingreso/registro; debajo, una franja controlable de profesionales y opiniones junto con una explicación breve de la red; index. |
 | `/profesionales` | **Implementado** | Directorio Supabase sólo de Psicología/Psicopedagogía, filtros URL con scroll propio y orden; index. |
 | `/profesionales/[slug]` | **Implementado** | Perfil `PUBLISHED`/elegible sin honorarios; rating y opiniones aprobadas; index y badge sólo cuando el estado calculado es `VERIFIED`. |
 | `/matching` | **Legacy** | Redirección permanente a `/profesionales`; sin cuestionario, navegación, canonical propio ni entrada en sitemap. |
@@ -20,7 +20,9 @@ Este documento separa la superficie existente del contrato objetivo. `Implementa
 
 Los filtros del directorio viven en query params normalizados para persistir/compartir estado. Selects y checks aplican el refinamiento automáticamente; el texto se confirma con “Buscar”. El panel tiene altura acotada y scroll propio para que refinar no desplace innecesariamente el listado; en móvil se presenta como control accesible. Los namespaces explícitos evitan colisiones con el slug de perfil. No existe filtro de precio y no se generan combinaciones masivas sin contenido y demanda reales.
 
-En desktop, los resultados forman una lista vertical de filas horizontales compactas: iniciales, identidad/badges, presentación, necesidades, datos comparables y una columna estable de acciones. “Contactar” es la acción dominante y “Ver perfil” la secundaria. Las columnas de modalidad, ubicación, experiencia y acciones conservan anchos comparables entre filas; los perfiles relacionados fuera del directorio pueden mantener el formato de card. En móvil, cada fila se apila sin alterar el orden semántico ni imponer alturas artificiales.
+La franja rotativa de la portada no reemplaza la búsqueda ni agrega un paso al embudo: cada perfil lleva directamente a contacto o perfil completo. Usa iniciales, no fotografías; identifica contenido demo; puede pausarse y recorrerse con controles; se detiene al interactuar y desactiva la rotación automática con `prefers-reduced-motion`.
+
+En desktop, los resultados forman una lista vertical de filas horizontales compactas: iniciales, identidad/badges, presentación, necesidades, modalidad, ubicación y una columna estable de acciones. “Contactar” es la acción dominante y “Ver perfil” la secundaria. Las columnas comparables y las acciones conservan anchos consistentes entre filas; los perfiles relacionados fuera del directorio pueden mantener el formato de card. No se publican cantidades de años de experiencia: la trayectoria se comunica de forma narrativa dentro del perfil. En móvil, cada fila se apila sin alterar el orden semántico ni imponer alturas artificiales.
 
 ## Dashboard profesional
 

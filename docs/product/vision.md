@@ -18,7 +18,7 @@ La oportunidad es hacer que alguien que expresa “mi profesión ya no me repres
 ## Problema
 
 - Las necesidades mezclan identidad, educación, carrera, empleabilidad e industria.
-- La oferta de orientación confiable está fragmentada y resulta difícil comparar psicólogos/as y psicopedagogos/as por experiencia, modalidad, ubicación y enfoque.
+- La oferta de orientación confiable está fragmentada y resulta difícil comparar psicólogos/as y psicopedagogos/as por modalidad, ubicación, enfoque y trayectoria profesional.
 - Los títulos profesionales no explican bien qué situación puede acompañar cada persona.
 - Comparar credenciales, modalidad, enfoque, disponibilidad, valoraciones y opiniones requiere confianza.
 - Profesionales valiosos carecen de visibilidad, posicionamiento y demanda predecible.
@@ -35,7 +35,7 @@ La oportunidad es hacer que alguien que expresa “mi profesión ya no me repres
 
 1. La búsqueda por texto y “Profesional orientador” aparece en la primera pantalla.
 2. La persona llega al directorio y refina resultados con filtros que conservan su estado en la URL y pueden scrollear de forma independiente.
-3. Compara cards alineadas de psicólogos/as y psicopedagogos/as con experiencia, modalidad, ubicación, disponibilidad, rating y opiniones; nunca honorarios.
+3. Compara cards alineadas de psicólogos/as y psicopedagogos/as con modalidad, ubicación, disponibilidad, rating y opiniones; nunca honorarios ni cantidades de años de experiencia. La trayectoria se presenta de forma narrativa en el perfil.
 4. Abre un perfil, ingresa o crea su cuenta y envía un contacto con los datos mínimos. El contacto no debe quedar escondido detrás de contenido ornamental.
 5. El profesional gestiona el lead en su dashboard; recibir un email real depende de Resend configurado y verificado. La relación continúa fuera de la plataforma en el MVP.
 

@@ -15,7 +15,7 @@
 1. La home presenta una búsqueda por texto y el selector “Profesional orientador” en la primera pantalla.
 2. La persona llega al directorio con filtros representados en query params compartibles.
 3. Selects y checks refinan automáticamente; el panel puede scrollear de forma independiente del listado y no ofrece presupuesto/precio.
-4. Las cards alinean los mismos bloques comparables: identidad, enfoque, etiquetas, modalidad/ubicación/experiencia y disponibilidad/valoración.
+4. Las cards alinean los mismos bloques comparables: identidad, enfoque, etiquetas, modalidad/ubicación y disponibilidad/valoración. La trayectoria narrativa queda en el perfil, sin publicar cantidades de años de experiencia.
 5. La persona abre un perfil, ingresa o crea cuenta y envía sus datos de contacto al profesional.
 
 No se genera un diagnóstico ni una recomendación cerrada. La orientación surge de criterios explícitos de búsqueda, contenido profesional verificable, rating y opiniones aprobadas.
