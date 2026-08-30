@@ -106,6 +106,9 @@ export const needOptions = [
   { value: "entrevistas", label: "Preparar entrevistas" },
   { value: "desarrollo", label: "Crecer en mi carrera" },
   { value: "cambio-industria", label: "Cambiar de industria" },
+  { value: "orientacion-de-adultos", label: "Orientación de adultos" },
+  { value: "reorientacion", label: "Reorientación" },
+  { value: "retiro", label: "Pensar mi retiro" },
 ] as const;
 
 export const professionalTypeOptions = [

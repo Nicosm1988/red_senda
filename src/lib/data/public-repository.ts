@@ -116,6 +116,9 @@ const needGroups: Record<string, string> = {
   job_interviews: "entrevistas",
   career_growth: "desarrollo",
   change_industry: "cambio-industria",
+  adult_guidance: "orientacion-de-adultos",
+  reorientation: "reorientacion",
+  retirement: "retiro",
 };
 
 const professionalTypeGroups: Record<string, string> = {

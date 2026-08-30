@@ -59,7 +59,10 @@ values
   ('22000000-0000-4000-8000-000000000007', 'professional_positioning', 'mejorar-mi-posicionamiento', 'Quiero mejorar mi posicionamiento', 'Fortalecer CV, LinkedIn y propuesta de valor.', 70),
   ('22000000-0000-4000-8000-000000000008', 'job_interviews', 'preparar-entrevistas', 'Tengo entrevistas', 'Practicar entrevistas y comunicar experiencia.', 80),
   ('22000000-0000-4000-8000-000000000009', 'career_growth', 'crecer-profesionalmente', 'Quiero crecer profesionalmente', 'Definir próximos pasos y capacidades.', 90),
-  ('22000000-0000-4000-8000-000000000010', 'change_industry', 'cambiar-de-industria', 'Quiero cambiar de industria', 'Traducir experiencia hacia otro sector.', 100)
+  ('22000000-0000-4000-8000-000000000010', 'change_industry', 'cambiar-de-industria', 'Quiero cambiar de industria', 'Traducir experiencia hacia otro sector.', 100),
+  ('22000000-0000-4000-8000-000000000011', 'adult_guidance', 'orientacion-de-adultos', 'Orientación de adultos', 'Acompañamiento a personas adultas en decisiones de estudio, trabajo o carrera.', 105),
+  ('22000000-0000-4000-8000-000000000012', 'reorientation', 'reorientacion', 'Reorientación', 'Redefinir un rumbo educativo o profesional en curso.', 35),
+  ('22000000-0000-4000-8000-000000000013', 'retirement', 'retiro', 'Retiro', 'Pensar la etapa de retiro laboral y lo que sigue.', 115)
 on conflict (id) do update set name = excluded.name, short_description = excluded.short_description, is_active = true;
 
 insert into public.services (id, code, slug, name, description, sort_order)
