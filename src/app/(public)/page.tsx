@@ -11,17 +11,19 @@ import { buttonStyles } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 
 export const metadata: Metadata = {
-  title: "Encontrá psicólogos y psicopedagogos",
+  title: "Orientación a lo largo de la vida",
   description:
-    "Buscá psicólogos y psicopedagogos para decisiones de estudio, trabajo y carrera. Compará perfiles y contactá a la persona indicada.",
+    "Buscá un profesional de orientación para decisiones y transiciones educativas o laborales, en cualquier etapa de tu vida. Compará perfiles y contactá a la persona indicada.",
   alternates: { canonical: "/" },
 };
 
 const commonSearches = [
-  ["elegir-estudios", "Elegir qué estudiar"],
-  ["reinvencion", "Repensar mi carrera"],
-  ["cambio-trabajo", "Cambiar de trabajo"],
-  ["desarrollo", "Crecer profesionalmente"],
+  ["orientacion-de-adultos", "Orientación de adultos"],
+  ["reorientacion", "Reorientación"],
+  ["cambio-trabajo", "Transiciones laborales"],
+  ["retiro", "Retiro"],
+  ["desarrollo", "Carrera"],
+  ["reinvencion", "Reconversión profesional"],
 ] as const;
 
 export default function HomePage() {
@@ -31,7 +33,7 @@ export default function HomePage() {
     name: "Red Senda",
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://redsenda.com.ar",
     description:
-      "Red de psicólogos y psicopedagogos para acompañar decisiones de estudio, trabajo y carrera.",
+      "Orientación a lo largo de la vida: acompañamiento de psicólogos y psicopedagogos en decisiones y transiciones educativas o laborales.",
     areaServed: "AR",
   };
 
@@ -47,16 +49,16 @@ export default function HomePage() {
           <div className="mx-auto max-w-[1240px] overflow-hidden rounded-[1.45rem] border border-line bg-paper shadow-soft lg:grid lg:grid-cols-[minmax(0,.78fr)_minmax(460px,1.22fr)]">
             <div className="flex flex-col justify-between overflow-hidden bg-ink px-5 py-5 text-white max-[359px]:py-4 sm:px-7 sm:py-7 lg:p-8">
               <div>
-                <Badge tone="clay" className="hidden sm:inline-flex">Acompañamiento profesional</Badge>
+                <Badge tone="clay" className="hidden sm:inline-flex">Orientación a lo largo de la vida</Badge>
                 <h1 className="max-w-xl font-display text-[clamp(1.8rem,3vw,2.5rem)] font-medium leading-[1.04] tracking-[-0.045em] text-balance sm:mt-4">
-                  Encontrá tu profesional.
+                  La orientación no termina al elegir una carrera.
                 </h1>
                 <p className="mt-1 max-w-lg text-[11px] leading-4 text-white/72 sm:mt-3 sm:text-sm sm:leading-6">
                   <span className="max-[359px]:hidden">
-                    Compará psicólogos y psicopedagogos por enfoque, modalidad y opiniones. Elegí un perfil y enviá tu consulta de forma directa.
+                    Antes de estudiar, al cambiar de trabajo o al acercarte al retiro: comparás psicólogos y psicopedagogos por enfoque, modalidad y opiniones, y enviás tu consulta de forma directa.
                   </span>
                   <span className="hidden max-[359px]:inline">
-                    Psicólogos y psicopedagogos para orientarte.
+                    Psicólogos y psicopedagogos para orientarte en cualquier etapa.
                   </span>
                 </p>
               </div>

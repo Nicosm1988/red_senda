@@ -41,17 +41,22 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://redsenda.com.ar"),
   title: {
-    default: "Red Senda · Encontrá un profesional orientador",
+    default: "Red Senda · Orientación a lo largo de la vida",
     template: "%s · Red Senda",
   },
   description:
-    "Encontrá psicólogos y psicopedagogos orientadores, compará perfiles y contactá al profesional que mejor se adapte a tu búsqueda.",
+    "Encontrá un profesional de orientación para decisiones y transiciones educativas o laborales, en cualquier etapa de tu vida. Compará perfiles y contactá de forma directa.",
   applicationName: "Red Senda",
   category: "professional directory",
   keywords: [
     "orientación vocacional",
-    "cambio de carrera",
-    "empleabilidad",
+    "orientación profesional",
+    "reorientación",
+    "transición laboral",
+    "reconversión profesional",
+    "orientación de carrera",
+    "orientación para adultos",
+    "retiro",
     "psicología",
     "psicopedagogía",
     "Argentina",
@@ -60,13 +65,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_AR",
     siteName: "Red Senda",
-    title: "Red Senda · Encontrá un profesional orientador",
-    description: "Buscá psicólogos y psicopedagogos orientadores, compará perfiles y contactá de forma directa.",
+    title: "Red Senda · Orientación a lo largo de la vida",
+    description: "Buscá un profesional de orientación para decisiones y transiciones educativas o laborales, en cualquier etapa de tu vida.",
   },
   twitter: {
     card: "summary",
     title: "Red Senda",
-    description: "Buscá psicólogos y psicopedagogos orientadores y contactá de forma directa.",
+    description: "Orientación a lo largo de la vida: decisiones y transiciones educativas y laborales.",
   },
 };
 

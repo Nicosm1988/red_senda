@@ -27,7 +27,7 @@ export default function ForProfessionalsPage() {
       <PageHero
         eyebrow="Para profesionales"
         title="Una red que haga visible tu manera de acompañar."
-        description="Red Senda reúne psicólogos y psicopedagogos que acompañan decisiones educativas, vocacionales y de trayectoria con credenciales revisadas."
+        description="Red Senda reúne psicólogos y psicopedagogos que acompañan decisiones y transiciones educativas o laborales a lo largo de la vida, con credenciales revisadas."
         breadcrumbs={[{ label: "Inicio", href: "/" }, { label: "Para profesionales" }]}
         actions={
           <>
