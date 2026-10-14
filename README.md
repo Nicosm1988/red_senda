@@ -99,3 +99,5 @@ La integración destructiva `tests/integration/supabase-vertical.test.ts` y el E
 - [Despliegue](docs/deployment/vercel.md)
 
 Los perfiles y textos demo son ficticios. No representan recomendaciones, diagnósticos ni profesionales reales.
+
+_README revisado en octubre de 2026._
